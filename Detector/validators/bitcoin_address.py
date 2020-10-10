@@ -23,8 +23,6 @@ class BitcoinAddress(Validator):
                 )
 
             hrp, decoded = self.segwit.decode(data, hrp="bc")
-            if hrp is None:
-                hrp, decoded = self.segwit.decode(data, hrp="tb")
             return hrp is not None and decoded is not None
         except Exception:
             return False

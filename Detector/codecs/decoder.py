@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Optional, Union
+from typing import Any, Optional, Tuple, Union
 
 Decodable = Union[bytes, str]
 
@@ -10,5 +10,5 @@ class Decoder(metaclass=ABCMeta):
         return hasattr(subclass, "decode") and callable(subclass.decode)
 
     @abstractmethod
-    def decode(self, data: Decodable, *args, **kwargs) -> Optional[bytes]:
+    def decode(self, data: Decodable, *args, **kwargs) -> Any:
         raise NotImplementedError("You should implement this")

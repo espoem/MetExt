@@ -14,7 +14,7 @@ class Base58(Decoder):
         length = kwargs.get("length", 25)
         try:
             n = 0
-            for char in data.decode("ascii") if isinstance(data, bytes) else data:
+            for char in data if isinstance(data, str) else data.decode("ascii"):
                 n = n * ALPHABET_LENGTH + ALPHABET.index(char)
 
             return n.to_bytes(length, "big")

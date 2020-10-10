@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Any, Optional, Tuple, Union
+from typing import Any, Union
 
 Decodable = Union[bytes, str]
 

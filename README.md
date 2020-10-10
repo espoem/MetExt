@@ -1,0 +1,6 @@
+- http://rosettacode.org/wiki/Bitcoin/address_validation#Python
+- https://github.com/niksmac/btc-validate/tree/master/src
+- https://github.com/keis/base58
+- https://en.bitcoin.it/wiki/Address
+- https://en.bitcoin.it/wiki/Bech32
+- https://en.bitcoin.it/wiki/BIP_0173

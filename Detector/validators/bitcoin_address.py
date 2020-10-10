@@ -15,7 +15,6 @@ class BitcoinAddress(Validator):
         """
         try:
             bcbytes = self.decoder.decode(data)
-            return bcbytes[-4:] == sha256(sha256(
-                bcbytes[:-4]).digest()).digest()[:4]
+            return bcbytes[-4:] == sha256(sha256(bcbytes[:-4]).digest()).digest()[:4]
         except Exception:
             return False

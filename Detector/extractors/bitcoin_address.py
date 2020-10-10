@@ -10,12 +10,9 @@ RE_BTC = re.compile(PATTERN_BTC)
 
 
 class BitcoinAddress(Extractor):
-
     def extract_from(self, data: Union[str, List[str]]) -> Iterable[str]:
         btc_addresses = []
-        for part in data if isinstance(data, list) else data.splitlines(
-                keepends=False):
+        for part in data if isinstance(data, list) else data.splitlines(keepends=False):
             btc_addresses.extend(RE_BTC.findall(part))
         btc = BTC()
-        yield from (
-            address for address in btc_addresses if btc.is_valid(address))
+        yield from (address for address in btc_addresses if btc.is_valid(address))

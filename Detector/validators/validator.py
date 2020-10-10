@@ -3,7 +3,6 @@ from typing import Any
 
 
 class Validator(metaclass=ABCMeta):
-
     @classmethod
     def __subclasshook__(cls, subclass):
         return hasattr(subclass, "is_valid") and callable(subclass.is_valid)

@@ -13,7 +13,7 @@ from Detector.extractors.bitcoin_address import BitcoinAddress
             "1AGNa15ZQXAZUgFiqJ3i7Z2DPU2J6hW62i",
         ],
         "1AGNa15ZQXAZUgFiqJ3i7Z2DPU2J6hW62i\n1AGNa15ZQXAZUgFiqJ3i7Z2DPU2J6hW62i",
-        "17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j"
+        "17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j",
     ],
 )
 def test_extract_from_returns_empty_collection(input_data):
@@ -25,16 +25,25 @@ def test_extract_from_returns_empty_collection(input_data):
     "input_data, expected",
     [
         (
+            "17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j",
+            ["17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j"],
+        ),
+        (
+            "-17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j-17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j-",
+            [
                 "17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j",
-                ["17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j"],
+                "17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j",
+            ],
         ),
         (
-                "-17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j-17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j-",
-                ["17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j", "17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j"],
-        ),
-        (
-                ["-17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j-", "\n3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy\nabctest"],
-                ["17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j", "3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy"],
+            [
+                "-17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j-",
+                "\n3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy\nabctest",
+            ],
+            [
+                "17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j",
+                "3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy",
+            ],
         ),
     ],
 )

@@ -5,9 +5,8 @@ from .decoder import Decodable, Decoder
 
 
 class Base64(Decoder):
-
     def decode(self, data: Decodable, **kwargs) -> Optional[bytes]:
-        padding_len = ((4 - len(data) % 4) % 4)
+        padding_len = (4 - len(data) % 4) % 4
 
         try:
             if isinstance(data, str):

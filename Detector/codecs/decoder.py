@@ -5,7 +5,6 @@ Decodable = Union[bytes, str]
 
 
 class Decoder(metaclass=ABCMeta):
-
     @classmethod
     def __subclasshook__(cls, subclass):
         return hasattr(subclass, "decode") and callable(subclass.decode)

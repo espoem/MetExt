@@ -7,7 +7,9 @@ ALPHABET_LENGTH = len(ALPHABET)
 
 
 class Base58(Decoder):
-    def decode(self, data: Decodable, length: int = 25, *args, **kwargs) -> Optional[bytes]:
+    def decode(
+        self, data: Decodable, length: int = 25, *args, **kwargs
+    ) -> Optional[bytes]:
         """
         https://rosettacode.org/wiki/Bitcoin/address_validation#Python
         """

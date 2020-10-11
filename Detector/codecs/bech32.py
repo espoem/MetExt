@@ -6,11 +6,22 @@ ALPHABET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 
 
 class Bech32(Decoder):
-    """https://github.com/sipa/bech32/blob/master/ref/python/segwit_addr.py"""
+    """Bech32 decoder using base32 type of encoding.
+
+    Using https://github.com/sipa/bech32/blob/master/ref/python/segwit_addr.py
+    """
 
     def decode(
         self, data: Decodable, *args, **kwargs
-    ) -> Union[Tuple[None, None], Tuple[Union[int, bytes, str], List[int]]]:
+    ) -> Union[Tuple[None, None], Tuple[str, List[int]]]:
+        """Decodes Bech32 encoded bytes-like object or ASCII data string.
+
+        :param data: Data string to decode
+        :param args: Variable arguments
+        :param kwargs: Other keyword arguments
+        :return: Tuple (hrp, data) with human-readable part and decoded data.
+        Returns (None, None) if `data` is not valid bech32 encoded (bytes) string.
+        """
         try:
             if not isinstance(data, str):
                 data = data.decode("ascii")
@@ -28,10 +39,10 @@ class Bech32(Decoder):
         if any(x not in ALPHABET for x in data[pos + 1 :]):
             return None, None
         hrp = data[:pos]
-        data = [ALPHABET.find(x) for x in data[pos + 1 :]]
-        if not self.verify_checksum(hrp, data):
+        result = [ALPHABET.find(x) for x in data[pos + 1 :]]
+        if not self.verify_checksum(hrp, result):
             return None, None
-        return hrp, data[:-6]
+        return hrp, result[:-6]
 
     def verify_checksum(self, hrp, data):
         """Verify a checksum given HRP and converted data characters."""

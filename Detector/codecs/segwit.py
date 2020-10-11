@@ -1,4 +1,4 @@
-from typing import Any
+from typing import List, Optional, Tuple, Union
 
 from .bech32 import Bech32
 from .decoder import Decodable, Decoder
@@ -28,15 +28,29 @@ def convert_bits(data, from_bits, to_bits, pad=True):
 
 
 class Segwit(Decoder):
-    """https://github.com/sipa/bech32/blob/master/ref/python/segwit_addr.py"""
+    """Bitcoin Segwit address decoding class.
+
+    Using https://github.com/sipa/bech32/blob/master/ref/python/segwit_addr.py
+    """
 
     bech32 = Bech32()
 
-    def decode(self, data: Decodable, *args, **kwargs) -> Any:
-        """Decode a segwit address."""
-        hrp = kwargs.get("hrp", "bc")
+    def decode(
+        self, data: Decodable, *, hrp: Optional[str] = None, **kwargs
+    ) -> Union[Tuple[None, None], Tuple[str, List[int]]]:
+        """Decodes Bech32 encoded bytes-like object or ASCII data string containing a (Bitcoin) Segwit address.
+
+        See https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki#witness-program
+
+        :param data: Data to decode
+        :param hrp: Keyword argument for Human-readable part. Used as a check for an expected type of an address.
+        Using "bc" for mainnet addresses and "tb" for testnet addresses.
+        :param kwargs: Other keyword arguments
+        :return: Tuple (witness_version, witness_program), returns (None, None) if decoded program and version
+        are not valid.
+        """
         hrpgot, data = self.bech32.decode(data)
-        if hrpgot != hrp:
+        if hrp and hrpgot != hrp:
             return None, None
         decoded = convert_bits(data[1:], 5, 8, False)
         if decoded is None or len(decoded) < 2 or len(decoded) > 40:

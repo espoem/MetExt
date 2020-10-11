@@ -7,11 +7,17 @@ ALPHABET_LENGTH = len(ALPHABET)
 
 
 class Base58(Decoder):
-    def decode(self, data: Decodable, *args, **kwargs) -> Optional[bytes]:
+    def decode(self, data: Decodable, *, length: int = 25, **kwargs) -> Optional[bytes]:
+        """Decodes Base58 encoded bytes-like object or ASCII `data` string using the charset
+        defined for Bitcoin addresses.
+
+        Using https://rosettacode.org/wiki/Bitcoin/address_validation#Python
+
+        :param data: Base58 encoded (bytes) string
+        :param length: Number of bytes in which the decoded data should be represented
+        :param kwargs: Other keyword arguments
+        :return: Decode bytes string. Returns `None` if `data` couldn't be decoded.
         """
-        https://rosettacode.org/wiki/Bitcoin/address_validation#Python
-        """
-        length = kwargs.get("length", 25)
         try:
             n = 0
             for char in data if isinstance(data, str) else data.decode("ascii"):

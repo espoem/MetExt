@@ -2,8 +2,9 @@ import binascii
 
 import pytest
 
-# tests credit https://github.com/sipa/bech32/blob/master/ref/python/tests.py
 from Detector.codecs.segwit import Segwit
+
+# tests credit https://github.com/sipa/bech32/blob/master/ref/python/tests.py
 
 
 def segwit_scriptpubkey(witver, witprog):

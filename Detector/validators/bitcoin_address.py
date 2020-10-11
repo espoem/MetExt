@@ -1,5 +1,5 @@
 from hashlib import sha256
-from typing import Any
+from typing import Union
 
 from Detector.codecs.base58 import Base58
 from Detector.codecs.segwit import Segwit
@@ -11,9 +11,14 @@ class BitcoinAddress(Validator):
     base58 = Base58()
     segwit = Segwit()
 
-    def is_valid(self, data: Any) -> bool:
-        """
-        https://rosettacode.org/wiki/Bitcoin/address_validation#Python
+    def is_valid(self, data: Union[bytes, str]) -> bool:
+        """Checks that given data (bytes) string represents a valid Bitcoin mainnet address.
+
+        Works with base58-encoded (starts with char 1 or 3) and segwit (bech32-encoded) (starts with "bc1")
+        mainnet addresses.
+
+        :param data: ASCII (bytes) string
+        :return: True if given address string represents a valid Bitcoin address, otherwise False
         """
         try:
             if data[0] in ["1", "3"]:

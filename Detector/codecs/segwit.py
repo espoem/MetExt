@@ -34,7 +34,7 @@ class Segwit(Decoder):
 
     def decode(self, data: Decodable, *args, **kwargs) -> Any:
         """Decode a segwit address."""
-        hrp = kwargs.get("hrp")
+        hrp = kwargs.get("hrp", "bc")
         hrpgot, data = self.bech32.decode(data)
         if hrpgot != hrp:
             return None, None

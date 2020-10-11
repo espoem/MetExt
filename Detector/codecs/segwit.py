@@ -38,7 +38,8 @@ class Segwit(Decoder):
     def decode(
         self, data: Decodable, *, hrp: Optional[str] = None, **kwargs
     ) -> Union[Tuple[None, None], Tuple[str, List[int]]]:
-        """Decodes Bech32 encoded bytes-like object or ASCII data string containing a (Bitcoin) Segwit address.
+        """Decodes Bech32 encoded bytes-like object or ASCII data string
+        containing a (Bitcoin) Segwit address.
 
         See https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki#witness-program
 

@@ -12,7 +12,8 @@ class BitcoinAddress(Validator):
     segwit = Segwit()
 
     def is_valid(self, data: Union[bytes, str]) -> bool:
-        """Checks that given data (bytes) string represents a valid Bitcoin mainnet address.
+        """Checks that given data (bytes) string represents a valid Bitcoin
+        mainnet address.
 
         Works with base58-encoded (starts with char 1 or 3) and segwit (bech32-encoded) (starts with "bc1")
         mainnet addresses.

@@ -6,8 +6,8 @@ from .decoder import Decodable, Decoder
 
 class Base64(Decoder):
     def decode(self, data: Decodable, *args, **kwargs) -> Optional[bytes]:
-        """Decodes Base64 encoded bytes-like object or ASCII `data` string using the standard base64 charset
-        with `+` and `/` characters.
+        """Decodes Base64 encoded bytes-like object or ASCII `data` string
+        using the standard base64 charset with `+` and `/` characters.
 
         See https://tools.ietf.org/html/rfc4648#section-4
 

@@ -23,7 +23,7 @@ if __name__ == "__main__":
                     )
     except Exception:
         print_help()
-        exit(1)
+        sys.exit(1)
 
     if addresses_found:
         print("BTC addresses:")

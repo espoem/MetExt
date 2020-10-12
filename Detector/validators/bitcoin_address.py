@@ -22,6 +22,9 @@ class BitcoinAddress(Validator):
         :return: True if given address string represents a valid Bitcoin address, otherwise False
         """
         try:
+            if not isinstance(data, str):
+                data = data.decode("ascii")
+
             if data[0] in ["1", "3"]:
                 bc_bytes = self.base58.decode(data)
                 return (

@@ -22,4 +22,6 @@ from Detector.validators.bitcoin_address import BitcoinAddress
     ],
 )
 def test_is_valid(input_address, expected):
-    assert BitcoinAddress().is_valid(input_address) == expected
+    btc = BitcoinAddress()
+    assert btc.is_valid(input_address) == expected
+    assert btc.is_valid(bytes(input_address, encoding="utf-8")) == expected

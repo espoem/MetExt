@@ -18,11 +18,15 @@ if __name__ == "__main__":
             for line in f:
                 line_base64_decoded = base64.decode(line)
                 if line_base64_decoded:
-                    addresses_found += btc.extract_from(
-                        line_base64_decoded.decode("ascii")
-                    )
-    except Exception:
+                    try:
+                        addresses_found += btc.extract_from(
+                            line_base64_decoded.decode("utf8")
+                        )
+                    except Exception:
+                        continue
+    except Exception as e:
         print_help()
+        print(e)
         sys.exit(1)
 
     if addresses_found:

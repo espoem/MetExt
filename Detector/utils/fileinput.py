@@ -14,8 +14,7 @@ class FileInputExtended(FileInput):
         if not self._files:
             if "b" in self._mode:
                 return b""
-            else:
-                return ""
+            return ""
         self._filename = self._files[0]
         self._files = self._files[1:]
         self._file = None

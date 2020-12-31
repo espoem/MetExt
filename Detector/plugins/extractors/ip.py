@@ -1,4 +1,3 @@
-import ipaddress
 import re
 from typing import Iterable, List, Union
 

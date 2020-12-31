@@ -1,9 +1,9 @@
 import concurrent.futures as cf
-from io import BufferedIOBase, BytesIO, TextIOBase, StringIO
-from typing import List, Tuple, Union, Optional, Any
+from io import BufferedIOBase, BytesIO, StringIO, TextIOBase
+from typing import Any, List, Optional, Tuple, Union
 
 from Detector import plugin_base
-from Detector.plugin_base import Decodable, BaseDecoder, BaseExtractor
+from Detector.plugin_base import BaseDecoder, BaseExtractor, Decodable
 from Detector.plugins import load_plugin_modules
 from Detector.utils.fileinput import FileInputExtended
 

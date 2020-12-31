@@ -1,8 +1,9 @@
 import re
 
+from email_validator import validate_email
+
 from Detector.plugin_base import BaseValidator
 from Detector.utils.uri import addr_spec
-from email_validator import validate_email
 
 RE_EMAIL = re.compile(addr_spec, re.VERBOSE)
 

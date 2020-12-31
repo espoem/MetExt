@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 
-from Detector import plugin_base
-from Detector import analyze
+from Detector import analyze, plugin_base
 from Detector.utils import to_csv_printer_format, to_table_printer_format
 from Detector.utils.fileinput import FileInputExtended
 
@@ -97,7 +96,7 @@ def build_parser():
 
 def unglob_filepaths(filepaths, recursive=False):
     import glob
-    from os.path import isfile, abspath
+    from os.path import abspath, isfile
 
     for path in filepaths or []:
         yield from (

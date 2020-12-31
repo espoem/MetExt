@@ -1,9 +1,9 @@
 from hashlib import sha256
 from typing import Union
 
+from Detector.plugin_base import BaseValidator
 from Detector.plugins.decoders.base58 import Base58Decoder
 from Detector.plugins.decoders.segwit import SegwitDecoder
-from Detector.plugin_base import BaseValidator
 
 
 class BitcoinValidator(BaseValidator):

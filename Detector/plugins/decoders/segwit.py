@@ -1,7 +1,7 @@
 from typing import List, Optional, Tuple, Union
 
-from Detector.plugins.decoders.bech32 import Bech32Decoder
 from Detector.plugin_base import BaseDecoder, Decodable
+from Detector.plugins.decoders.bech32 import Bech32Decoder
 
 
 def convert_bits(data, from_bits, to_bits, pad=True):

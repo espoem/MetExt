@@ -29,7 +29,8 @@ class Base32Decoder(BaseDecoder):
         """
         alt_chars = kwargs.get("alt_chars", CHARSETS_BASE32["std"])
         lalt_chars = len(alt_chars)
-        assert lalt_chars == 32, "Only full chars set can be defined"
+        if lalt_chars != 32:
+            raise AssertionError("Only full chars set can be defined")
 
         if lalt_chars == 32 and alt_chars != CHARSETS_BASE32["std"]:
             # https://stackoverflow.com/questions/5537750/decode-base64-like-string-with-different-index-tables

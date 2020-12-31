@@ -32,10 +32,11 @@ class Base64Decoder(BaseDecoder):
         """
         alt_chars = kwargs.get("alt_chars", "+/")
         lalt_chars = len(alt_chars)
-        assert lalt_chars in [
+        if lalt_chars not in [
             2,  # special chars set
             64,  # full chars set
-        ], "Only full chars set or special chars set can be defined"
+        ]:
+            raise AssertionError("Only full chars set or special chars set can be defined")
 
         if lalt_chars == 64 and alt_chars != CHARSETS_BASE64["std"]:
             # https://stackoverflow.com/questions/5537750/decode-base64-like-string-with-different-index-tables

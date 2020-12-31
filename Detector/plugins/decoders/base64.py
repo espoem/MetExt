@@ -36,7 +36,9 @@ class Base64Decoder(BaseDecoder):
             2,  # special chars set
             64,  # full chars set
         ]:
-            raise AssertionError("Only full chars set or special chars set can be defined")
+            raise AssertionError(
+                "Only full chars set or special chars set can be defined"
+            )
 
         if lalt_chars == 64 and alt_chars != CHARSETS_BASE64["std"]:
             # https://stackoverflow.com/questions/5537750/decode-base64-like-string-with-different-index-tables

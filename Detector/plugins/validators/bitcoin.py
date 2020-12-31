@@ -1,37 +1,36 @@
 from hashlib import sha256
 from typing import Union
 
-from Detector.codecs.base58 import Base58
-from Detector.codecs.segwit import Segwit
+from Detector.plugins.decoders.base58 import Base58Decoder
+from Detector.plugins.decoders.segwit import SegwitDecoder
+from Detector.plugin_base import BaseValidator
 
-from .validator import Validator
 
+class BitcoinValidator(BaseValidator):
+    PLUGIN_NAME = "btc"
 
-class BitcoinAddress(Validator):
-    base58 = Base58()
-    segwit = Segwit()
-
-    def is_valid(self, data: Union[bytes, str]) -> bool:
+    @classmethod
+    def run(cls, _input: Union[bytes, str], *args, **kwargs) -> bool:
         """Checks that given data (bytes) string represents a valid Bitcoin
         mainnet address.
 
         Works with base58-encoded (starts with char 1 or 3) and segwit (bech32-encoded) (starts with "bc1")
         mainnet addresses.
 
-        :param data: ASCII (bytes) string
+        :param _input: ASCII (bytes) string
         :return: True if given address string represents a valid Bitcoin address, otherwise False
         """
         try:
-            if not isinstance(data, str):
-                data = data.decode("ascii")
+            if not isinstance(_input, str):
+                _input = _input.decode("ascii")
 
-            if data[0] in ["1", "3"]:
-                bc_bytes = self.base58.decode(data)
+            if _input[0] in ["1", "3"]:
+                bc_bytes = Base58Decoder.run(_input)
                 return (
                     bc_bytes[-4:] == sha256(sha256(bc_bytes[:-4]).digest()).digest()[:4]
                 )
 
-            hrp, decoded = self.segwit.decode(data, hrp="bc")
+            hrp, decoded = SegwitDecoder.run(_input, hrp="bc")
             return hrp is not None and decoded is not None
         except Exception:
             return False

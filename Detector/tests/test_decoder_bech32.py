@@ -1,8 +1,7 @@
 import pytest
 
-from Detector.codecs.bech32 import Bech32
-
 # tests credit https://github.com/sipa/bech32/blob/master/ref/python/tests.py
+from Detector.plugins.decoders.bech32 import Bech32Decoder
 
 
 @pytest.mark.parametrize(
@@ -21,8 +20,8 @@ from Detector.codecs.bech32 import Bech32
     ],
 )
 def test_valid_checksum(checksum):
-    bech32 = Bech32()
-    hrp, decoded = bech32.decode(checksum)
+    bech32 = Bech32Decoder()
+    hrp, decoded = bech32.run(checksum)
     assert hrp is not None
     assert decoded is not None
 
@@ -49,7 +48,6 @@ def test_valid_checksum(checksum):
     ],
 )
 def test_invalid_checksum(checksum):
-    bech32 = Bech32()
-    hrp, decoded = bech32.decode(checksum)
+    hrp, decoded = Bech32Decoder.run(checksum)
     assert hrp is None
     assert decoded is None

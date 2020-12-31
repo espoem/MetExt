@@ -2,9 +2,8 @@ import binascii
 
 import pytest
 
-from Detector.codecs.segwit import Segwit
-
 # tests credit https://github.com/sipa/bech32/blob/master/ref/python/tests.py
+from Detector.plugins.decoders.segwit import SegwitDecoder
 
 
 def segwit_scriptpubkey(witver, witprog):
@@ -44,8 +43,8 @@ def segwit_scriptpubkey(witver, witprog):
     ],
 )
 def test_valid_segwit_address(hrp, address, hexscript):
-    segwit = Segwit()
-    witness_version, witness_program = segwit.decode(address, hrp=hrp)
+    segwit = SegwitDecoder()
+    witness_version, witness_program = segwit.run(address, hrp=hrp)
     assert witness_version is not None
     scriptpubkey = segwit_scriptpubkey(witness_version, witness_program)
     assert scriptpubkey == binascii.unhexlify(hexscript)
@@ -67,8 +66,7 @@ def test_valid_segwit_address(hrp, address, hexscript):
     ],
 )
 def test_invalid_segwit_address(address):
-    segwit = Segwit()
-    witness_version, _ = segwit.decode(address, hrp="bc")
+    witness_version, _ = SegwitDecoder.run(address, hrp="bc")
     assert witness_version is None
-    witness_version, _ = segwit.decode(address, hrp="tb")
+    witness_version, _ = SegwitDecoder.run(address, hrp="tb")
     assert witness_version is None

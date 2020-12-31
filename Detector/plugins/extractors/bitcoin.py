@@ -1,19 +1,19 @@
 import re
 from typing import Iterable, List, Union
 
-from Detector.validators.bitcoin_address import BitcoinAddress as Btc
+from Detector.plugin_base import BaseExtractor
+from Detector.plugins.validators.bitcoin import BitcoinValidator
 
-from .extractor import Extractor
-
-PATTERN_BTC_BASE58 = r"[13][a-km-zA-HJ-NP-Z1-9]{25,34}"
-PATTERN_BTC_SEGWIT = r"(?:[bB][cC])1[a-zA-HJ-NP-Z0-9]{25,39}"
+PATTERN_BTC_BASE58 = r"\b[13][a-km-zA-HJ-NP-Z1-9]{25,34}\b"
+PATTERN_BTC_SEGWIT = r"\b(?:[bB][cC])1[a-zA-HJ-NP-Z0-9]{25,39}\b"
 RE_BTC = re.compile("{}|{}".format(PATTERN_BTC_SEGWIT, PATTERN_BTC_BASE58))
 
 
-class BitcoinAddress(Extractor):
-    btc = Btc()
+class BitcoinAddress(BaseExtractor):
+    PLUGIN_NAME = "btc"
 
-    def extract_from(self, data: Union[str, List[str]]) -> Iterable[str]:
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
         """Extracts valid Bitcoin addresses from a string or a list of strings.
 
         Looks for addresses on mainnet:
@@ -23,13 +23,15 @@ class BitcoinAddress(Extractor):
         See:
         - https://en.bitcoin.it/wiki/Address
 
-        :param data: String or a list of strings to extract Bitcoin addresses from
+        :param _input: String or a list of strings to extract Bitcoin addresses from
         :return: Generator of found valid Bitcoin addresses
         """
 
-        for part in data if isinstance(data, list) else data.splitlines():
+        for part in _input if isinstance(_input, list) else _input.splitlines():
+            if not part:
+                continue
             yield from (
                 address
                 for address in RE_BTC.findall(part)
-                if self.btc.is_valid(address)
+                if BitcoinValidator.run(address)
             )

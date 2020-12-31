@@ -1,0 +1,3 @@
+pytest
+email-validator
+tabulate

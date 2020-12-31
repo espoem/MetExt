@@ -1,6 +1,6 @@
 import pytest
 
-from Detector.validators.bitcoin_address import BitcoinAddress
+from Detector.plugins.validators.bitcoin import BitcoinValidator
 
 
 @pytest.mark.parametrize(
@@ -22,6 +22,5 @@ from Detector.validators.bitcoin_address import BitcoinAddress
     ],
 )
 def test_is_valid(input_address, expected):
-    btc = BitcoinAddress()
-    assert btc.is_valid(input_address) == expected
-    assert btc.is_valid(bytes(input_address, encoding="utf-8")) == expected
+    assert BitcoinValidator.run(input_address) == expected
+    assert BitcoinValidator.run(bytes(input_address, encoding="utf-8")) == expected

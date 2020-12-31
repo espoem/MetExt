@@ -1,6 +1,6 @@
 import pytest
 
-from Detector.extractors.bitcoin_address import BitcoinAddress
+from Detector.plugins.extractors.bitcoin import BitcoinAddress
 
 
 @pytest.mark.parametrize(
@@ -20,7 +20,7 @@ from Detector.extractors.bitcoin_address import BitcoinAddress
     ],
 )
 def test_extract_from_returns_empty_collection(input_data):
-    extracted = BitcoinAddress().extract_from(input_data)
+    extracted = BitcoinAddress().run(input_data)
     assert len(list(extracted)) == 0
 
 
@@ -66,6 +66,6 @@ def test_extract_from_returns_empty_collection(input_data):
     ],
 )
 def test_extract_from(input_data, expected):
-    extracted = list(BitcoinAddress().extract_from(input_data))
+    extracted = list(BitcoinAddress.run(input_data))
     assert len(extracted) == len(expected)
     assert not set(extracted).isdisjoint(expected)

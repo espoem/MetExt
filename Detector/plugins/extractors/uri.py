@@ -1,5 +1,5 @@
 import re
-from typing import List, Union, Iterable
+from typing import Iterable, List, Union
 
 from Detector.plugin_base import BaseExtractor
 from Detector.plugins.validators.uri import URIValidator, URLValidator

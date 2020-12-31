@@ -1,5 +1,5 @@
 import re
-from typing import Union, List, Iterable
+from typing import Iterable, List, Union
 
 from Detector.plugin_base import BaseExtractor
 

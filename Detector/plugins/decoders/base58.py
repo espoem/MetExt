@@ -2,7 +2,6 @@ from typing import Optional
 
 from Detector.plugin_base import BaseDecoder, Decodable
 
-
 CHARSETS_BASE58 = {
     "bitcoin": "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz",
     "ripple": "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz",

@@ -1,5 +1,6 @@
 import sys
-from csv import DictWriter, writer as csvwriter, QUOTE_MINIMAL
+from csv import QUOTE_MINIMAL, DictWriter
+from csv import writer as csvwriter
 from typing import List, Union
 
 from Detector.plugin_base import BasePrinter

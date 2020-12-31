@@ -1,7 +1,7 @@
+import json
 import sys
 
 from Detector.plugin_base import BasePrinter
-import json
 
 
 class JsonPrinter(BasePrinter):

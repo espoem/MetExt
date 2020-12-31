@@ -1,11 +1,10 @@
 import ipaddress
 import re
-from typing import List, Union, Iterable
+from typing import Iterable, List, Union
 
-from Detector.plugins.validators.ip import IPv4AddressValidator, IPv6AddressValidator
-from Detector.utils.uri import IPv6address, IPv4address
 from Detector.plugin_base import BaseExtractor
-
+from Detector.plugins.validators.ip import IPv4AddressValidator, IPv6AddressValidator
+from Detector.utils.uri import IPv4address, IPv6address
 
 # https://en.wikipedia.org/wiki/Wikipedia:Hyphens_and_dashes
 SYMBOLS_HYPHEN_LIKE = [

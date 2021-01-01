@@ -51,6 +51,11 @@ if __name__ == "__main__":
         "VsWvxI1pIHphwqB0csOhdmlseSwgZG9iLCB6YWxlZG7Em27DqSBtxJsgdGEgZMOta3nCoHrDoXBhZG7DrWNoIHRvdXRvIGhhdmFqc2vDvWNoIG9wdGltw6FsbsOtIERhdmlkYSBhxaUu",
         "dGVzdA==",
     ]
+    base_32 = [
+        "YWMGLRENORUW46JAODCZSZLEOBXWW3GDUFSGC3WDVEQGW4TJORUWG26DXVRWQIDTN52XG5DBOZXMJGZANVSXQ2LLN4QHA33LMHC34ZGDVEQHIZLEPEWCA5DPEBXGK2TSYWXXU3WETNVMLIODVUQHU4TBMRUXIIDVNZUXMZLSPJUXI33VEBZG7RENN3CJWIDBYKQHG4DBMRQWVQ5NMPB22IDJYKQHA33IYOQXEIDNYOWXE6JAO3C2CZJMEB5GIYJAONWG65TOYOWWWIDKMVSG433N",
+        "ORSQ====",
+        "ORSXG5BAORSXG5A=",
+    ]
 
     result = [
         "".join(random.choice(printable) for _ in range(random.randint(0, 10000)))
@@ -58,7 +63,14 @@ if __name__ == "__main__":
         + item
         + random.choice(string.whitespace)
         + "".join(random.choice(printable) for _ in range(random.randint(0, 30000)))
-        for item in btc_addresses + ips + emails + md5s + urls + data_uris + base_64
+        for item in btc_addresses
+        + ips
+        + emails
+        + md5s
+        + urls
+        + data_uris
+        + base_64
+        + base_32
     ]
 
     with open("examples/gen/ex_input.txt", "w", encoding="utf-8") as f:

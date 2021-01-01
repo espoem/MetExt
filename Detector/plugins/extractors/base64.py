@@ -6,7 +6,7 @@ from Detector.plugins.validators.base64 import Base64Validator
 
 # https://www.rise4fun.com/Bek/tutorial/base64
 PATTERN_BASE64 = r"(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/][AQgw]==|[A-Za-z0-9+/]{2}[AEIMQUYcgkosw048]=)?"
-RE_BASE64 = re.compile(r"\b{}\b".format(PATTERN_BASE64))
+RE_BASE64 = re.compile(r"{}".format(PATTERN_BASE64))
 
 
 class Base64Extractor(BaseExtractor):
@@ -27,5 +27,5 @@ class Base64Extractor(BaseExtractor):
             yield from (
                 b64
                 for b64 in RE_BASE64.findall(part)
-                if b64 and Base64Validator.run(part)
+                if b64 and Base64Validator.run(b64)
             )

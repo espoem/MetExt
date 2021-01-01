@@ -80,4 +80,9 @@ class DataURIExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator with data URIs
         """
-        return URIExtractor.run(_input, schemes=["data"])
+        for part in _input if isinstance(_input, list) else _input.splitlines():
+            if not part:
+                continue
+            yield from (
+                uri for uri in RE_URI.findall(part) if DataURIValidator.run(uri)
+            )

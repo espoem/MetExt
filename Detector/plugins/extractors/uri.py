@@ -7,7 +7,6 @@ from Detector.utils.uri import URI, URI_reference, data_URI
 
 RE_URI_REFERENCE = re.compile(r"\b{}\b".format(URI_reference), re.VERBOSE)
 RE_URI = re.compile(r"\b{}\b".format(URI), re.VERBOSE)
-RE_DATA_URI = re.compile(r"\b{}\b".format(data_URI), re.VERBOSE)
 
 
 class URIExtractor(BaseExtractor):
@@ -82,5 +81,5 @@ class DataURIExtractor(BaseExtractor):
             if not part:
                 continue
             yield from (
-                uri for uri in RE_DATA_URI.findall(part) if DataURIValidator.run(uri)
+                uri for uri in (RE_URI.findall(part)) if DataURIValidator.run(uri)
             )

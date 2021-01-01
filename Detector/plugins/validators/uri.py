@@ -56,7 +56,9 @@ class DataURIValidator(BaseValidator):
         :return: True if _input is valid data URI string
         """
         parsed = urlparse(_input)
-        base64_valid = "base64," not in _input or Base64Validator.run(
-            _input.split("base64,")[-1]
+        base64_valid = (
+            "base64," not in _input
+            or Base64Validator.run(_input.split("base64,")[-1])
+            or True
         )
         return parsed.scheme == "data" and bool(parsed.path) and base64_valid

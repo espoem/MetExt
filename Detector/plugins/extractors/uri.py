@@ -29,10 +29,13 @@ class URIExtractor(BaseExtractor):
         if True then only path-like results with "/" path parts delimiter are returned, defaults to True
         :keyword relative: Flag to allow URI relative references,
         otherwise some scheme must be present, default to False
+        :keyword schemes: List of lower-cased schemes (e.g. http, data) URI must contain.
+        If empty list (not provided), then URI is not restricted by a scheme, defaults to empty list
         :return: Generator of URIs
         """
         include_relative = kwargs.get("relative", False)
         strict = kwargs.get("strict", True)
+        schemes = kwargs.get("schemes", [])
         regex = RE_URI_REFERENCE if include_relative else RE_URI
         for part in _input if isinstance(_input, list) else _input.splitlines():
             if not part:
@@ -40,7 +43,7 @@ class URIExtractor(BaseExtractor):
             yield from (
                 uri
                 for uri in regex.findall(part)
-                if URIValidator.run(uri, strict=strict)
+                if URIValidator.run(uri, strict=strict, schemes=schemes)
             )
 
 
@@ -77,9 +80,4 @@ class DataURIExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator with data URIs
         """
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                uri for uri in (RE_URI.findall(part)) if DataURIValidator.run(uri)
-            )
+        return URIExtractor.run(_input, schemes=["data"])

@@ -15,13 +15,18 @@ class URIValidator(BaseValidator):
         :param args:
         :param kwargs:
         :keyword strict: If True then _input is required to contain path-like delimiter "/"
+        :keyword schemes: List of lower-cased schemes (e.g. http, data) that URI must have (one of).
+        If schemes is an empty list (none provided), then there is no scheme restriction, defaults to empty list
         :return:
         """
         strict = kwargs.get("strict", True)
+        schemes = kwargs.get("schemes", [])
         parsed = urlparse(_input)
-        return bool(parsed.netloc) or (
-            bool(parsed.path) and ("/" in parsed.path) if strict else True
-        )
+        is_path_like = ("/" in parsed.path) if strict else True
+        has_selected_scheme = parsed.scheme in schemes if schemes else True
+        return (
+            bool(parsed.netloc) or (bool(parsed.path) and is_path_like)
+        ) and has_selected_scheme
 
 
 class URLValidator(BaseValidator):

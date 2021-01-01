@@ -5,17 +5,18 @@ from Detector import analyze, plugin_base
 from Detector.utils import to_csv_printer_format, to_table_printer_format
 from Detector.utils.fileinput import FileInputExtended
 
+decoders = [
+    plug.PLUGIN_NAME
+    for plug in plugin_base.BaseDecoder.get_active_plugins()
+    if plug.PLUGIN_NAME != "_id"
+]
+extractors = [
+    plug.PLUGIN_NAME for plug in plugin_base.BaseExtractor.get_active_plugins()
+]
+printers = [plug.PLUGIN_NAME for plug in plugin_base.BasePrinter.get_active_plugins()]
+
 
 def build_parser():
-    default_decoders = [
-        plug.PLUGIN_NAME for plug in plugin_base.BaseDecoder.get_active_plugins()
-    ]
-    default_extractors = [
-        plug.PLUGIN_NAME for plug in plugin_base.BaseExtractor.get_active_plugins()
-    ]
-    default_printers = [
-        plug.PLUGIN_NAME for plug in plugin_base.BasePrinter.get_active_plugins()
-    ]
     main_parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
@@ -55,10 +56,8 @@ def build_parser():
             "Select formats that should be tried for decoding from."
             " If no format selected, all will be tried."
         ),
-        choices=default_decoders,
-        # default=["_id"],
-        # default=default_decoders,
-        default=[p for p in default_decoders if p != "_id"],
+        choices=decoders + ["_id"],
+        default=decoders,
     )
     main_parser.add_argument(
         "-e",
@@ -68,16 +67,15 @@ def build_parser():
             "Select patterns that should be extracted."
             " If no pattern selected, all supported patterns will be tried."
         ),
-        choices=default_extractors,
-        # default=default_extractors,
-        default=["btc", "ipv4", "ipv6", "email", "url"],
+        choices=extractors,
+        default=extractors,
     )
     main_parser.add_argument(
         "-F",
         "--out-format",
         nargs=1,
         help="Select output format of found patterns.",
-        choices=default_printers,
+        choices=printers,
         default=["json"],
     )
     # main_parser.add_argument(

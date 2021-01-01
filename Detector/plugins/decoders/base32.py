@@ -32,7 +32,7 @@ class Base32Decoder(BaseDecoder):
         if lalt_chars != 32:
             raise AssertionError("Only full chars set can be defined")
 
-        if lalt_chars == 32 and alt_chars != CHARSETS_BASE32["std"]:
+        if alt_chars != CHARSETS_BASE32["std"]:
             # https://stackoverflow.com/questions/5537750/decode-base64-like-string-with-different-index-tables
             if isinstance(_input, str):
                 tbl = str.maketrans(alt_chars, CHARSETS_BASE32["std"])

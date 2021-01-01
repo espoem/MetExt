@@ -2,11 +2,12 @@ import re
 from typing import Iterable, List, Union
 
 from Detector.plugin_base import BaseExtractor
-from Detector.plugins.validators.uri import URIValidator, URLValidator
-from Detector.utils.uri import URI, URI_reference
+from Detector.plugins.validators.uri import DataURIValidator, URIValidator, URLValidator
+from Detector.utils.uri import URI, URI_reference, data_URI
 
 RE_URI_REFERENCE = re.compile(r"\b{}\b".format(URI_reference), re.VERBOSE)
 RE_URI = re.compile(r"\b{}\b".format(URI), re.VERBOSE)
+RE_DATA_URI = re.compile(r"\b{}\b".format(data_URI), re.VERBOSE)
 
 
 class URIExtractor(BaseExtractor):
@@ -63,3 +64,23 @@ class URLExtractor(BaseExtractor):
             if not part:
                 continue
             yield from (uri for uri in RE_URI.findall(part) if URLValidator.run(uri))
+
+
+class DataURIExtractor(BaseExtractor):
+    PLUGIN_NAME = "data_uri"
+
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+        """Extracts valid data URIs from a string or a lists of strings.
+
+        :param _input: String or a list of strings
+        :param args: Variable arguments
+        :param kwargs: Arbitrary keyword arguments
+        :return: Generator with data URIs
+        """
+        for part in _input if isinstance(_input, list) else _input.splitlines():
+            if not part:
+                continue
+            yield from (
+                uri for uri in RE_DATA_URI.findall(part) if DataURIValidator.run(uri)
+            )

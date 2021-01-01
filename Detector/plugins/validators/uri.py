@@ -1,6 +1,7 @@
 from urllib.parse import urlparse
 
 from Detector.plugin_base import BaseValidator
+from Detector.plugins.validators.base64 import Base64Validator
 
 
 class URIValidator(BaseValidator):
@@ -38,3 +39,24 @@ class URLValidator(BaseValidator):
         """
         parsed = urlparse(_input)
         return parsed.scheme in ("http", "https", "ftp", "ftps") and bool(parsed.netloc)
+
+
+class DataURIValidator(BaseValidator):
+    PLUGIN_NAME = "data_uri"
+
+    @classmethod
+    def run(cls, _input: str, *args, **kwargs) -> bool:
+        """Checks that _input is a valid data URI string.
+        If it contains data in base64 format, it checks that the data
+        is valid base64.
+
+        :param _input:
+        :param args: Variable arguments
+        :param kwargs: Arbitrary keyword arguments
+        :return: True if _input is valid data URI string
+        """
+        parsed = urlparse(_input)
+        base64_valid = "base64," not in _input or Base64Validator.run(
+            _input.split("base64,")[-1]
+        )
+        return parsed.scheme == "data" and bool(parsed.path) and base64_valid

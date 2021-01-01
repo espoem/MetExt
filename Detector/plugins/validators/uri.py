@@ -42,8 +42,9 @@ class URLValidator(BaseValidator):
         :param kwargs:
         :return: True if _input is URL
         """
-        parsed = urlparse(_input)
-        return parsed.scheme in ("http", "https", "ftp", "ftps") and bool(parsed.netloc)
+        return URIValidator.run(
+            _input, *args, schemes=("http", "https", "ftp", "ftps"), **kwargs
+        )
 
 
 class DataURIValidator(BaseValidator):

@@ -56,6 +56,10 @@ if __name__ == "__main__":
         "ORSQ====",
         "ORSXG5BAORSXG5A=",
     ]
+    sha_1 = [
+        "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3",
+        "d3486ae9136e7856bc42212385ea797094475802",
+    ]
 
     result = [
         "".join(random.choice(printable) for _ in range(random.randint(0, 10000)))
@@ -71,6 +75,7 @@ if __name__ == "__main__":
         + data_uris
         + base_64
         + base_32
+        + sha_1
     ]
 
     with open("examples/gen/ex_input.txt", "w", encoding="utf-8") as f:

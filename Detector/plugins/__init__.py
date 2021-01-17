@@ -2,6 +2,24 @@ import pkgutil
 
 __all__ = []
 
+HEX_DELIMITERS = {
+    "None": "",
+    "Space": " ",
+    "Comma": ",",
+    "Semicolon": ";",
+    "Colon": ":",
+    "LF": r"\n",
+    "CRLF": r"\r\n",
+    "0x": "0x",
+    "comma-0x": ",0x",
+    r"\x": r"[\]x",
+}
+HEX_PATTERN_TEMPLATE = r"[\dA-F]{{2}}(?:{delim}[\dA-F]{{2}})*"
+HEX_PATTERNS = {
+    name: HEX_PATTERN_TEMPLATE.format(delim=delim)
+    for name, delim in HEX_DELIMITERS.items()
+}
+
 
 def load_plugin_modules(paths):
     """https://geoffsamuel.com/2020/03/31/plugin-class-architecture/

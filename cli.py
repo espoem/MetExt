@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import argparse
 
-from Detector import analyze, plugin_base
-from Detector.utils import to_csv_printer_format, to_table_printer_format
-from Detector.utils.fileinput import FileInputExtended
+from metext import analyze, plugin_base
+from metext.utils import to_csv_printer_format, to_table_printer_format
+from metext.utils.fileinput import FileInputExtended
 
 decoders = [
     plug.PLUGIN_NAME

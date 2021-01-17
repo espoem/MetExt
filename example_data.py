@@ -60,6 +60,22 @@ if __name__ == "__main__":
         "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3",
         "d3486ae9136e7856bc42212385ea797094475802",
     ]
+    sha_224 = [
+        "90a3ed9e32b2aaf4c61c410eb925426119e1a9dc53d4286ade99a809",
+        "7e81ebe9e604a0c97fef0e4cfe71f9ba0ecba13332bde953ad1c66e4",
+    ]
+    sha_256 = [
+        "c0535e4be2b79ffd93291305436bf889314e4a3faec05ecffcbb7df31ad9e51a",
+        "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+    ]
+    sha_384 = [
+        "768412320f7b0aa5812fce428dc4706b3cae50e02a64caa16a782249bfe8efc4b7ef1ccb126255d196047dfedf17a0a9",
+        "86255fa2c36e4b30969eae17dc34c772cbebdfc58b58403900be87614eb1a34b8780263f255eb5e65ca9bbb8641cccfe",
+    ]
+    sha_512 = [
+        "f6cde2a0f819314cdde55fc227d8d7dae3d28cc556222a0a8ad66d91ccad4aad6094f517a2182360c9aacf6a3dc323162cb6fd8cdffedb0fe038f55e85ffb5b6",
+        "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff",
+    ]
 
     result = [
         "".join(random.choice(printable) for _ in range(random.randint(0, 10000)))
@@ -76,6 +92,10 @@ if __name__ == "__main__":
         + base_64
         + base_32
         + sha_1
+        + sha_224
+        + sha_256
+        + sha_384
+        + sha_512
     ]
 
     with open("examples/gen/ex_input.txt", "w", encoding="utf-8") as f:

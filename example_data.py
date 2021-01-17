@@ -76,6 +76,7 @@ if __name__ == "__main__":
         "f6cde2a0f819314cdde55fc227d8d7dae3d28cc556222a0a8ad66d91ccad4aad6094f517a2182360c9aacf6a3dc323162cb6fd8cdffedb0fe038f55e85ffb5b6",
         "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff",
     ]
+    mac = ["01-23-45-67-89-AB", "01:23:45:67:89:ab", "0123.4567.89AB"]
 
     result = [
         "".join(random.choice(printable) for _ in range(random.randint(0, 10000)))
@@ -96,6 +97,7 @@ if __name__ == "__main__":
         + sha_256
         + sha_384
         + sha_512
+        + mac
     ]
 
     with open("examples/gen/ex_input.txt", "w", encoding="utf-8") as f:

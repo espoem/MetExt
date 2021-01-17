@@ -60,5 +60,5 @@ class IPv6AddressExtractor(BaseExtractor):
             yield from (
                 address
                 for address in RE_IPV6.findall(part)
-                if IPv6AddressValidator.run(address)
+                if len(address) > 6 and IPv6AddressValidator.run(address)
             )

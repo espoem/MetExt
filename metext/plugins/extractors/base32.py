@@ -23,11 +23,13 @@ class Base32Extractor(BaseExtractor):
         :param _input: String or a list of strings
         :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
+        :keyword min_len: Minimum length of base32 found strings
         :return: Generator of Base32 strings
         """
+        min_len = kwargs.get("min_len", 50)
         for part in _input if isinstance(_input, list) else _input.splitlines():
             yield from (
                 b32
                 for b32 in RE_BASE32.findall(part)
-                if b32 and Base32Validator.run(b32)
+                if len(b32) >= min_len and Base32Validator.run(b32)
             )

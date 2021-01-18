@@ -174,7 +174,11 @@ def _extract_single(_data, _executor):
     )
 
 
-def _read(_input: Union[FileInputExtended, BufferedIOBase], per_line: bool = False):
+def _read(_input, per_line: bool = False):
+    if isinstance(_input, str):
+        _input = StringIO(_input)
+    elif isinstance(_input, bytes):
+        _input = BytesIO(_input)
     if per_line:
         return _input
     if isinstance(_input, FileInputExtended):

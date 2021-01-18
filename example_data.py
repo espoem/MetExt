@@ -13,6 +13,12 @@ if __name__ == "__main__":
         "bc1q5s8fz9p8x0a59774jlr9cmuwf6kjdv3j5tqvxm",
         "3Fxq8ctmbr5CQEdoow189rAi64LePvxgfb",
     ]
+    ripple = [
+        "rDbWJ9C7uExThZYAwV8m6LsZ5YSX3sa6US",
+        "rMQ98K56yXJbDGv49ZSmW51sLn94Xe1mu1",
+        "rJb5KsHsDHF1YS5B5DU6QCkH5NsPaKQTcy",
+        "rKveEyR1SrkWbJX214xcfH43ZsoGMb3PEv",
+    ]
     ips = [
         "1762:0:0:0:0:B03:1:AF18",
         "1762:0:0:0:0:B03:127.32.67.1",
@@ -100,6 +106,7 @@ if __name__ == "__main__":
         + sha_384
         + sha_512
         + mac
+        + ripple
     ]
 
     with open("examples/gen/ex_input.txt", "w", encoding="utf-8") as f:

@@ -1,3 +1,4 @@
 pytest
 email-validator
 tabulate
+base91

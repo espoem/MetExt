@@ -1,6 +1,6 @@
 import concurrent.futures as cf
 from io import BufferedIOBase, BytesIO, StringIO, TextIOBase
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any, Callable, List, Optional, Tuple, Union
 
 from metext import plugin_base
 from metext.plugin_base import BaseDecoder, BaseExtractor, Decodable
@@ -26,12 +26,28 @@ def list_decoders() -> dict:
     return supported_decoders
 
 
-def get_decoder(name) -> Optional[BaseDecoder]:
-    return supported_decoders.get(name)
+def get_decoder(name) -> Optional[Callable]:
+    """Get decoder execution function
+
+    :param name: Decoder name
+    :return: Decoding function
+    """
+    try:
+        return supported_decoders.get(name).run
+    except:
+        return None
 
 
-def get_extractor(name) -> Optional[BaseExtractor]:
-    return supported_extractors.get(name)
+def get_extractor(name) -> Optional[Callable]:
+    """Get extractor execution function
+
+    :param name: Extractor name
+    :return: Extracting function
+    """
+    try:
+        return supported_extractors.get(name).run
+    except:
+        return None
 
 
 def list_extractors() -> dict:
@@ -70,7 +86,7 @@ def decode(data: Decodable, decoder: str, *args, **kwargs) -> Optional[Any]:
             )
         )
 
-    return supported_decoders[decoder].run(data, *args, **kwargs)
+    return get_decoder(decoder)(data, *args, **kwargs)
 
 
 def extract_patterns(data: str, extractor: str, *args, **kwargs) -> List[Any]:
@@ -90,7 +106,7 @@ def extract_patterns(data: str, extractor: str, *args, **kwargs) -> List[Any]:
             )
         )
 
-    return list(supported_extractors[extractor].run(data, *args, **kwargs))
+    return list(get_extractor(extractor)(data, *args, **kwargs))
 
 
 def analyze(

@@ -7,6 +7,7 @@ from metext.plugins import HEX_PATTERN_TEMPLATE
 
 class HexExtractor(BaseExtractor):
     PLUGIN_NAME = "hex"
+    PLUGIN_ACTIVE = False
 
     @classmethod
     def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:

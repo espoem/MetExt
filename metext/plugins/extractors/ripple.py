@@ -26,5 +26,8 @@ class RippleAddress(BaseExtractor):
         for part in _input if isinstance(_input, list) else _input.splitlines():
             if not part:
                 continue
-            a = RE_XRP.findall(part)
-            yield from (address for address in a if RippleValidator.run(address))
+            yield from (
+                address
+                for address in RE_XRP.findall(part)
+                if RippleValidator.run(address)
+            )

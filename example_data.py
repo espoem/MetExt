@@ -3,6 +3,8 @@ import random
 import string
 from string import printable
 
+import base91
+
 if __name__ == "__main__":
     btc_addresses = [
         "1AGNa15ZQXAZUgFiqJ2i7Z2DPU2J6hW62i",
@@ -114,3 +116,6 @@ if __name__ == "__main__":
 
     with open("examples/gen/ex_ascii85", "wb") as g:
         g.write(base64.a85encode("\n".join(result).encode("utf-8")))
+
+    with open("examples/gen/ex_base91", "w", encoding="utf8") as g:
+        g.write(base91.encode("\n".join(result).encode("utf-8")))

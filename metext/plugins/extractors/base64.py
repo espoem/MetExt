@@ -21,11 +21,13 @@ class Base64Extractor(BaseExtractor):
         :param _input: String or a list of strings
         :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
+        :keyword min_len: Minimum length of base64 found string, defaults to 50
         :return: Generator of Base64 strings
         """
+        min_len = kwargs.get("min_len", 50)
         for part in _input if isinstance(_input, list) else _input.splitlines():
             yield from (
                 b64
                 for b64 in RE_BASE64.findall(part)
-                if b64 and Base64Validator.run(b64)
+                if len(b64) >= min_len and Base64Validator.run(b64)
             )

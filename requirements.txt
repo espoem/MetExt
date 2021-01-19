@@ -2,3 +2,4 @@ pytest
 email-validator
 tabulate
 base91
+pysha3

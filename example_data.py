@@ -19,6 +19,12 @@ if __name__ == "__main__":
         "rJb5KsHsDHF1YS5B5DU6QCkH5NsPaKQTcy",
         "rKveEyR1SrkWbJX214xcfH43ZsoGMb3PEv",
     ]
+    litecoin = [
+        "M8T1B2Z97gVdvmfkQcAtYbEepune1tzGua",
+        "LQTpS3VaYTjCr4s9Y1t5zbeY26zevf7Fb3",
+        "MBuTKxJaHMN3UsRxQqpGRPdA7sCfE1UF7n",
+        "3Lq1u3Gr7vo5ogcQPEjfU5r8MHUFfC4ini",
+    ]
     ips = [
         "1762:0:0:0:0:B03:1:AF18",
         "1762:0:0:0:0:B03:127.32.67.1",
@@ -107,6 +113,7 @@ if __name__ == "__main__":
         + sha_512
         + mac
         + ripple
+        + litecoin
     ]
 
     with open("examples/gen/ex_input.txt", "w", encoding="utf-8") as f:

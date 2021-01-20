@@ -27,34 +27,29 @@ class Base64Decoder(BaseDecoder):
         :param _input: Base64 encoded (bytes) string
         :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
-        :keyword alt_chars: Defines alternative full chars set of 64 chars, or set of 2 special chars, defaults to "+/"
+        :keyword charset: Defines alternative full chars set of 64 chars
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """
-        alt_chars = kwargs.get("alt_chars", "+/")
-        lalt_chars = len(alt_chars)
-        if lalt_chars not in [
-            2,  # special chars set
-            64,  # full chars set
-        ]:
+        charset = kwargs.get("charset", CHARSETS_BASE64["std"])
+        if len(charset) != 64:
             raise AssertionError(
                 "Only full chars set or special chars set can be defined"
             )
 
-        if lalt_chars == 64 and alt_chars != CHARSETS_BASE64["std"]:
+        if isinstance(_input, str):
+            _input = bytes(_input, "utf8")
+        if charset != CHARSETS_BASE64["std"]:
             # https://stackoverflow.com/questions/5537750/decode-base64-like-string-with-different-index-tables
-            if isinstance(_input, str):
-                tbl = str.maketrans(alt_chars, CHARSETS_BASE64["std"])
-            else:
-                tbl = bytes.maketrans(
-                    bytes(alt_chars, "utf8"), bytes(CHARSETS_BASE64["std"], "utf8")
-                )
+            tbl = bytes.maketrans(
+                bytes(charset, "utf8"), bytes(CHARSETS_BASE64["std"], "utf8")
+            )
             _input = _input.translate(tbl)
 
         padding_len = (4 - len(_input) & 3) & 3
-        _input += ("=" if isinstance(_input, str) else b"=") * padding_len
+        _input += b"=" * padding_len
 
         try:
-            return base64.b64decode(_input, altchars=alt_chars[-2:])
+            return base64.b64decode(_input, altchars=charset[-2:], validate=True)
         except Exception:
             return None
 
@@ -74,4 +69,6 @@ class Base64UrlDecoder(BaseDecoder):
         :param kwargs: Arbitrary keyword arguments
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """
-        return Base64Decoder.run(_input, *args, alt_chars="-_", **kwargs)
+        return Base64Decoder.run(
+            _input, *args, charset=CHARSETS_BASE64["urlsafe"], **kwargs
+        )

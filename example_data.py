@@ -1,4 +1,5 @@
 import base64
+import codecs
 import random
 import string
 from string import printable
@@ -139,3 +140,6 @@ if __name__ == "__main__":
 
     with open("examples/gen/ex_base91", "w", encoding="utf8") as g:
         g.write(base91.encode("\n".join(result).encode("utf-8")))
+
+    with open("examples/gen/ex_uu", "wb") as g:
+        g.write(codecs.encode(bytes("\n".join(result), "utf8"), encoding="uu"))

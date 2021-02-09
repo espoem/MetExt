@@ -1,6 +1,4 @@
 from metext.plugin_base import BaseValidator
-
-
 from metext.utils.regex import RE_MD5
 
 

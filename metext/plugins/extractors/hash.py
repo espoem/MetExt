@@ -1,13 +1,31 @@
-import re
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
+from metext.utils.regex import (
+    RE_MD5,
+    RE_SHA1,
+    RE_SHA224,
+    RE_SHA256,
+    RE_SHA384,
+    RE_SHA512,
+)
 
-RE_SHA1 = re.compile(r"\b[a-f0-9]{40}\b", re.IGNORECASE)
-RE_SHA224 = re.compile(r"\b[a-f0-9]{56}\b", re.IGNORECASE)
-RE_SHA256 = re.compile(r"\b[a-f0-9]{64}\b", re.IGNORECASE)
-RE_SHA384 = re.compile(r"\b[a-f0-9]{96}\b", re.IGNORECASE)
-RE_SHA512 = re.compile(r"\b[a-f0-9]{128}\b", re.IGNORECASE)
+
+class MD5Extractor(BaseExtractor):
+    PLUGIN_NAME = "md5"
+
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+        """Extracts strings that conform to the MD5 hash string.
+
+        :param _input: String or a list of strings to extract MD5 hash string from
+        :param kwargs: Arbitrary keyword arguments
+        :return: Generator of MD5 hash strings
+        """
+        for part in _input if isinstance(_input, list) else _input.splitlines():
+            if not part:
+                continue
+            yield from iter(RE_MD5.findall(part))
 
 
 class SHA1Extractor(BaseExtractor):

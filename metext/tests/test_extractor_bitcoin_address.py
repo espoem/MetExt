@@ -1,6 +1,6 @@
 import pytest
 
-from metext.plugins.extractors.bitcoin import BitcoinAddress
+from metext.plugins.extractors.crypto import BitcoinAddress
 
 
 @pytest.mark.parametrize(

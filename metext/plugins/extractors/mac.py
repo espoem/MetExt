@@ -13,11 +13,10 @@ class MACAddressExtractor(BaseExtractor):
     PLUGIN_NAME = "mac"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts MAC addresses
 
         :param _input: String or a list of strings to extract MAC address from
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of MAC addresses
         """

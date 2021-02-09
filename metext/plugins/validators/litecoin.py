@@ -9,7 +9,7 @@ class LitecoinValidator(BaseValidator):
     PLUGIN_NAME = "ltc"
 
     @classmethod
-    def run(cls, _input: Union[bytes, str], *args, **kwargs) -> bool:
+    def run(cls, _input: Union[bytes, str], **kwargs) -> bool:
         """Checks that given (bytes) string represents a valid
         Litecoin mainnet address.
 

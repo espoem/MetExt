@@ -10,13 +10,12 @@ class CsvPrinter(BasePrinter):
     PLUGIN_NAME = "csv"
 
     @classmethod
-    def run(cls, _input: Union[List[list], List[dict]], *args, **kwargs):
+    def run(cls, _input: Union[List[list], List[dict]], **kwargs):
         """Prints to CSV format.
 
         Input can be either a list of dicts, or a list of lists.
 
         :param _input:
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :keyword filename: Name of output file. If it is "-", then the output is printed to STDOUT, defaults to "-"
         :return:

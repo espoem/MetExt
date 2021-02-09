@@ -9,7 +9,7 @@ class RippleValidator(BaseValidator):
     PLUGIN_NAME = "xrp"
 
     @classmethod
-    def run(cls, _input: Union[bytes, str], *args, **kwargs) -> bool:
+    def run(cls, _input: Union[bytes, str], **kwargs) -> bool:
         """Checks that given data (bytes) string represents a valid Ripple (XRP)
         address.
 

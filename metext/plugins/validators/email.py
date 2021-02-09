@@ -12,11 +12,10 @@ class EmailValidator(BaseValidator):
     PLUGIN_NAME = "email"
 
     @classmethod
-    def run(cls, _input: str, *args, **kwargs) -> bool:
+    def run(cls, _input: str, **kwargs) -> bool:
         """Checks that a string has a valid e-mail address form
 
         :param _input:
-        :param args:
         :param kwargs:
         :return: True if _input has a valid e-mail addresses from
         """

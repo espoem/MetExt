@@ -12,13 +12,10 @@ class Bech32Decoder(BaseDecoder):
     """
 
     @classmethod
-    def run(
-        cls, _input: Decodable, *args, **kwargs
-    ) -> Union[Tuple[None, None], Tuple[str, List[int]]]:
+    def run(cls, _input: Decodable, **kwargs) -> Union[Tuple[None, None], Tuple[str, List[int]]]:
         """Decodes Bech32 encoded bytes-like object or ASCII data string.
 
         :param _input: Data string to decode
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: Tuple (hrp, data) with human-readable part and decoded data.
         Returns (None, None) if `data` is not valid bech32 encoded (bytes) string.

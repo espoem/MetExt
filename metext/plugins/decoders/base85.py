@@ -8,11 +8,10 @@ class Base85Decoder(BaseDecoder):
     PLUGIN_NAME = "base85"
 
     @classmethod
-    def run(cls, _input: Decodable, *args, **kwargs) -> Optional[bytes]:
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
         """Decodes Base85 encoded bytes-like object or ASCII `data` string.
 
         :param _input: Base85 encoded (bytes) string
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """

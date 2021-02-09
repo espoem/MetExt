@@ -10,7 +10,7 @@ class EthereumValidator(BaseValidator):
     PLUGIN_NAME = "eth"
 
     @classmethod
-    def run(cls, _input: Union[bytes, str], *args, **kwargs) -> bool:
+    def run(cls, _input: Union[bytes, str], **kwargs) -> bool:
         """Checks that given (bytes) string represents a valid Ethereum address.
 
         :param _input: ASCII (bytes) string

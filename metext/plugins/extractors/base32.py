@@ -15,13 +15,12 @@ class Base32Extractor(BaseExtractor):
     PLUGIN_NAME = "base32"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts (standard) padded Base32 strings.
 
         See https://tools.ietf.org/html/rfc4648#section-4
 
         :param _input: String or a list of strings
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :keyword min_len: Minimum length of base32 found strings
         :return: Generator of Base32 strings

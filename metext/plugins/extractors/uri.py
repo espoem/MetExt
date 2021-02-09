@@ -13,7 +13,7 @@ class URIExtractor(BaseExtractor):
     PLUGIN_NAME = "uri"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts URIs from a string or a list of strings.
 
         See https://tools.ietf.org/html/rfc3986
@@ -23,7 +23,6 @@ class URIExtractor(BaseExtractor):
             lots of noise patterns.
 
         :param _input: String or a list of strings
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :keyword strict: Flag to reduce the number of results,
         if True then only path-like results with "/" path parts delimiter are returned, defaults to True
@@ -51,14 +50,13 @@ class URLExtractor(BaseExtractor):
     PLUGIN_NAME = "url"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts URLs from a string or a list of strings. URL must contain one of the following schemes:
         `http`, `https`, `ftp`, `ftps`
 
         See https://tools.ietf.org/html/rfc3986
 
         :param _input: String or a list of strings
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: Generator with URLs
         """
@@ -72,11 +70,10 @@ class DataURIExtractor(BaseExtractor):
     PLUGIN_NAME = "data_uri"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts valid data URIs from a string or a lists of strings.
 
         :param _input: String or a list of strings
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: Generator with data URIs
         """

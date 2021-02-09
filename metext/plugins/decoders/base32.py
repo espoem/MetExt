@@ -13,7 +13,7 @@ class Base32Decoder(BaseDecoder):
     PLUGIN_NAME = "base32"
 
     @classmethod
-    def run(cls, _input: Decodable, *args, **kwargs) -> Optional[bytes]:
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
         """Decodes Base32 encoded bytes-like object or ASCII `data` string
         using the base32 chars set.
 
@@ -22,7 +22,6 @@ class Base32Decoder(BaseDecoder):
         See https://tools.ietf.org/html/rfc4648#section-6
 
         :param _input: Base32 encoded (bytes) string
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :keyword alt_chars: Chars set of 32 chars to use
         :return: `None` if `data` couldn't be decoded, else decoded byte string
@@ -55,14 +54,13 @@ class Base32HexDecoder(BaseDecoder):
     PLUGIN_NAME = "base32hex"
 
     @classmethod
-    def run(cls, _input: Decodable, *args, **kwargs) -> Optional[bytes]:
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
         """Decodes Base32 encoded bytes-like object or ASCII `data` string
         using the base32hex chars set.
 
         See https://tools.ietf.org/html/rfc4648#section-7
 
         :param _input: Base64 encoded (bytes) string
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """

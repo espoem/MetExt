@@ -11,13 +11,12 @@ class Base91Decoder(BaseDecoder):
     PLUGIN_NAME = "base91"
 
     @classmethod
-    def run(cls, _input: Decodable, *args, **kwargs) -> Optional[bytes]:
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
         """Decodes Base91 encoded bytes-like object or ASCII string.
 
         See http://base91.sourceforge.net/
 
         :param _input: Base91 encoded (bytes) string
-        :param args:
         :param kwargs:
         :return: `None` if `_input` couldn't be decoded, else decoded bytes string
         """

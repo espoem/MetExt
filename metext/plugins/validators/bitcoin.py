@@ -10,7 +10,7 @@ class BitcoinValidator(BaseValidator):
     PLUGIN_NAME = "btc"
 
     @classmethod
-    def run(cls, _input: Union[bytes, str], *args, **kwargs) -> bool:
+    def run(cls, _input: Union[bytes, str], **kwargs) -> bool:
         """Checks that given data (bytes) string represents a valid Bitcoin
         mainnet address.
 

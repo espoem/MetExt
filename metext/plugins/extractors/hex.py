@@ -10,12 +10,11 @@ class HexExtractor(BaseExtractor):
     PLUGIN_ACTIVE = False
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts sequences of hex strings, where each two hex chars are separated by
         a selected delimiter.
 
         :param _input: String or a list of strings
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :keyword delim: Delimiter separating 2-digit hex representation of a byte,
         can be regex pattern string. Defaults to empty string ("")

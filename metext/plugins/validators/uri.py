@@ -8,11 +8,10 @@ class URIValidator(BaseValidator):
     PLUGIN_NAME = "uri"
 
     @classmethod
-    def run(cls, _input, *args, **kwargs) -> bool:
+    def run(cls, _input, **kwargs) -> bool:
         """Checks that _input is valid, non-empty URI string, doesn't have to contain a scheme.
 
         :param _input:
-        :param args:
         :param kwargs:
         :keyword strict: If True then _input is required to contain path-like delimiter "/"
         :keyword schemes: List of lower-cased schemes (e.g. http, data) that URI must have (one of).
@@ -33,31 +32,27 @@ class URLValidator(BaseValidator):
     PLUGIN_NAME = "url"
 
     @classmethod
-    def run(cls, _input, *args, **kwargs) -> bool:
+    def run(cls, _input, **kwargs) -> bool:
         """Checks that _input conforms to URL with either of the following schemes:
         http, https, ftp, ftps
 
         :param _input:
-        :param args:
         :param kwargs:
         :return: True if _input is URL
         """
-        return URIValidator.run(
-            _input, *args, schemes=("http", "https", "ftp", "ftps"), **kwargs
-        )
+        return URIValidator.run(_input, schemes=("http", "https", "ftp", "ftps"), **kwargs)
 
 
 class DataURIValidator(BaseValidator):
     PLUGIN_NAME = "data_uri"
 
     @classmethod
-    def run(cls, _input: str, *args, **kwargs) -> bool:
+    def run(cls, _input: str, **kwargs) -> bool:
         """Checks that _input is a valid data URI string.
         If it contains data in base64 format, it checks that the data
         is valid base64.
 
         :param _input:
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: True if _input is valid data URI string
         """

@@ -10,11 +10,10 @@ class MD5Validator(BaseValidator):
     PLUGIN_NAME = "md5"
 
     @classmethod
-    def run(cls, _input, *args, **kwargs) -> bool:
+    def run(cls, _input, **kwargs) -> bool:
         """Checks that the input string is a MD5 hash string.
 
         :param _input:
-        :param args:
         :param kwargs:
         :return: True if input string is a MD5 hash string, else False
         """

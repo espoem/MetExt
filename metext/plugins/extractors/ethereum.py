@@ -9,7 +9,7 @@ class EthereumAddressExtractor(BaseExtractor):
     PLUGIN_NAME = "eth"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts valid Ethereum (ETH) addresses from a string or a list of strings.
 
         Looks for legacy addresses and EIP-55 addresses.

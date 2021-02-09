@@ -11,11 +11,10 @@ class MD5Extractor(BaseExtractor):
     PLUGIN_NAME = "md5"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts strings that conform to the MD5 hash string.
 
         :param _input: String or a list of strings to extract MD5 hash string from
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of MD5 hash strings
         """

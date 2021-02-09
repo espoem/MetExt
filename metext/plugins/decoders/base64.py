@@ -16,7 +16,7 @@ class Base64Decoder(BaseDecoder):
     PLUGIN_NAME = "base64"
 
     @classmethod
-    def run(cls, _input: Decodable, *args, **kwargs) -> Optional[bytes]:
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
         """Decodes Base64 encoded bytes-like object or ASCII `data` string
         using the base64 chars set.
 
@@ -25,7 +25,6 @@ class Base64Decoder(BaseDecoder):
         See https://tools.ietf.org/html/rfc4648#section-4
 
         :param _input: Base64 encoded (bytes) string
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :keyword charset: Defines alternative full chars set of 64 chars
         :return: `None` if `data` couldn't be decoded, else decoded byte string
@@ -58,17 +57,14 @@ class Base64UrlDecoder(BaseDecoder):
     PLUGIN_NAME = "base64url"
 
     @classmethod
-    def run(cls, _input: Decodable, *args, **kwargs) -> Optional[bytes]:
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
         """Decodes Base64 encoded bytes-like object or ASCII `data` string
         using the standard base64 charset with `-` and `_` characters.
 
         See https://tools.ietf.org/html/rfc4648#section-4
 
         :param _input: Base64 encoded (bytes) string
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """
-        return Base64Decoder.run(
-            _input, *args, charset=CHARSETS_BASE64["urlsafe"], **kwargs
-        )
+        return Base64Decoder.run(_input, charset=CHARSETS_BASE64["urlsafe"], **kwargs)

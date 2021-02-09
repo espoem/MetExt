@@ -6,5 +6,5 @@ class Base85Validator(BaseValidator):
     PLUGIN_NAME = "base85"
 
     @classmethod
-    def run(cls, _input, *args, **kwargs):
-        return Base85Decoder.run(_input, *args, **kwargs) is not None
+    def run(cls, _input, **kwargs):
+        return Base85Decoder.run(_input, **kwargs) is not None

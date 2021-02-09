@@ -14,11 +14,10 @@ class SHA1Extractor(BaseExtractor):
     PLUGIN_NAME = "sha1"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts strings that is in accordance with the SHA-1 hash string.
 
         :param _input: String or a list of strings to extract SHA-1 hash string from
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of SHA-1 hash strings
         """
@@ -32,11 +31,10 @@ class SHA224Extractor(BaseExtractor):
     PLUGIN_NAME = "sha224"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts strings that is in accordance with the SHA-224 hash string.
 
         :param _input: String or a list of strings to extract SHA-224 hash string from
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of SHA-224 hash strings
         """
@@ -50,11 +48,10 @@ class SHA256Extractor(BaseExtractor):
     PLUGIN_NAME = "sha256"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts strings that is in accordance with the SHA-256 hash string.
 
         :param _input: String or a list of strings to extract SHA-256 hash string from
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of SHA-256 hash strings
         """
@@ -68,11 +65,10 @@ class SHA384Extractor(BaseExtractor):
     PLUGIN_NAME = "sha384"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts strings that is in accordance with the SHA-384 hash string.
 
         :param _input: String or a list of strings to extract SHA-384 hash string from
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of SHA-384 hash strings
         """
@@ -86,11 +82,10 @@ class SHA512Extractor(BaseExtractor):
     PLUGIN_NAME = "sha512"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts strings that is in accordance with the SHA-512 hash string.
 
         :param _input: String or a list of strings to extract SHA-512 hash string from
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of SHA-512 hash strings
         """

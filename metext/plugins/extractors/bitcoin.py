@@ -13,7 +13,7 @@ class BitcoinAddress(BaseExtractor):
     PLUGIN_NAME = "btc"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts valid Bitcoin addresses from a string or a list of strings.
 
         Looks for addresses on mainnet:

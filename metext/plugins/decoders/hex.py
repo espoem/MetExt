@@ -9,11 +9,10 @@ class HexDecoder(BaseDecoder):
     PLUGIN_NAME = "hex"
 
     @classmethod
-    def run(cls, _input: Decodable, *args, **kwargs) -> Optional[bytes]:
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
         """Decodes hex (base16) encoded bytes string or ASCII string
 
         :param _input: String or bytes in hex representation
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :keyword delim: String delimiter separating 2-digit hex representation of a byte.
         If `delim` is empty, then it will remove any char outside hex charset and 0x pairs.

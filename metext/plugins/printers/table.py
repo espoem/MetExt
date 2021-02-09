@@ -10,11 +10,10 @@ class TextTablePrinter(BasePrinter):
     PLUGIN_NAME = "text"
 
     @classmethod
-    def run(cls, _input: List[list], *args, **kwargs):
+    def run(cls, _input: List[list], **kwargs):
         """Prints to JSON format.
 
         :param _input: List of rows
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :keyword filename: Name of output file. If it is "-", then the output is printed to STDOUT, defaults to "-"
         :keyword tablefmt: Table format, see https://pypi.org/project/tabulate/ for supported values

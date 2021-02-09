@@ -22,13 +22,12 @@ class IPv4AddressExtractor(BaseExtractor):
     PLUGIN_NAME = "ipv4"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extract IPv4 addresses strings from a string or a list of strings.
 
         See https://tools.ietf.org/html/rfc3986#section-3.2.2 for the form of IPv4 address
 
         :param _input: String or a list of strings to extract IPv4 addresses from
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of IPv4 addresses
         """
@@ -44,13 +43,12 @@ class IPv6AddressExtractor(BaseExtractor):
     PLUGIN_NAME = "ipv6"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extract IPv6 addresses strings from a string or a list of strings.
 
         See https://tools.ietf.org/html/rfc3986#section-3.2.2 for the form of IPv6 address
 
         :param _input: String or a list of strings to extract IPv6 addresses from
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of IPv6 addresses
         """

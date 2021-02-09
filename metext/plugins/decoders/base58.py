@@ -13,7 +13,7 @@ class Base58Decoder(BaseDecoder):
     PLUGIN_ACTIVE = False
 
     @classmethod
-    def run(cls, _input: Decodable, *args, **kwargs) -> Optional[bytes]:
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
         """Decodes Base58 encoded bytes-like object or ASCII `data` string
         using the charset defined for Bitcoin addresses.
 
@@ -42,7 +42,7 @@ class Base58BitcoinDecoder(BaseDecoder):
     PLUGIN_NAME = "base58btc"
 
     @classmethod
-    def run(cls, _input: Decodable, *args, **kwargs) -> Optional[bytes]:
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
         """Decodes Base58 encoded bytes-like object or ASCII `data` string
         using the charset defined for Bitcoin addresses.
 
@@ -53,16 +53,14 @@ class Base58BitcoinDecoder(BaseDecoder):
         :keyword length: Number of bytes in which the decoded data should be represented, defaults to 25
         :return: Decode bytes string. Returns `None` if `data` couldn't be decoded.
         """
-        return Base58Decoder.run(
-            _input, *args, alt_chars=CHARSETS_BASE58["bitcoin"], **kwargs
-        )
+        return Base58Decoder.run(_input, alt_chars=CHARSETS_BASE58["bitcoin"], **kwargs)
 
 
 class Base58RippleDecoder(BaseDecoder):
     PLUGIN_NAME = "base58ripple"
 
     @classmethod
-    def run(cls, _input: Decodable, *args, **kwargs) -> Optional[bytes]:
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
         """Decodes Base58 encoded bytes-like object or ASCII `data` string
         using the charset defined for Bitcoin addresses.
 
@@ -73,6 +71,4 @@ class Base58RippleDecoder(BaseDecoder):
         :keyword length: Number of bytes in which the decoded data should be represented, defaults to 25
         :return: Decode bytes string. Returns `None` if `data` couldn't be decoded.
         """
-        return Base58Decoder.run(
-            _input, *args, alt_chars=CHARSETS_BASE58["ripple"], **kwargs
-        )
+        return Base58Decoder.run(_input, alt_chars=CHARSETS_BASE58["ripple"], **kwargs)

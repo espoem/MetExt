@@ -57,7 +57,7 @@ class PluginBase(metaclass=RegisteredPluginMetaClass):
         return [plug for plug in cls.get_plugins() if plug.PLUGIN_ACTIVE is True]
 
     @classmethod
-    def run(cls, _input, *args, **kwargs):
+    def run(cls, _input, **kwargs):
         return _input
 
 

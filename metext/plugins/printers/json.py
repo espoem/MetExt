@@ -8,11 +8,10 @@ class JsonPrinter(BasePrinter):
     PLUGIN_NAME = "json"
 
     @classmethod
-    def run(cls, _input, *args, **kwargs):
+    def run(cls, _input, **kwargs):
         """Prints to JSON format.
 
         :param _input:
-        :param args: Variable arguments
         :param kwargs: Arbitrary keyword arguments
         :keyword filename: Name of output file. If it is "-", then the output is printed to STDOUT, defaults to "-"
         :keyword indent: Indentation to pretty print, defaults to 2

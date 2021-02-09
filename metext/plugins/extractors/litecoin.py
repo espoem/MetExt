@@ -12,7 +12,7 @@ class LitecoinAddress(BaseExtractor):
     PLUGIN_NAME = "ltc"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], *args, **kwargs) -> Iterable[str]:
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts valid Litecoin addresses from a string or a list of strings.
 
         Looks for addresses that start with 'M', 'L', or '3' char.

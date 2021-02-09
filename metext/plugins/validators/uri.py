@@ -1,7 +1,7 @@
 from urllib.parse import urlparse
 
 from metext.plugin_base import BaseValidator
-from metext.plugins.validators.base64 import Base64Validator
+from metext.plugins.validators.baseenc import Base64Validator
 
 
 class URIValidator(BaseValidator):
@@ -40,7 +40,9 @@ class URLValidator(BaseValidator):
         :param kwargs:
         :return: True if _input is URL
         """
-        return URIValidator.run(_input, schemes=("http", "https", "ftp", "ftps"), **kwargs)
+        return URIValidator.run(
+            _input, schemes=("http", "https", "ftp", "ftps"), **kwargs
+        )
 
 
 class DataURIValidator(BaseValidator):

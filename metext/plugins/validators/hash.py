@@ -1,9 +1,7 @@
-import re
-
 from metext.plugin_base import BaseValidator
 
-# https://stackoverflow.com/a/25231922
-RE_MD5 = re.compile(r"\b(?!^[\d]*$)(?!^[a-fA-F]*$)([a-f\d]{32}|[A-F\d]{32})\b")
+
+from metext.utils.regex import RE_MD5
 
 
 class MD5Validator(BaseValidator):

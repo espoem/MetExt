@@ -2,7 +2,7 @@ import re
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
-from metext.plugins.validators.base32 import Base32Validator
+from metext.plugins.validators.baseenc import Base32Validator
 
 # https://stackoverflow.com/a/27362880
 PATTERN_BASE32 = (

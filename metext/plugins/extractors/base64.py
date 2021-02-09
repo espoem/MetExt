@@ -2,7 +2,7 @@ import re
 from typing import List, Union
 
 from metext.plugin_base import BaseExtractor
-from metext.plugins.validators.base64 import Base64Validator
+from metext.plugins.validators.baseenc import Base64Validator
 
 # https://www.rise4fun.com/Bek/tutorial/base64
 PATTERN_BASE64 = r"(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/][AQgw]==|[A-Za-z0-9+/]{2}[AEIMQUYcgkosw048]=)?"

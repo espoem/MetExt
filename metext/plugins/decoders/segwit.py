@@ -34,7 +34,9 @@ class SegwitDecoder(BaseDecoder):
     """
 
     @classmethod
-    def run(cls, _input: Decodable, **kwargs) -> Union[Tuple[None, None], Tuple[str, List[int]]]:
+    def run(
+        cls, _input: Decodable, **kwargs
+    ) -> Union[Tuple[None, None], Tuple[str, List[int]]]:
         """Decodes Bech32 encoded bytes-like object or ASCII data string
         containing a (Bitcoin) Segwit address.
 

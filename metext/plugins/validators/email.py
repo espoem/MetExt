@@ -1,11 +1,6 @@
-import re
-
 from email_validator import validate_email
 
 from metext.plugin_base import BaseValidator
-from metext.utils.uri import addr_spec
-
-RE_EMAIL = re.compile(addr_spec, re.VERBOSE)
 
 
 class EmailValidator(BaseValidator):

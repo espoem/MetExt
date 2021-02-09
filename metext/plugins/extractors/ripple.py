@@ -2,7 +2,7 @@ import re
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
-from metext.plugins.validators.ripple import RippleValidator
+from metext.plugins.validators.crypto import RippleValidator
 
 PATTERN_XRP_BASE58 = r"\br[0-9a-zA-Z]{24,34}\b"
 RE_XRP = re.compile(PATTERN_XRP_BASE58)

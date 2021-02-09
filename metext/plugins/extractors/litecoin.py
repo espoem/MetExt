@@ -2,7 +2,7 @@ import re
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
-from metext.plugins.validators.litecoin import LitecoinValidator
+from metext.plugins.validators.crypto import LitecoinValidator
 
 PATTERN_LTC_BASE58 = r"\b[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}\b"
 RE_LTC = re.compile(PATTERN_LTC_BASE58)

@@ -2,7 +2,7 @@ import re
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
-from metext.plugins.validators.bitcoin import BitcoinValidator
+from metext.plugins.validators.crypto import BitcoinValidator
 
 PATTERN_BTC_BASE58 = r"\b[13][a-km-zA-HJ-NP-Z1-9]{25,34}\b"
 PATTERN_BTC_SEGWIT = r"\b(?:[bB][cC])1[a-zA-HJ-NP-Z0-9]{25,39}\b"

@@ -1,7 +1,7 @@
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
-from metext.plugins.validators.ethereum import EthereumValidator
+from metext.plugins.validators.crypto import EthereumValidator
 from metext.utils import RE_ETH
 
 

@@ -1,6 +1,6 @@
 import pytest
 
-from metext.plugins.validators.bitcoin import BitcoinValidator
+from metext.plugins.validators.crypto import BitcoinValidator
 
 
 @pytest.mark.parametrize(

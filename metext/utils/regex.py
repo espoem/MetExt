@@ -1,6 +1,6 @@
 import re
 
-from metext.utils.uri import addr_spec
+from metext.utils.uri import URI, URI_reference, addr_spec
 
 RE_MD5 = re.compile(
     r"\b(?!^[\d]*$)(?!^[a-fA-F]*$)([a-f\d]{32}|[A-F\d]{32})\b"
@@ -11,6 +11,8 @@ RE_SHA256 = re.compile(r"\b[a-f0-9]{64}\b", re.IGNORECASE)
 RE_SHA384 = re.compile(r"\b[a-f0-9]{96}\b", re.IGNORECASE)
 RE_SHA512 = re.compile(r"\b[a-f0-9]{128}\b", re.IGNORECASE)
 
+RE_URI_REFERENCE = re.compile(r"\b{}\b".format(URI_reference), re.VERBOSE)
+RE_URI = re.compile(r"\b{}\b".format(URI), re.VERBOSE)
 RE_EMAIL = re.compile(addr_spec, re.VERBOSE)
 
 RE_BASE32 = re.compile(

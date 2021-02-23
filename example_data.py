@@ -118,6 +118,7 @@ if __name__ == "__main__":
         "ISBN:978-3-16-148410-0",
         "ISBN: 978-3-16-148410-0",
     ]
+    issn = ["0378-5955", "0024-9319", "0032-1478"]
 
     result = [
         "".join(random.choice(printable) for _ in range(random.randint(0, 10000)))
@@ -144,6 +145,7 @@ if __name__ == "__main__":
         + ethereum
         + isbn10
         + isbn13
+        + issn
     ]
 
     with open("examples/gen/ex_input.txt", "w", encoding="utf-8") as f:

@@ -119,6 +119,13 @@ if __name__ == "__main__":
         "ISBN: 978-3-16-148410-0",
     ]
     issn = ["0378-5955", "0024-9319", "0032-1478"]
+    dois = [
+        "doi:10.1038/nphys1170",
+        "doi:10.1002/0470841559.ch1",
+        "10.1594/PANGAEA.726855",
+        "doi: 10.3207/2959859860",
+        "https://doi.org/10.3866/PKU.WHXB201112303",
+    ]
 
     result = [
         "".join(random.choice(printable) for _ in range(random.randint(0, 10000)))
@@ -146,6 +153,7 @@ if __name__ == "__main__":
         + isbn10
         + isbn13
         + issn
+        + dois
     ]
 
     with open("examples/gen/ex_input.txt", "w", encoding="utf-8") as f:

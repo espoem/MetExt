@@ -1,4 +1,3 @@
-import re
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor

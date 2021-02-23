@@ -18,7 +18,7 @@ RE_EMAIL = re.compile(addr_spec, re.VERBOSE)
 # https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s13.html
 RE_ISBN10 = re.compile(
     r"""
-(?:ISBN(?:-10)?:?\ ?)?     # Optional ISBN/ISBN-10 identifier.
+#(?:ISBN(?:-10)?:?\ ?)?     # Optional ISBN/ISBN-10 identifier.
 (?=                       # Basic format pre-checks (lookahead):
   [0-9X]{10}             #   Require 10 digits/Xs (no separators).
  |                        #  Or:
@@ -33,7 +33,7 @@ RE_ISBN10 = re.compile(
 )
 RE_ISBN13 = re.compile(
     r"""
-(?:ISBN(?:-13)?:?\ ?)?     # Optional ISBN/ISBN-13 identifier.
+#(?:ISBN(?:-13)?:?\ ?)?     # Optional ISBN/ISBN-13 identifier.
 (?=                       # Basic format pre-checks (lookahead):
   [0-9]{13}\b              #   Require 13 digits (no separators).
  |                        #  Or:
@@ -49,7 +49,7 @@ RE_ISBN13 = re.compile(
 )
 RE_ISBN = re.compile(
     r"""
-(?:ISBN(?:-1[03])?:?\ ?)?  # Optional ISBN/ISBN-10/ISBN-13 identifier.
+#(?:ISBN(?:-1[03])?:?\ ?)?  # Optional ISBN/ISBN-10/ISBN-13 identifier.
 (?=                       # Basic format pre-checks (lookahead):
   [0-9X]{10}\b             #   Require 10 digits/Xs (no separators).
  |                        #  Or:

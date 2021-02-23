@@ -1,13 +1,8 @@
-import re
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
 from metext.plugins.validators.isbn import IsbnValidator
-from metext.utils.regex import RE_ISBN, RE_ISBN10, RE_ISBN13
-
-
-def prepare_for_validation(x):
-    return re.sub(r"[\D]", "", re.sub(r"[xX]", "0", (x.rsplit(":", 1)[-1]).strip()))
+from metext.utils.regex import RE_ISBN10, RE_ISBN13
 
 
 class IsbnExtractor(BaseExtractor):
@@ -27,11 +22,7 @@ class IsbnExtractor(BaseExtractor):
                 continue
             isbn10 = RE_ISBN10.findall(part)
             isbn13 = RE_ISBN13.findall(part)
-            yield from (
-                isbn
-                for isbn in isbn10 + isbn13
-                if IsbnValidator.run(prepare_for_validation(isbn))
-            )
+            yield from (isbn for isbn in isbn10 + isbn13 if IsbnValidator.run(isbn))
 
 
 class Isbn10Extractor(BaseExtractor):
@@ -49,9 +40,7 @@ class Isbn10Extractor(BaseExtractor):
             if not part:
                 continue
             yield from (
-                isbn
-                for isbn in RE_ISBN10.findall(part)
-                if IsbnValidator.run(prepare_for_validation(isbn))
+                isbn for isbn in RE_ISBN10.findall(part) if IsbnValidator.run(isbn)
             )
 
 
@@ -70,7 +59,5 @@ class Isbn13Extractor(BaseExtractor):
             if not part:
                 continue
             yield from (
-                isbn
-                for isbn in RE_ISBN13.findall(part)
-                if IsbnValidator.run(prepare_for_validation(isbn))
+                isbn for isbn in RE_ISBN13.findall(part) if IsbnValidator.run(isbn)
             )

@@ -97,6 +97,27 @@ if __name__ == "__main__":
         "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff",
     ]
     mac = ["01-23-45-67-89-AB", "01:23:45:67:89:ab", "0123.4567.89AB"]
+    isbn10 = [
+        "99921-58-10-7",
+        "9971-5-0210-0",
+        "960-425-059-0",
+        "ISBN-10 80-00-01462-9",
+        "85-359-0277-5",
+        "1-84356-028-3",
+        "0684843285",
+        "URN:ISBN:0-395-36341-1",
+        "ISBN: 0-395-36341-1",
+        "9971-5-0210-X",
+    ]
+    isbn13 = [
+        "978-1-56619-909-4",
+        "9780136091813",
+        "ISBN-13:978-3-16-148410-0",
+        "urn:isbn:978-1-56619-909-4",
+        "ISBN-13: 978-3-16-148410-0",
+        "ISBN:978-3-16-148410-0",
+        "ISBN: 978-3-16-148410-0",
+    ]
 
     result = [
         "".join(random.choice(printable) for _ in range(random.randint(0, 10000)))
@@ -121,6 +142,8 @@ if __name__ == "__main__":
         + ripple
         + litecoin
         + ethereum
+        + isbn10
+        + isbn13
     ]
 
     with open("examples/gen/ex_input.txt", "w", encoding="utf-8") as f:

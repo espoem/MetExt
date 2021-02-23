@@ -4,9 +4,9 @@ from typing import Iterable, List, Union
 from metext.plugin_base import BaseExtractor
 from metext.plugins.validators.uri import (
     DataURIValidator,
+    MagnetValidator,
     URIValidator,
     URLValidator,
-    MagnetValidator,
 )
 from metext.utils.regex import RE_URI, RE_URI_REFERENCE
 

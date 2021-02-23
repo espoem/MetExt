@@ -15,10 +15,10 @@ class DoiValidator(BaseValidator):
         :return: True if input string is a resolvable DOI identifier,
         else False
         """
-        from urllib.error import HTTPError
-        import urllib.request
-        import urllib.parse
         import json
+        import urllib.parse
+        import urllib.request
+        from urllib.error import HTTPError
 
         if not _input.startswith("10."):
             return False

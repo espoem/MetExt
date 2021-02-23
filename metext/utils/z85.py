@@ -40,8 +40,8 @@ See ZMQ RFC 32 for details.
 # Copyright (C) PyZMQ Developers
 # Distributed under the terms of the Modified BSD License.
 
-import sys
 import struct
+import sys
 
 # Z85CHARS is the base 85 symbol table
 Z85CHARS = b"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-:+=^!/*?&<>()[]{}@%$#"
@@ -59,7 +59,7 @@ def encode(rawbytes):
 
     nvalues = len(rawbytes) / 4
 
-    values = struct.unpack('>%dI' % nvalues, rawbytes)
+    values = struct.unpack(">%dI" % nvalues, rawbytes)
     encoded = []
     for v in values:
         for offset in _85s:
@@ -72,9 +72,9 @@ def decode(z85bytes):
     """decode Z85 bytes to raw bytes, accepts ASCII string"""
     if isinstance(z85bytes, str):
         try:
-            z85bytes = z85bytes.encode('ascii')
+            z85bytes = z85bytes.encode("ascii")
         except UnicodeEncodeError:
-            raise ValueError('string argument should contain only ASCII characters')
+            raise ValueError("string argument should contain only ASCII characters")
 
     if len(z85bytes) % 5:
         raise ValueError("Z85 length must be multiple of 5, not %i" % len(z85bytes))
@@ -84,4 +84,4 @@ def decode(z85bytes):
     for i in range(0, len(z85bytes), 5):
         value = sum(Z85MAP[z85bytes[i + j]] * offset for j, offset in enumerate(_85s))
         values.append(value)
-    return struct.pack('>%dI' % nvalues, *values)
+    return struct.pack(">%dI" % nvalues, *values)

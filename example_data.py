@@ -126,6 +126,10 @@ if __name__ == "__main__":
         "doi: 10.3207/2959859860",
         "https://doi.org/10.3866/PKU.WHXB201112303",
     ]
+    magnets = [
+        "magnet:?xt=urn:btih:c12fe1c06bba254a9dc9f519b335aa7c1367a88a",
+        "magnet:?xt=urn:btih:d2474e86c95b19b8bcfdb92bc12c9d44667cfa36&dn=Leaves+of+Grass+by+Walt+Whitman.epub&tr=udp%3A%2F%2Ftracker.example4.com%3A80&tr=udp%3A%2F%2Ftracker.example5.com%3A80&tr=udp%3A%2F%2Ftracker.example3.com%3A6969&tr=udp%3A%2F%2Ftracker.example2.com%3A80&tr=udp%3A%2F%2Ftracker.example1.com%3A1337",
+    ]
 
     result = [
         "".join(random.choice(printable) for _ in range(random.randint(0, 10000)))
@@ -154,6 +158,7 @@ if __name__ == "__main__":
         + isbn13
         + issn
         + dois
+        + magnets
     ]
 
     with open("examples/gen/ex_input.txt", "w", encoding="utf-8") as f:

@@ -1,7 +1,13 @@
+import re
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
-from metext.plugins.validators.uri import DataURIValidator, URIValidator, URLValidator
+from metext.plugins.validators.uri import (
+    DataURIValidator,
+    URIValidator,
+    URLValidator,
+    MagnetValidator,
+)
 from metext.utils.regex import RE_URI, RE_URI_REFERENCE
 
 
@@ -81,6 +87,24 @@ class DataURIExtractor(BaseExtractor):
             yield from (
                 uri for uri in RE_URI.findall(part) if DataURIValidator.run(uri)
             )
+
+
+class MagnetExtractor(BaseExtractor):
+    PLUGIN_NAME = "magnet"
+
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+        """Extracts MAC addresses
+
+        :param _input: String or a list of strings to extract MAC address from
+        :param kwargs: Arbitrary keyword arguments
+        :return: Generator of MAC addresses
+        """
+        for part in _input if isinstance(_input, list) else _input.splitlines():
+            if not part or not re.search(r"magnet:", part, re.IGNORECASE):
+                continue
+            uris = URIExtractor.run(part, schemes=["magnet"], strict=False)
+            yield from (magnet for magnet in uris if MagnetValidator.run(magnet))
 
 
 URI_SCHEMES = [

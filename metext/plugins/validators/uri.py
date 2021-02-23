@@ -2,6 +2,7 @@ from urllib.parse import urlparse
 
 from metext.plugin_base import BaseValidator
 from metext.plugins.validators.baseenc import Base64Validator
+from metext.utils._torf._magnet import Magnet
 
 
 class URIValidator(BaseValidator):
@@ -24,7 +25,9 @@ class URIValidator(BaseValidator):
         is_path_like = ("/" in parsed.path) if strict else True
         has_selected_scheme = parsed.scheme in schemes if schemes else True
         return (
-            bool(parsed.netloc) or (bool(parsed.path) and is_path_like)
+            bool(parsed.netloc)
+            or (bool(parsed.path) and is_path_like)
+            or (bool(parsed.scheme) and bool(parsed.query))
         ) and has_selected_scheme
 
 
@@ -65,3 +68,21 @@ class DataURIValidator(BaseValidator):
             or True
         )
         return parsed.scheme == "data" and bool(parsed.path) and base64_valid
+
+
+class MagnetValidator(BaseValidator):
+    PLUGIN_NAME = "magnet"
+
+    @classmethod
+    def run(cls, _input: str, **kwargs) -> bool:
+        """Checks that _input is a valid data magnet uri.
+
+        :param _input:
+        :param kwargs: Arbitrary keyword arguments
+        :return: True if _input is valid data URI string
+        """
+        try:
+            Magnet.from_string(_input)
+            return True
+        except:
+            return False

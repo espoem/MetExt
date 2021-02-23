@@ -123,7 +123,7 @@ class LitecoinValidator(BaseValidator):
         :param _input: ASCII (bytes) string
         :return: True if address string is a valid Litecoin address, else False
         """
-        return is_valid_base58_address(_input, prefixes=["L", "M", "3"])
+        return is_valid_base58_address(_input, prefixes=["L", "M", "3"]) or is_valid_segwit_address(_input, hrps=["ltc"])
 
 
 class RippleValidator(BaseValidator):

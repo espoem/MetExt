@@ -162,30 +162,31 @@ if __name__ == "__main__":
         + dois
         + magnets
     ]
+    res_to_print = "\n".join(result)
 
     with open("examples/gen/ex_input.txt", "w", encoding="utf-8") as f:
-        f.write("\n".join(result))
+        f.write(res_to_print)
 
     with open("examples/gen/ex_base64", "wb") as g:
-        g.write(base64.b64encode("\n".join(result).encode("utf-8")))
+        g.write(base64.b64encode(res_to_print.encode("utf-8")))
 
     with open("examples/gen/ex_base32", "wb") as g:
-        g.write(base64.b32encode("\n".join(result).encode("utf-8")))
+        g.write(base64.b32encode(res_to_print.encode("utf-8")))
 
     with open("examples/gen/ex_base85", "wb") as g:
-        g.write(base64.b85encode("\n".join(result).encode("utf-8")))
+        g.write(base64.b85encode(res_to_print.encode("utf-8")))
 
     with open("examples/gen/ex_ascii85", "wb") as g:
-        g.write(base64.a85encode("\n".join(result).encode("utf-8")))
+        g.write(base64.a85encode(res_to_print.encode("utf-8")))
 
     with open("examples/gen/ex_z85", "wb") as g:
-        res = "\n".join(result)
+        res = res_to_print
         padding_len = (4 - len(res) & 3) & 3
         res += "=" * padding_len
         g.write(z85.encode(res.encode("utf-8")))
 
     with open("examples/gen/ex_base91", "w", encoding="utf8") as g:
-        g.write(base91.encode("\n".join(result).encode("utf-8")))
+        g.write(base91.encode(res_to_print.encode("utf-8")))
 
     with open("examples/gen/ex_uu", "wb") as g:
-        g.write(codecs.encode(bytes("\n".join(result), "utf8"), encoding="uu"))
+        g.write(codecs.encode(bytes(res_to_print, "utf8"), encoding="uu"))

@@ -159,8 +159,7 @@ class Magnet:
             else:
                 if value < 1:
                     raise error.MagnetError(value, "Must be 1 or larger")
-                else:
-                    self._xl = value
+                self._xl = value
         else:
             self._xl = None
 
@@ -271,8 +270,7 @@ class Magnet:
         )
         if info.scheme != "magnet":
             raise error.MagnetError(uri, "Not a magnet URI")
-        else:
-            query = urllib.parse.parse_qs(info.query)
+        query = urllib.parse.parse_qs(info.query)
 
         # Check for unknown parameters
         for key in query:
@@ -281,10 +279,9 @@ class Magnet:
 
         if "xt" not in query:
             raise error.MagnetError(uri, 'Missing exact topic ("xt")')
-        elif len(query["xt"]) > 1:
+        if len(query["xt"]) > 1:
             raise error.MagnetError(uri, 'Multiple exact topics ("xt")')
-        else:
-            self = cls(xt=query["xt"][0])
+        self = cls(xt=query["xt"][0])
 
         # Parameters that accept only one value
         for param, attr, name, parse in (
@@ -300,8 +297,7 @@ class Magnet:
                         uri,
                         'Multiple {name}s ("{param}")'.format(name=name, param=param),
                     )
-                else:
-                    setattr(self, attr, parse(query[param][0]))
+                setattr(self, attr, parse(query[param][0]))
 
         # Parameters that accept multiple values
         for param, name in (("tr", "tracker"), ("ws", "webseed")):

@@ -3,3 +3,4 @@ email-validator
 tabulate
 base91
 pysha3
+is-isbn

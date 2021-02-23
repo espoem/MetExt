@@ -69,6 +69,8 @@ RE_ISBN = re.compile(
     re.VERBOSE | re.IGNORECASE,
 )
 
+RE_ISSN = re.compile(r"\b[0-9]{4}-[0-9]{3}[0-9xX]\b")
+
 RE_BASE32 = re.compile(
     r"(?:[A-Z2-7]{8})*(?:[A-Z2-7]{2}={6}|[A-Z2-7]{4}={4}|[A-Z2-7]{5}={3}|[A-Z2-7]{7}=)?"
 )  # https://stackoverflow.com/a/27362880

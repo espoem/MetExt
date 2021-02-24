@@ -7,6 +7,7 @@ from metext.plugins.validators.uri import (
     MagnetValidator,
     URIValidator,
     URLValidator,
+    URNValidator,
 )
 from metext.utils.regex import RE_URI, RE_URI_REFERENCE
 
@@ -68,6 +69,23 @@ class URLExtractor(BaseExtractor):
             if not part:
                 continue
             yield from (uri for uri in RE_URI.findall(part) if URLValidator.run(uri))
+
+
+class URNExtractor(BaseExtractor):
+    PLUGIN_NAME = "urn"
+
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+        """Extracts URNs from a string or a list of strings.
+
+        :param _input: String or a list of strings
+        :param kwargs: Arbitrary keyword arguments
+        :return: Generator with URNs
+        """
+        for part in _input if isinstance(_input, list) else _input.splitlines():
+            if not part:
+                continue
+            yield from URIExtractor.run(part, schemes=["urn"], strict=False)
 
 
 class DataURIExtractor(BaseExtractor):

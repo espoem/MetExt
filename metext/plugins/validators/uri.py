@@ -48,6 +48,20 @@ class URLValidator(BaseValidator):
         )
 
 
+class URNValidator(BaseValidator):
+    PLUGIN_NAME = "urn"
+
+    @classmethod
+    def run(cls, _input, **kwargs) -> bool:
+        """Checks that _input conforms to URN.
+
+        :param _input: String to check
+        :param kwargs:
+        :return: True if _input is URN, else False
+        """
+        return URIValidator.run(_input, schemes=("urn",), **kwargs)
+
+
 class DataURIValidator(BaseValidator):
     PLUGIN_NAME = "data_uri"
 

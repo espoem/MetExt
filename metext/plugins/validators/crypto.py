@@ -1,5 +1,5 @@
 from hashlib import sha256
-from typing import Union
+from typing import Union, Optional
 
 import sha3
 
@@ -11,31 +11,35 @@ from metext.utils import RE_ETH
 
 def is_valid_base58_address(
     address: Union[bytes, str],
-    prefixes: list = None,
+    prefixes: Optional[list] = None,
     charset=CHARSETS_BASE58["bitcoin"],
     length=25,
+    specs: Optional[list] = None,
 ) -> bool:
     """Checks validity of a address
 
+    :param specs: List of version bytes, e.g. [b"\x00", b"\x05"] for bitcaoin
     :param address: Address to validate
     :param prefixes: First character of the address string,
-    defaults to ["1", "3"] prefixes for bitcoin addresses
+    e.g. ["1", "3"] prefixes for bitcoin addresses
     :param charset: Base58 charset (different for bitcoin, ripple),
     defaults to bitcoin base58 charset
     :param length: Number of bytes in which the decoded data should be represented,
     defaults to 25
     :return: True if address is valid, else False
     """
-    if prefixes is None:
-        prefixes = ("1", "3")
+    if prefixes is None and specs is None:
+        specs = [b"\x00", b"\x05"]
 
     try:
         if not isinstance(address, str):
             address = address.decode("ascii")
 
-        if address[0] not in prefixes:
+        if prefixes and address[0] not in prefixes:
             return False
         bc_bytes = Base58Decoder.run(address, alt_chars=charset, length=length)
+        if specs and bc_bytes not in specs:
+            return False
         return bc_bytes[-4:] == sha256(sha256(bc_bytes[:-4]).digest()).digest()[:4]
     except:
         return False

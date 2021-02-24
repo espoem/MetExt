@@ -6,9 +6,9 @@ from metext.plugins.validators.crypto import (
     EthereumValidator,
     LitecoinValidator,
     RippleValidator,
+    TetherValidator,
 )
-from metext.utils import RE_ETH
-from metext.utils.regex import RE_BTC, RE_LTC, RE_XRP
+from metext.utils.regex import RE_BTC, RE_LTC, RE_XRP, RE_ETH, RE_USDT
 
 
 class BitcoinAddress(BaseExtractor):
@@ -107,4 +107,25 @@ class RippleAddress(BaseExtractor):
                 address
                 for address in RE_XRP.findall(part)
                 if RippleValidator.run(address)
+            )
+
+
+class TetherAddress(BaseExtractor):
+    PLUGIN_NAME = "usdt"
+
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+        """Extracts valid Tether (USDT) addresses from a string or a list of strings.
+
+        :param _input: String or a list of strings
+        :return: Generator of formally valid Tether addresses
+        """
+
+        for part in _input if isinstance(_input, list) else _input.splitlines():
+            if not part:
+                continue
+            yield from (
+                address
+                for address in RE_USDT.findall(part)
+                if TetherValidator.run(address)
             )

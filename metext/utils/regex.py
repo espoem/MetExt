@@ -82,6 +82,9 @@ RE_BASE64 = re.compile(
 
 PATTERN_BTC_BASE58 = r"\b[13][a-km-zA-HJ-NP-Z1-9]{25,34}\b"
 PATTERN_BTC_SEGWIT = r"\b(?:[bB][cC])1[a-zA-HJ-NP-Z0-9]{25,39}\b"
+PATTERN_ETH = r"\b0x[0-9a-f]{40}\b"
 RE_BTC = re.compile("{}|{}".format(PATTERN_BTC_SEGWIT, PATTERN_BTC_BASE58))
 RE_LTC = re.compile(r"\b[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}\b")
 RE_XRP = re.compile(r"\br[0-9a-zA-Z]{24,34}\b")
+RE_ETH = re.compile(PATTERN_ETH, re.IGNORECASE)
+RE_USDT = re.compile(r"{}|{}".format(PATTERN_BTC_BASE58, PATTERN_ETH), re.IGNORECASE)

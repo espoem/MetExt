@@ -1,5 +1,3 @@
-import json
-import re
 from collections import OrderedDict
 
 
@@ -39,6 +37,3 @@ def to_table_printer_format(analyzed_data: list) -> list:
 
 def to_xml_printer_format(analyzed_data: list) -> dict:
     return {"data": analyzed_data}
-
-
-RE_ETH = re.compile(r"\b0x[0-9a-f]{40}\b", re.IGNORECASE)

@@ -6,7 +6,7 @@ import sha3
 from metext.plugin_base import BaseValidator
 from metext.plugins.decoders.base58 import CHARSETS_BASE58, Base58Decoder
 from metext.plugins.decoders.segwit import SegwitDecoder
-from metext.utils import RE_ETH
+from metext.utils.regex import RE_ETH
 
 
 def is_valid_base58_address(
@@ -38,7 +38,7 @@ def is_valid_base58_address(
         if prefixes and address[0] not in prefixes:
             return False
         bc_bytes = Base58Decoder.run(address, alt_chars=charset, length=length)
-        if specs and bc_bytes not in specs:
+        if specs and bc_bytes[0] not in (ord(s) for s in specs):
             return False
         return bc_bytes[-4:] == sha256(sha256(bc_bytes[:-4]).digest()).digest()[:4]
     except:
@@ -127,7 +127,9 @@ class LitecoinValidator(BaseValidator):
         :param _input: ASCII (bytes) string
         :return: True if address string is a valid Litecoin address, else False
         """
-        return is_valid_base58_address(_input, prefixes=["L", "M", "3"]) or is_valid_segwit_address(_input, hrps=["ltc"])
+        return is_valid_base58_address(
+            _input, prefixes=["L", "M", "3"]
+        ) or is_valid_segwit_address(_input, hrps=["ltc"])
 
 
 class RippleValidator(BaseValidator):
@@ -146,3 +148,22 @@ class RippleValidator(BaseValidator):
         return is_valid_base58_address(
             _input, prefixes=["r"], charset=CHARSETS_BASE58["ripple"]
         )
+
+
+class TetherValidator(BaseValidator):
+    PLUGIN_NAME = "usdt"
+
+    @classmethod
+    def run(cls, _input: Union[bytes, str], **kwargs) -> bool:
+        """Checks that given data (bytes) string represents
+        a valid Tether (USDT) address.
+
+        Address may be omni-based (on Bitcoin blockchain)
+         or erc20-based (on Ethereum blockchain).
+
+        :param _input: ASCII (bytes) string
+        :return: True if address string represents a valid Tether address, else False
+        """
+        return is_valid_base58_address(
+            _input, charset=CHARSETS_BASE58["bitcoin"], specs=[b"\x00", b"\x05"]
+        ) or EthereumValidator.run(_input)

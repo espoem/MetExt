@@ -135,7 +135,16 @@ if __name__ == "__main__":
     tether = [
         "0x25f1eCA8b1BfbfB2A7a2Cb749E43A0430715f5a5",
         "0xDb8787f714Ac65E8A54DF9Bc355E13E56600Ac6C",
-        "0x83bDbd897A8A95b34A6c548de71f6EFA747c96db"
+        "0x83bDbd897A8A95b34A6c548de71f6EFA747c96db",
+    ]
+    urns = [
+        "urn:isbn:0451450523",
+        "urn:isan:0000-0000-2CEA-0000-1-0000-0000-Y",
+        "urn:ISSN:0167-6423",
+        "urn:ietf:rfc:2648",
+        "urn:mpeg:mpeg7:schema:2001",
+        "urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66",
+        "urn:lex:eu:council:directive:2010-03-09;2010-19-UE",
     ]
 
     result = [
@@ -167,6 +176,7 @@ if __name__ == "__main__":
         + dois
         + magnets
         + tether
+        + urns
     ]
     res_to_print = "\n".join(result)
 

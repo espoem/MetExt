@@ -24,8 +24,7 @@ def is_isbn(isbn: str) -> bool:
 
     if len(isbn) == 10:
         return check_isbn_10(isbn)
-    else:
-        return check_isbn_13(isbn)
+    return check_isbn_13(isbn)
 
 
 def check_isbn_10(isbn: str) -> bool:

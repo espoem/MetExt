@@ -83,8 +83,7 @@ class MonitoredList(collections.abc.MutableSequence):
     def _coerce(self, value):
         if self._type is not None:
             return self._type(value)
-        else:
-            return value
+        return value
 
     def _filter_func(self, item):
         if item not in self._items:
@@ -128,12 +127,11 @@ class MonitoredList(collections.abc.MutableSequence):
     def __eq__(self, other):
         if isinstance(other, type(self)):
             return frozenset(other._items) == frozenset(self._items)
-        elif isinstance(other, collections.abc.Iterable):
+        if isinstance(other, collections.abc.Iterable):
             return len(other) == len(self._items) and all(
                 item in self._items for item in other
             )
-        else:
-            return False
+        return False
 
     def __ne__(self, other):
         return not self.__eq__(other)

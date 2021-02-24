@@ -132,6 +132,11 @@ if __name__ == "__main__":
         "magnet:?xt=urn:btih:c12fe1c06bba254a9dc9f519b335aa7c1367a88a",
         "magnet:?xt=urn:btih:d2474e86c95b19b8bcfdb92bc12c9d44667cfa36&dn=Leaves+of+Grass+by+Walt+Whitman.epub&tr=udp%3A%2F%2Ftracker.example4.com%3A80&tr=udp%3A%2F%2Ftracker.example5.com%3A80&tr=udp%3A%2F%2Ftracker.example3.com%3A6969&tr=udp%3A%2F%2Ftracker.example2.com%3A80&tr=udp%3A%2F%2Ftracker.example1.com%3A1337",
     ]
+    tether = [
+        "0x25f1eCA8b1BfbfB2A7a2Cb749E43A0430715f5a5",
+        "0xDb8787f714Ac65E8A54DF9Bc355E13E56600Ac6C",
+        "0x83bDbd897A8A95b34A6c548de71f6EFA747c96db"
+    ]
 
     result = [
         "".join(random.choice(printable) for _ in range(random.randint(0, 10000)))
@@ -161,6 +166,7 @@ if __name__ == "__main__":
         + issn
         + dois
         + magnets
+        + tether
     ]
     res_to_print = "\n".join(result)
 

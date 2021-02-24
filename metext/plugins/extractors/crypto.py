@@ -3,13 +3,13 @@ from typing import Iterable, List, Union
 from metext.plugin_base import BaseExtractor
 from metext.plugins.validators.crypto import (
     BitcoinValidator,
+    ChainlinkValidator,
     EthereumValidator,
     LitecoinValidator,
     RippleValidator,
     TetherValidator,
-    ChainlinkValidator,
 )
-from metext.utils.regex import RE_BTC, RE_LTC, RE_XRP, RE_ETH, RE_USDT, RE_LINK
+from metext.utils.regex import RE_BTC, RE_ETH, RE_LINK, RE_LTC, RE_USDT, RE_XRP
 
 
 class BitcoinAddress(BaseExtractor):

@@ -1,5 +1,5 @@
 from hashlib import sha256
-from typing import Union, Optional
+from typing import Optional, Union
 
 import sha3
 

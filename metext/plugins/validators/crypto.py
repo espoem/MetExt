@@ -167,3 +167,20 @@ class TetherValidator(BaseValidator):
         return is_valid_base58_address(
             _input, charset=CHARSETS_BASE58["bitcoin"], specs=[b"\x00", b"\x05"]
         ) or EthereumValidator.run(_input)
+
+
+class ChainlinkValidator(BaseValidator):
+    PLUGIN_NAME = "chainlink"
+
+    @classmethod
+    def run(cls, _input: Union[bytes, str], **kwargs) -> bool:
+        """Checks that given data (bytes) string represents
+        a formally valid Chainlink (LINK) address.
+
+        Conforms to ERC20-based address format.
+
+        :param _input: ASCII (bytes) string
+        :return: True if address string represents a valid Chainlink address,
+        else False
+        """
+        return EthereumValidator.run(_input)

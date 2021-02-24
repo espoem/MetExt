@@ -7,8 +7,9 @@ from metext.plugins.validators.crypto import (
     LitecoinValidator,
     RippleValidator,
     TetherValidator,
+    ChainlinkValidator,
 )
-from metext.utils.regex import RE_BTC, RE_LTC, RE_XRP, RE_ETH, RE_USDT
+from metext.utils.regex import RE_BTC, RE_LTC, RE_XRP, RE_ETH, RE_USDT, RE_LINK
 
 
 class BitcoinAddress(BaseExtractor):
@@ -128,4 +129,25 @@ class TetherAddress(BaseExtractor):
                 address
                 for address in RE_USDT.findall(part)
                 if TetherValidator.run(address)
+            )
+
+
+class ChainlinkAddress(BaseExtractor):
+    PLUGIN_NAME = "chainlink"
+
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+        """Extracts valid Chainlink (LINK) addresses from a string or a list of strings.
+
+        :param _input: String or a list of strings
+        :return: Generator of formally valid chainlink addresses
+        """
+
+        for part in _input if isinstance(_input, list) else _input.splitlines():
+            if not part:
+                continue
+            yield from (
+                address
+                for address in RE_LINK.findall(part)
+                if ChainlinkValidator.run(address)
             )

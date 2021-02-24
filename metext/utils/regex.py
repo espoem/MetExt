@@ -88,3 +88,4 @@ RE_LTC = re.compile(r"\b[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}\b")
 RE_XRP = re.compile(r"\br[0-9a-zA-Z]{24,34}\b")
 RE_ETH = re.compile(PATTERN_ETH, re.IGNORECASE)
 RE_USDT = re.compile(r"{}|{}".format(PATTERN_BTC_BASE58, PATTERN_ETH), re.IGNORECASE)
+RE_LINK = RE_ETH

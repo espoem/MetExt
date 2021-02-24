@@ -167,8 +167,7 @@ class URL(str):
     def __init__(self, url):
         if not is_url(url):
             raise error.URLError(url)
-        else:
-            self._parsed = urllib.parse.urlparse(url)
+        self._parsed = urllib.parse.urlparse(url)
 
     @property
     def scheme(self):

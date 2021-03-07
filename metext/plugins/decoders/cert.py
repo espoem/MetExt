@@ -2,9 +2,16 @@ import textwrap
 from datetime import datetime
 from typing import Optional
 
-from Crypto.Util.asn1 import DerSequence, DerObject
-from OpenSSL.crypto import TYPE_DSA, TYPE_RSA, FILETYPE_PEM, FILETYPE_ASN1
-from OpenSSL.crypto import load_certificate, dump_privatekey, dump_certificate
+from Crypto.Util.asn1 import DerObject, DerSequence
+from OpenSSL.crypto import (
+    FILETYPE_ASN1,
+    FILETYPE_PEM,
+    TYPE_DSA,
+    TYPE_RSA,
+    dump_certificate,
+    dump_privatekey,
+    load_certificate,
+)
 
 from metext.plugin_base import BaseDecoder, Decodable
 

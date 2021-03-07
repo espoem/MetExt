@@ -1,13 +1,13 @@
 import base64
+import binhex
 import codecs
+import gzip
+import quopri
 import random
 import string
 import tempfile
 from io import StringIO
 from string import printable
-import quopri
-import gzip
-import binhex
 
 import base91
 
@@ -245,7 +245,8 @@ if __name__ == "__main__":
     binhex.binhex("examples/gen/ex_input.txt", "examples/gen/ex_binhex")
 
     with open("examples/gen/ex_mime_multipart", "w") as g:
-        g.write("""From: Nathaniel Borenstein <nsb@bellcore.com> 
+        g.write(
+            """From: Nathaniel Borenstein <nsb@bellcore.com> 
 To:  Ned Freed <ned@innosoft.com> 
 Subject: Sample message 
 MIME-Version: 1.0 
@@ -270,4 +271,7 @@ It DOES end with a linebreak.
 {}
 
 --simple boundary-- 
-This is the epilogue.  It is also to be ignored.""".format(res_to_print))
+This is the epilogue.  It is also to be ignored.""".format(
+                res_to_print
+            )
+        )

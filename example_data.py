@@ -4,6 +4,7 @@ import random
 import string
 from string import printable
 import quopri
+import gzip
 
 import base91
 
@@ -210,3 +211,6 @@ if __name__ == "__main__":
 
     with open("examples/gen/ex_quopri", "wb") as g:
         g.write(quopri.encodestring(res_to_print.encode("utf8")))
+
+    with gzip.open("examples/gen/ex_gzip", "wb") as g:
+        g.write(res_to_print.encode("utf8"))

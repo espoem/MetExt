@@ -2,9 +2,12 @@ import base64
 import codecs
 import random
 import string
+import tempfile
+from io import StringIO
 from string import printable
 import quopri
 import gzip
+import binhex
 
 import base91
 
@@ -149,7 +152,7 @@ if __name__ == "__main__":
         "urn:lex:eu:council:directive:2010-03-09;2010-19-UE",
     ]
 
-    result = [
+    result = ["BEGIN TEST DATA\n"] + [
         "".join(random.choice(printable) for _ in range(random.randint(0, 10000)))
         + random.choice(string.whitespace)
         + item
@@ -214,3 +217,5 @@ if __name__ == "__main__":
 
     with gzip.open("examples/gen/ex_gzip", "wb") as g:
         g.write(res_to_print.encode("utf8"))
+
+    binhex.binhex("examples/gen/ex_input.txt", "examples/gen/ex_binhex")

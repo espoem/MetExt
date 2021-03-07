@@ -151,6 +151,30 @@ if __name__ == "__main__":
         "urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66",
         "urn:lex:eu:council:directive:2010-03-09;2010-19-UE",
     ]
+    email_multipart = [
+        """From: Nathaniel Borenstein <nsb@bellcore.com> 
+ To:  Ned Freed <ned@innosoft.com> 
+ Subject: Sample message 
+ MIME-Version: 1.0 
+ Content-type: multipart/mixed; boundary="simple 
+ boundary" 
+
+ This is the preamble.  It is to be ignored, though it 
+ is a handy place for mail composers to include an 
+ explanatory note to non-MIME compliant readers. 
+ --simple boundary 
+
+ This is implicitly typed plain ASCII text. 
+ It does NOT end with a linebreak. 
+ --simple boundary 
+ Content-type: text/plain; charset=us-ascii 
+
+ This is explicitly typed plain ASCII text. 
+ It DOES end with a linebreak. 
+
+ --simple boundary-- 
+ This is the epilogue.  It is also to be ignored."""
+    ]
 
     result = ["BEGIN TEST DATA\n"] + [
         "".join(random.choice(printable) for _ in range(random.randint(0, 10000)))
@@ -219,3 +243,28 @@ if __name__ == "__main__":
         g.write(res_to_print.encode("utf8"))
 
     binhex.binhex("examples/gen/ex_input.txt", "examples/gen/ex_binhex")
+
+    with open("examples/gen/ex_mime_multipart", "w") as g:
+        g.write("""From: Nathaniel Borenstein <nsb@bellcore.com> 
+To:  Ned Freed <ned@innosoft.com> 
+Subject: Sample message 
+MIME-Version: 1.0 
+Content-type: multipart/mixed; boundary=\"simple boundary\" 
+
+This is the preamble.  It is to be ignored, though it
+is a handy place for mail composers to include an
+explanatory note to non-MIME compliant readers.
+
+--simple boundary
+This is implicitly typed plain ASCII text.
+It does NOT end with a linebreak.
+
+--simple boundary 
+Content-type: text/plain; charset=us-ascii 
+Content-Transfer: quoted-printable
+
+This is explicitly typed plain ASCII text.
+It DOES end with a linebreak.
+
+--simple boundary-- 
+This is the epilogue.  It is also to be ignored.""")

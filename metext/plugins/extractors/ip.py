@@ -13,9 +13,9 @@ SYMBOLS_HYPHEN_LIKE = [
     "−",  # minus
 ]
 
-RE_IPV4 = re.compile(r"\b{}\b".format(IPv4address), re.VERBOSE)
+RE_IPV4 = re.compile(r"\b(?<!\.){}(?!\.)\b".format(IPv4address), re.VERBOSE)
 # RE_IPV4 = re.compile(r"(?:\d{1,3}\.){3}\d{1,3}")
-RE_IPV6 = re.compile(r"\b{}\b".format(IPv6address), re.VERBOSE)
+RE_IPV6 = re.compile(r"\b(?<!:){}(?!:)\b".format(IPv6address), re.VERBOSE)
 
 
 class IPv4AddressExtractor(BaseExtractor):

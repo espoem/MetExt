@@ -5,7 +5,7 @@ from metext.plugin_base import BaseExtractor
 
 # https://www.geeksforgeeks.org/how-to-validate-mac-address-using-regular-expression/
 RE_MAC = re.compile(
-    r"\b(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}|(?:[0-9a-fA-F]{4}\.){2}[0-9a-fA-F]{4}\b"
+    r"\b(?<![:-])(?:(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}|(?:[0-9a-fA-F]{4}\.){2}[0-9a-fA-F]{4})(?![:-])\b"
 )
 
 

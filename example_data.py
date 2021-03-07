@@ -266,5 +266,8 @@ Content-Transfer: quoted-printable
 This is explicitly typed plain ASCII text.
 It DOES end with a linebreak.
 
+--simple boundary
+{}
+
 --simple boundary-- 
-This is the epilogue.  It is also to be ignored.""")
+This is the epilogue.  It is also to be ignored.""".format(res_to_print))

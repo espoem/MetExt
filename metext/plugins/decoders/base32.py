@@ -26,21 +26,21 @@ class Base32Decoder(BaseDecoder):
 
         :param _input: Base32 encoded (bytes) string
         :param kwargs: Arbitrary keyword arguments
-        :keyword alt_chars: Chars set of 32 chars to use
+        :keyword charset: Alphabet of 32 chars to use for decoding
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """
-        alt_chars = kwargs.get("alt_chars", CHARSETS_BASE32["std"])
-        lalt_chars = len(alt_chars)
+        charset = kwargs.get("charset", CHARSETS_BASE32["std"])
+        lalt_chars = len(charset)
         if lalt_chars != 32:
             raise AssertionError("Only full chars set can be defined")
 
-        if alt_chars != CHARSETS_BASE32["std"]:
+        if charset != CHARSETS_BASE32["std"]:
             # https://stackoverflow.com/questions/5537750/decode-base64-like-string-with-different-index-tables
             if isinstance(_input, str):
-                tbl = str.maketrans(alt_chars, CHARSETS_BASE32["std"])
+                tbl = str.maketrans(charset, CHARSETS_BASE32["std"])
             else:
                 tbl = bytes.maketrans(
-                    bytes(alt_chars, "utf8"), bytes(CHARSETS_BASE32["std"], "utf8")
+                    bytes(charset, "utf8"), bytes(CHARSETS_BASE32["std"], "utf8")
                 )
             _input = _input.translate(tbl)
 
@@ -67,4 +67,4 @@ class Base32HexDecoder(BaseDecoder):
         :param kwargs: Arbitrary keyword arguments
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """
-        return Base32Decoder.run(_input, alt_chars=CHARSETS_BASE32["hex"])
+        return Base32Decoder.run(_input, charset=CHARSETS_BASE32["hex"])

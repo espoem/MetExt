@@ -6,6 +6,9 @@ from metext.plugin_base import BaseDecoder, Decodable
 CHARSETS_BASE32 = {
     "std": "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567",
     "hex": "0123456789ABCDEFGHIJKLMNOPQRSTUV",
+    "z-base-32": "ybndrfg8ejkmcpqxot1uwisza345h769",
+    "geohash": "0123456789bcdefghjkmnpqrstuvwxyz",
+    "word-safe": "23456789CFGHJMPQRVWXcfghjmpqrvwx"
 }
 
 

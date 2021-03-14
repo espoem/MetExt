@@ -1,4 +1,5 @@
 import base64
+import math
 import sys
 from typing import Optional
 
@@ -92,7 +93,7 @@ class Base32CrockfordDecoder(BaseDecoder):
             if not isinstance(_input, str):
                 _input = _input.decode("ascii")
             decoded = base32_crockford.decode(_input)
-            return decoded.to_bytes(len(_input), "big")
+            return decoded.to_bytes(math.ceil(len(_input) * 5 / 8), "big")
         except Exception as e:
             print(e.with_traceback, file=sys.stderr)
             return None

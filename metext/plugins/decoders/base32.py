@@ -1,5 +1,8 @@
 import base64
+import sys
 from typing import Optional
+
+import base32_crockford
 
 from metext.plugin_base import BaseDecoder, Decodable
 
@@ -8,7 +11,7 @@ CHARSETS_BASE32 = {
     "hex": "0123456789ABCDEFGHIJKLMNOPQRSTUV",
     "z-base-32": "ybndrfg8ejkmcpqxot1uwisza345h769",
     "geohash": "0123456789bcdefghjkmnpqrstuvwxyz",
-    "word-safe": "23456789CFGHJMPQRVWXcfghjmpqrvwx"
+    "word-safe": "23456789CFGHJMPQRVWXcfghjmpqrvwx",
 }
 
 
@@ -49,7 +52,8 @@ class Base32Decoder(BaseDecoder):
 
         try:
             return base64.b32decode(_input)
-        except Exception:
+        except Exception as e:
+            print(e.with_traceback, file=sys.stderr)
             return None
 
 
@@ -68,3 +72,27 @@ class Base32HexDecoder(BaseDecoder):
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """
         return Base32Decoder.run(_input, charset=CHARSETS_BASE32["hex"])
+
+
+class Base32CrockfordDecoder(BaseDecoder):
+    PLUGIN_NAME = "base32crockford"
+
+    @classmethod
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
+        """Decodes Base32 encoded bytes-like object or ASCII `data` string
+        using the chars set and rules as defined by Douglas Crockford.
+
+        See https://www.crockford.com/base32.html
+
+        :param _input: Base64 encoded (bytes) string
+        :param kwargs: Arbitrary keyword arguments
+        :return: `None` if `data` couldn't be decoded, else decoded byte string
+        """
+        try:
+            if not isinstance(_input, str):
+                _input = _input.decode("ascii")
+            decoded = base32_crockford.decode(_input)
+            return decoded.to_bytes(len(_input), "big")
+        except Exception as e:
+            print(e.with_traceback, file=sys.stderr)
+            return None

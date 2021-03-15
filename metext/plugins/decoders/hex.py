@@ -30,3 +30,42 @@ class HexDecoder(BaseDecoder):
             return base64.b16decode(_input, casefold=True)
         except:
             return None
+
+
+class HexdumpDecoder(BaseDecoder):
+    PLUGIN_NAME = "hexdump"
+
+    @classmethod
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
+        """Decodes hexdump format
+
+        Tries to naively decode bytes basic hexdump format produced
+        by programs such as hexdump, od, xdd.
+
+        :param _input: String or bytes containing hex dump
+        :param kwargs: Arbitrary keyword arguments
+        :return: None if decoding failed, else bytes string
+        """
+        if isinstance(_input, str):
+            _input = _input.encode("utf8")
+
+        chunks = [c.strip() for c in _input.split(b" ", maxsplit=10)[:-1] if c.strip()]
+        if not chunks:
+            return None
+
+        if len(chunks) == 1:
+            return HexDecoder.run(_input)
+
+        if len(chunks[0]) > 4 and len(chunks[0]) > len(chunks[1]):
+            _input = b"".join(
+                re.findall(
+                    rb"^(?:[a-f0-9]{4,}[:-]?){1,3}[ \t]+(?:((?:[a-f0-9]{2}[ \t]{,2}){,32}))",
+                    _input,
+                    re.IGNORECASE | re.MULTILINE,
+                )
+            )
+
+        try:
+            return HexDecoder.run(_input)
+        except:
+            return None

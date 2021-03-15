@@ -1,8 +1,7 @@
 from metext.plugin_base import BaseValidator
-from metext.plugins.decoders.ascii85 import Ascii85Decoder
 from metext.plugins.decoders.base32 import Base32Decoder
 from metext.plugins.decoders.base64 import Base64Decoder, Base64UrlDecoder
-from metext.plugins.decoders.base85 import Base85Decoder
+from metext.plugins.decoders.base85 import Base85Decoder, Ascii85Decoder
 
 
 class Ascii85Validator(BaseValidator):

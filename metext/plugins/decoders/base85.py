@@ -1,7 +1,9 @@
 import base64
+import sys
 from typing import Optional
 
 from metext.plugin_base import BaseDecoder, Decodable
+from metext.utils import z85
 
 
 class Base85Decoder(BaseDecoder):
@@ -18,4 +20,42 @@ class Base85Decoder(BaseDecoder):
         try:
             return base64.b85decode(_input)
         except Exception:
+            return None
+
+
+class Ascii85Decoder(BaseDecoder):
+    PLUGIN_NAME = "ascii85"
+
+    @classmethod
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
+        """Decodes Ascii85 encoded bytes-like object or ASCII `data` string.
+
+        :param _input: Ascii85 encoded (bytes) string
+        :param kwargs: Arbitrary keyword arguments
+        :return: `None` if `data` couldn't be decoded, else decoded byte string
+        """
+        try:
+            return base64.a85decode(_input, adobe=True)
+        except:
+            try:
+                return base64.a85decode(_input, adobe=False)
+            except Exception as e:
+                print(e, file=sys.stderr)
+                return None
+
+
+class Z85Decoder(BaseDecoder):
+    PLUGIN_NAME = "z85"
+
+    @classmethod
+    def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
+        """Decodes Z85 encoded bytes-like object or ASCII `data` string.
+
+        :param _input: Z85 encoded (bytes) string
+        :param kwargs:
+        :return: `None` if `data` couldn't be decoded, else decoded byte string'
+        """
+        try:
+            return z85.decode(_input)
+        except:
             return None

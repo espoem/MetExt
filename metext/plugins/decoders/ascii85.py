@@ -1,4 +1,5 @@
 import base64
+import sys
 from typing import Optional
 
 from metext.plugin_base import BaseDecoder, Decodable
@@ -17,9 +18,13 @@ class Ascii85Decoder(BaseDecoder):
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """
         try:
-            return base64.a85decode(_input)
-        except Exception:
-            return None
+            return base64.a85decode(_input, adobe=True)
+        except:
+            try:
+                return base64.a85decode(_input, adobe=False)
+            except Exception as e:
+                print(e, file=sys.stderr)
+                return None
 
 
 class Z85Decoder(BaseDecoder):

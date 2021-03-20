@@ -29,16 +29,13 @@ class MimeDecoder(BaseDecoder):
                 res.append(msg.preamble)
             if msg.is_multipart():
                 for part in msg.walk():
-                    if part.get_content_maintype() not in ("text", "application"):
-                        continue
                     res.append(part.get_payload(decode=True))
             else:
                 res.append(msg.get_payload(decode=True))
             if msg.epilogue:
                 res.append(msg.epilogue)
             return b"\n\n".join(
-                bytes(part, "utf8") if isinstance(part, str) else part for part in res
+                bytes(part, "utf8") if isinstance(part, str) else part for part in res if part
             )
-        except Exception as e:
-            print(e)
+        except Exception:
             return None

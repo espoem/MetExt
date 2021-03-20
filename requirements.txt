@@ -6,3 +6,4 @@ pysha3
 pycryptodome
 pyopenssl
 base32-crockford
+chardet

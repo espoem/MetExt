@@ -85,7 +85,7 @@ PATTERN_BTC_SEGWIT = r"\b(?:[bB][cC])1[a-zA-HJ-NP-Z0-9]{25,39}\b"
 PATTERN_BCH = (
     r"\b(?:(?:bitcoincash:)?[qp][a-z0-9]{41}|(?:BITCOINCASH:)?[QP][A-Z0-9]{41})\b"
 )
-PATTERN_ETH = r"\b0x[0-9a-f]{40}\b"
+PATTERN_ETH = r"\b0x[0-9a-f]{40,42}\b"
 PATTERN_ADA_V1 = r"\b(?:Ddz[0-9a-zA-Z]{80,120}|Ae2tdPwUPE[0-9a-zA-Z]{46,53})\b"
 PATTERN_ADA_SHELLEY = (
     r"\b(?:addr[0-9a-zA-Z]{99}|stake[0-9a-zA-Z]{54}|[0-9a-zA-Z]{99})\b"

@@ -48,6 +48,16 @@ if __name__ == "__main__":
         "0xBE0EB53F46CD790CD13851D5EFF43D12404D33E8",
         "0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed",
     ]
+    cardano = [
+        "Ae2tdPwUPEZJRmquD7YWse3c8D1y4TCjPBsxHUX4bzW7e4hNi4oJxDcm7LM",
+        "Ae2tdPwUPEYvuLBLw4KaFuA2KEC9875YZ8LXrrquB7Zp367NbKVxFRLEAZj",
+        "Ae2tdPwUPEZB3RoRxLV2mEKmeTesaS47Pe9CVWVLxo3ZmSTUyLnxd9RSxFN",
+        "DdzFFzCqrhsy9rP9DEtjAxBPkqyPpARHVtaU8q8BAHE9MdRiimqHHer9vKKws4Z3L6kow7iBaKUmVEVbdnuGpQqtF5cXG5YoRAEUwxak",
+        "37btjrVyb4KEB2STADSsj3MYSAdj52X5FrFWpw2r7Wmj2GDzXjFRsHWuZqrw7zSkwopv8Ci3VWeg6bisU9dgJxW5hb2MZYeduNKbQJrqz3zVBsu9nT",
+        "addr1q93qu0rz5g4dynwyt0r4ketkl38wvphpsk3e8z0clhj6pxnrvjgxcwl3ssf7sm4hg3c6x74vn3806m28mjtlclnemflswjxsdr",
+        "addr1q8y56n0qpezuvgjtcc46vztyfryznvn8p437gq0exjpwfkz2fp2uyt8lrdestzu08ey2j244v5lpq2tfv42pvjrymlks2xxxgp",
+        "stake1uyygesl7gvduqlpt2pcu2g3aamfwccsrl66eez25935uzyqyjpwpx"
+    ]
     ips = [
         "1762:0:0:0:0:B03:1:AF18",
         "1762:0:0:0:0:B03:127.32.67.1",
@@ -194,6 +204,7 @@ if __name__ == "__main__":
         + "".join(random.choice(printable) for _ in range(random.randint(0, 30000)))
         for item in btc_addresses
         + bch_addresses
+        + cardano
         + ips
         + emails
         + md5s
@@ -282,3 +293,5 @@ It DOES end with a linebreak.
 
 --simple boundary-- 
 This is the epilogue.  It is also to be ignored.""".format(res_to_print))
+
+# to create yEnc demo encoded output, use https://www.webutils.pl/yEnc

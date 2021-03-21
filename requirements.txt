@@ -8,3 +8,4 @@ pyopenssl
 base32-crockford
 chardet
 pem
+cashaddress

@@ -8,6 +8,7 @@ from metext.plugins.validators.crypto import (
     ChainlinkValidator,
     EthereumValidator,
     LitecoinValidator,
+    PolkadotValidator,
     RippleValidator,
     TetherValidator,
 )
@@ -16,6 +17,7 @@ from metext.utils.regex import (
     RE_BCH,
     RE_BCH_WITH_LEGACY,
     RE_BTC,
+    RE_DOT,
     RE_ETH,
     RE_LINK,
     RE_LTC,
@@ -209,4 +211,24 @@ class CardanoAddress(BaseExtractor):
                 address
                 for address in RE_ADA.findall(part)
                 if CardanoValidator.run(address)
+            )
+
+
+class PolkadotAddress(BaseExtractor):
+    PLUGIN_NAME = "dot"
+
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+        """Extracts valid Cardano (ADA) addresses from a string or a list of strings.
+
+        :param _input: String or a list of strings
+        :return: Generator of formally valid Cardano addresses
+        """
+        for part in _input if isinstance(_input, list) else _input.splitlines():
+            if not part:
+                continue
+            yield from (
+                address
+                for address in RE_DOT.findall(part)
+                if PolkadotValidator.run(address)
             )

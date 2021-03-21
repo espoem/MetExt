@@ -2,6 +2,7 @@ from binascii import crc32
 from hashlib import sha256
 from typing import Optional, Union
 
+import base58
 import cashaddress
 import cbor
 import sha3
@@ -11,6 +12,7 @@ from metext.plugins.decoders.base58 import CHARSETS_BASE58, Base58Decoder
 from metext.plugins.decoders.bech32 import Bech32Decoder
 from metext.plugins.decoders.segwit import SegwitDecoder
 from metext.utils.regex import RE_ETH
+from metext.utils.ss58 import ss58_decode
 
 
 def is_valid_base58_address(
@@ -41,7 +43,7 @@ def is_valid_base58_address(
 
         if prefixes and address[0] not in prefixes:
             return False
-        bc_bytes = Base58Decoder.run(address, alt_chars=charset, length=length)
+        bc_bytes = base58.b58decode(address, alphabet=charset.encode("ascii"))
         if specs and bc_bytes[0] not in (ord(s) for s in specs):
             return False
         return bc_bytes[-4:] == sha256(sha256(bc_bytes[:-4]).digest()).digest()[:4]
@@ -222,7 +224,9 @@ class CardanoValidator(BaseValidator):
         :return: True if address string represents a valid Cardano address,
         else False
         """
-        return cls.is_valid_address_byron(_input) or cls.is_valid_address_shelley(_input)
+        return cls.is_valid_address_byron(_input) or cls.is_valid_address_shelley(
+            _input
+        )
 
     @classmethod
     def is_valid_address_shelley(cls, address):
@@ -243,7 +247,7 @@ class CardanoValidator(BaseValidator):
 
     @classmethod
     def _get_decoded(cls, address):
-        decoded = Base58Decoder.run(address)
+        decoded = base58.b58decode(address)
         if not decoded:
             return None
         decoded = decoded.lstrip(b"\x00")
@@ -251,3 +255,29 @@ class CardanoValidator(BaseValidator):
             return cbor.loads(decoded)
         except:
             return None
+
+
+class PolkadotValidator(BaseValidator):
+    PLUGIN_NAME = "dot"
+
+    @classmethod
+    def run(cls, _input: Union[bytes, str], **kwargs) -> bool:
+        """Checks that given data (bytes) string represents
+        a Polkadot (DOT) address.
+
+        :param _input: Address string to validate
+        :return: True if address string represents a valid Polkadot address,
+        else False
+        """
+        try:
+            if not isinstance(_input, str):
+                _input = _input.decode("ascii")
+
+            if _input.startswith("0x"):
+                return False
+
+            ss58_decode(_input)
+        except:
+            return False
+
+        return True

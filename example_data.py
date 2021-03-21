@@ -58,6 +58,15 @@ if __name__ == "__main__":
         "addr1q8y56n0qpezuvgjtcc46vztyfryznvn8p437gq0exjpwfkz2fp2uyt8lrdestzu08ey2j244v5lpq2tfv42pvjrymlks2xxxgp",
         "stake1uyygesl7gvduqlpt2pcu2g3aamfwccsrl66eez25935uzyqyjpwpx"
     ]
+    polkadot = [
+        "16KkAKG7GHMejE8DjeVz32WxJEyLBkdNyrCSdqiyJSQE6mNc",
+        "CxDDSH8gS7jecsxaRL9Txf8H5kqesLXAEAEgp76Yz632J9M",
+        "1NthTCKurNHLW52mMa6iA8Gz7UFYW5UnM3yTSpVdGu4Th7h",
+        "4pbsSkWcBaYoFHrKJZp5fDVUKbqSYD9dhZZGvpp3vQ5ysVs5ybV",
+        "yGF4JP7q5AK46d1FPCEm9sYQ4KooSjHMpyVAjLnsCSWVafPnf",
+        "KWCv1L3QX9LDPwY4VzvLmarEmXjVJidUzZcinvVnmxAJJCBou",
+        "GLdQ4D4wkeEJUX8DBT9HkpycFVYQZ3fmJyQ5ZgBRxZ4LD3S"
+    ]
     ips = [
         "1762:0:0:0:0:B03:1:AF18",
         "1762:0:0:0:0:B03:127.32.67.1",
@@ -205,6 +214,7 @@ if __name__ == "__main__":
         for item in btc_addresses
         + bch_addresses
         + cardano
+        + polkadot
         + ips
         + emails
         + md5s

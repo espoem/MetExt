@@ -100,6 +100,7 @@ RE_LINK = RE_ETH
 RE_BCH = re.compile(PATTERN_BCH)
 RE_BCH_WITH_LEGACY = re.compile(r"{}|{}".format(PATTERN_BTC_BASE58, PATTERN_BCH))
 RE_ADA = re.compile(r"{}|{}".format(PATTERN_ADA_V1, PATTERN_ADA_SHELLEY))  # Cardano
+RE_DOT = re.compile(r"\b1[a-zA-Z1-9]{25,60}\b")  # Polkadot
 
 RE_PEM = re.compile(
     r"(?:-----BEGIN (?P<label>.+?)-----).+?(?:-----END (?P=label)-----)", re.DOTALL

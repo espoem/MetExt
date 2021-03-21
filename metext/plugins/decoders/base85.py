@@ -34,14 +34,20 @@ class Ascii85Decoder(BaseDecoder):
         :param kwargs: Arbitrary keyword arguments
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """
+        if not _input:
+            return None
+
+        if isinstance(_input, str):
+            _input = _input.encode("utf-8")
+
+        _input = _input.strip()
+
         try:
-            return base64.a85decode(_input, adobe=True)
+            if _input[:2] == b"<~" and _input[-2:] == b"~>":
+                return base64.a85decode(_input, adobe=True)
+            return base64.a85decode(_input, adobe=False, foldspaces=True)
         except:
-            try:
-                return base64.a85decode(_input, adobe=False)
-            except Exception as e:
-                print(e, file=sys.stderr)
-                return None
+            return None
 
 
 class Z85Decoder(BaseDecoder):

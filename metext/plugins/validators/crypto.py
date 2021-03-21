@@ -222,7 +222,7 @@ class CardanoValidator(BaseValidator):
         :return: True if address string represents a valid Cardano address,
         else False
         """
-        return cls.is_valid_address_v1(_input) or cls.is_valid_address_shelley(_input)
+        return cls.is_valid_address_byron(_input) or cls.is_valid_address_shelley(_input)
 
     @classmethod
     def is_valid_address_shelley(cls, address):
@@ -233,7 +233,7 @@ class CardanoValidator(BaseValidator):
         return hrp in ["addr", "stake"]
 
     @classmethod
-    def is_valid_address_v1(cls, address):
+    def is_valid_address_byron(cls, address):
         decoded = cls._get_decoded(address)
         if not decoded or len(decoded) != 2:
             return False

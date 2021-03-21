@@ -25,10 +25,10 @@ import chardet
 
 
 def correct_unknown_encoding(str_or_bytes_in):
-    """ Files created on Windows but unpacked/repaired on
-        linux can result in invalid filenames. Try to fix this
-        encoding by going to bytes and then back to unicode again.
-        Last resort we use chardet package
+    """Files created on Windows but unpacked/repaired on
+    linux can result in invalid filenames. Try to fix this
+    encoding by going to bytes and then back to unicode again.
+    Last resort we use chardet package
     """
     # If already string, back to bytes
     if not isinstance(str_or_bytes_in, bytes):

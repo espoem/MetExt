@@ -67,25 +67,17 @@ Decodable = Union[bytes, str]
 class BaseDecoder(PluginBase):
     PLUGIN_TYPE = "Decoder"
 
-    decode = PluginBase.run
-
 
 class BaseExtractor(PluginBase):
     PLUGIN_TYPE = "Extractor"
-
-    extract = PluginBase.run
 
 
 class BaseValidator(PluginBase):
     PLUGIN_TYPE = "Validator"
 
-    validate = PluginBase.run
-
 
 class BasePrinter(PluginBase):
     PLUGIN_TYPE = "Printer"
-
-    print = PluginBase.run
 
 
 # noinspection PyUnresolvedReferences

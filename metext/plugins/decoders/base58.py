@@ -23,8 +23,6 @@ class Base58Decoder(BaseDecoder):
 
         :param _input: Base58 encoded (bytes) string
         :param kwargs: Arbitrary keyword arguments
-        :keyword length: Number of bytes in which the decoded data should be represented.
-        Defaults to None, that means no restriction on output bytes length
         :keyword charset: Alphabet for base58 decoding. Use Bitcoin alphabet by default
         :return: Decode bytes string. Returns `None` if `data` couldn't be decoded.
         """
@@ -32,7 +30,7 @@ class Base58Decoder(BaseDecoder):
         assert len(charset) == 58
 
         try:
-            return base58.b58decode(_input)
+            return base58.b58decode(_input, alphabet=charset.encode("ascii"))
         except:
             return None
 
@@ -51,9 +49,7 @@ class Base58BitcoinDecoder(BaseDecoder):
         :param kwargs: Arbitrary keyword arguments
         :return: Decode bytes string. Returns `None` if `data` couldn't be decoded.
         """
-        return base58.b58decode(
-            _input, alphabet=CHARSETS_BASE58["bitcoin"].encode("ascii")
-        )
+        return Base58Decoder.run(_input, charset=CHARSETS_BASE58["bitcoin"])
 
 
 class Base58RippleDecoder(BaseDecoder):
@@ -70,6 +66,4 @@ class Base58RippleDecoder(BaseDecoder):
         :param kwargs: Arbitrary keyword arguments
         :return: Decode bytes string. Returns `None` if `data` couldn't be decoded.
         """
-        return base58.b58decode(
-            _input, alphabet=CHARSETS_BASE58["ripple"].encode("ascii")
-        )
+        return Base58Decoder.run(_input, charset=CHARSETS_BASE58["ripple"])

@@ -43,7 +43,7 @@ def is_valid_base58_address(
 
         if prefixes and address[0] not in prefixes:
             return False
-        bc_bytes = base58.b58decode(address, alphabet=charset.encode("ascii"))
+        bc_bytes = Base58Decoder.run(address, charset=charset)
         if specs and bc_bytes[0] not in (ord(s) for s in specs):
             return False
         return bc_bytes[-4:] == sha256(sha256(bc_bytes[:-4]).digest()).digest()[:4]
@@ -247,7 +247,7 @@ class CardanoValidator(BaseValidator):
 
     @classmethod
     def _get_decoded(cls, address):
-        decoded = base58.b58decode(address)
+        decoded = Base58Decoder.run(address)
         if not decoded:
             return None
         decoded = decoded.lstrip(b"\x00")

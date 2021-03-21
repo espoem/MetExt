@@ -7,3 +7,4 @@ pycryptodome
 pyopenssl
 base32-crockford
 chardet
+pem

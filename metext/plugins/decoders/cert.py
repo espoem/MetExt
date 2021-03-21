@@ -1,7 +1,9 @@
+import base64
 import textwrap
 from datetime import datetime
 from typing import Optional
 
+import pem
 from Crypto.Util.asn1 import DerSequence, DerObject
 from OpenSSL.crypto import TYPE_DSA, TYPE_RSA, FILETYPE_PEM, FILETYPE_ASN1
 from OpenSSL.crypto import load_certificate, dump_privatekey, dump_certificate
@@ -15,18 +17,29 @@ class PemDecoder(BaseDecoder):
     @classmethod
     def run(cls, _input: Decodable, **kwargs) -> Optional[bytes]:
         """Decodes PEM certificate as bytes containing
-         certificate info.
+         certificate info in DER format.
 
         :param _input: String or bytes
         :param kwargs:
         :return: Bytes string if decoded successfully, else None
         """
+        if isinstance(_input, str):
+            _input = _input.encode("utf-8")
+
         try:
-            return parse_cert(
-                bytes(_input, "utf8") if isinstance(_input, str) else _input
-            )
+            pems = pem.parse(_input)
         except:
             return None
+
+        res = []
+        for p in pems:
+            data = b"".join(p.as_bytes().splitlines()[1:-1])
+            try:
+                res.append(base64.b64decode(data))
+            except:
+                continue
+
+        return b"\n\n".join(res)
 
 
 # credit: http://www.zedwood.com/article/python-openssl-x509-parse-certificate

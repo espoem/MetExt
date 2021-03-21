@@ -99,7 +99,7 @@ RE_USDT = re.compile(r"{}|{}".format(PATTERN_BTC_BASE58, PATTERN_ETH), re.IGNORE
 RE_LINK = RE_ETH
 RE_BCH = re.compile(PATTERN_BCH)
 RE_BCH_WITH_LEGACY = re.compile(r"{}|{}".format(PATTERN_BTC_BASE58, PATTERN_BCH))
-RE_ADA = re.compile(r"{}|{}".format(PATTERN_ADA_V1, PATTERN_ADA_SHELLEY))
+RE_ADA = re.compile(r"{}|{}".format(PATTERN_ADA_V1, PATTERN_ADA_SHELLEY))  # Cardano
 
 RE_PEM = re.compile(
     r"(?:-----BEGIN (?P<label>.+?)-----).+?(?:-----END (?P=label)-----)", re.DOTALL

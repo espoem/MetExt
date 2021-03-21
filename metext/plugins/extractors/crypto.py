@@ -4,6 +4,7 @@ from metext.plugin_base import BaseExtractor
 from metext.plugins.validators.crypto import (
     BitcoinCashValidator,
     BitcoinValidator,
+    CardanoValidator,
     ChainlinkValidator,
     EthereumValidator,
     LitecoinValidator,
@@ -11,6 +12,7 @@ from metext.plugins.validators.crypto import (
     TetherValidator,
 )
 from metext.utils.regex import (
+    RE_ADA,
     RE_BCH,
     RE_BCH_WITH_LEGACY,
     RE_BTC,
@@ -187,4 +189,24 @@ class ChainlinkAddress(BaseExtractor):
                 address
                 for address in RE_LINK.findall(part)
                 if ChainlinkValidator.run(address)
+            )
+
+
+class CardanoAddress(BaseExtractor):
+    PLUGIN_NAME = "ada"
+
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+        """Extracts valid Cardano (ADA) addresses from a string or a list of strings.
+
+        :param _input: String or a list of strings
+        :return: Generator of formally valid Cardano addresses
+        """
+        for part in _input if isinstance(_input, list) else _input.splitlines():
+            if not part:
+                continue
+            yield from (
+                address
+                for address in RE_ADA.findall(part)
+                if CardanoValidator.run(address)
             )

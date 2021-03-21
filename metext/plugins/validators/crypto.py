@@ -1,11 +1,14 @@
+from binascii import crc32
 from hashlib import sha256
 from typing import Optional, Union
 
 import cashaddress
+import cbor
 import sha3
 
 from metext.plugin_base import BaseValidator
 from metext.plugins.decoders.base58 import CHARSETS_BASE58, Base58Decoder
+from metext.plugins.decoders.bech32 import Bech32Decoder
 from metext.plugins.decoders.segwit import SegwitDecoder
 from metext.utils.regex import RE_ETH
 
@@ -200,3 +203,51 @@ class ChainlinkValidator(BaseValidator):
         else False
         """
         return EthereumValidator.run(_input)
+
+
+class CardanoValidator(BaseValidator):
+    PLUGIN_NAME = "ada"
+
+    @classmethod
+    def run(cls, _input: Union[bytes, str], **kwargs) -> bool:
+        """Checks that given data (bytes) string represents
+        a Cardano (ADA) address.
+
+        Checks address via CRC, should work with
+        Yoroi and Daedalus address format as well as Shelley format.
+
+        See: https://docs.cardano.org/projects/adrestia/en/latest/key-concepts/addresses-byron.html
+
+        :param _input: ASCII (bytes) string
+        :return: True if address string represents a valid Cardano address,
+        else False
+        """
+        return cls.is_valid_address_v1(_input) or cls.is_valid_address_shelley(_input)
+
+    @classmethod
+    def is_valid_address_shelley(cls, address):
+        hrp, decoded = Bech32Decoder.run(address)
+        if decoded is None:
+            return False
+
+        return hrp in ["addr", "stake"]
+
+    @classmethod
+    def is_valid_address_v1(cls, address):
+        decoded = cls._get_decoded(address)
+        if not decoded or len(decoded) != 2:
+            return False
+        tag = decoded[0]
+        expected_crc = decoded[1]
+        return expected_crc == crc32(tag.value)
+
+    @classmethod
+    def _get_decoded(cls, address):
+        decoded = Base58Decoder.run(address)
+        if not decoded:
+            return None
+        decoded = decoded.lstrip(b"\x00")
+        try:
+            return cbor.loads(decoded)
+        except:
+            return None

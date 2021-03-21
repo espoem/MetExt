@@ -21,6 +21,16 @@ if __name__ == "__main__":
         "bc1q5s8fz9p8x0a59774jlr9cmuwf6kjdv3j5tqvxm",
         "3Fxq8ctmbr5CQEdoow189rAi64LePvxgfb",
     ]
+    bch_addresses = [
+        "1NNAdw8phoJcQYJVvNKuD3QebGhdpWqNiW",
+        "qr49k67fr3hxtfyx6dzlh9g5qup5r9ds0squ3cc86c",
+        "1AJb1wHbhfnJrLG4N8sNSxxqpxQM4RvQJh",
+        "qpnqex2qmsnpqen53gqpnm9drvjxdmh625u7xcwgsa",
+        "3PfwaZNVCdgVwy5i667aB4bjypthLhazxB",
+        "prc3awvqkuw9e23mpy524ajfgazv5hf39v4w5xuhnl",
+        "35hK24tcLEWcgNA4JxpvbkNkoAcDGqQPsP",
+        "pq47a3s9exn9zt64l6f66an48cj0eptekq3vk6udg0"
+    ]
     ripple = [
         "rDbWJ9C7uExThZYAwV8m6LsZ5YSX3sa6US",
         "rMQ98K56yXJbDGv49ZSmW51sLn94Xe1mu1",
@@ -183,6 +193,7 @@ if __name__ == "__main__":
         + random.choice(string.whitespace)
         + "".join(random.choice(printable) for _ in range(random.randint(0, 30000)))
         for item in btc_addresses
+        + bch_addresses
         + ips
         + emails
         + md5s

@@ -1,5 +1,7 @@
 from typing import Optional
 
+import base58
+
 from metext.plugin_base import BaseDecoder, Decodable
 
 CHARSETS_BASE58 = {
@@ -23,20 +25,14 @@ class Base58Decoder(BaseDecoder):
         :param kwargs: Arbitrary keyword arguments
         :keyword length: Number of bytes in which the decoded data should be represented.
         Defaults to None, that means no restriction on output bytes length
-        :keyword alt_chars: Alphabet for base58 decoding. Use Bitcoin alphabet by default
+        :keyword charset: Alphabet for base58 decoding. Use Bitcoin alphabet by default
         :return: Decode bytes string. Returns `None` if `data` couldn't be decoded.
         """
-        alt_chars = kwargs.get("alt_chars", CHARSETS_BASE58["bitcoin"])
-        assert len(alt_chars) == 58
-        length = kwargs.get("length", None)
-        try:
-            n = 0
-            for char in _input if isinstance(_input, str) else _input.decode("ascii"):
-                n = n * 58 + alt_chars.index(char)
+        charset = kwargs.get("charset", CHARSETS_BASE58["bitcoin"])
+        assert len(charset) == 58
 
-            return n.to_bytes(
-                length if length is not None else (n.bit_length() + 7) // 8, "big"
-            )
+        try:
+            return base58.b58decode(_input)
         except:
             return None
 
@@ -53,12 +49,10 @@ class Base58BitcoinDecoder(BaseDecoder):
 
         :param _input: Base58 encoded (bytes) string
         :param kwargs: Arbitrary keyword arguments
-        :keyword length: Number of bytes in which the decoded data should be represented, defaults to 25
         :return: Decode bytes string. Returns `None` if `data` couldn't be decoded.
         """
-        kwargs_ = {"length": 25}.update(kwargs)
-        return Base58Decoder.run(
-            _input, alt_chars=CHARSETS_BASE58["bitcoin"], **kwargs_
+        return base58.b58decode(
+            _input, alphabet=CHARSETS_BASE58["bitcoin"].encode("ascii")
         )
 
 
@@ -74,8 +68,8 @@ class Base58RippleDecoder(BaseDecoder):
 
         :param _input: Base58 encoded (bytes) string
         :param kwargs: Arbitrary keyword arguments
-        :keyword length: Number of bytes in which the decoded data should be represented, defaults to 25
         :return: Decode bytes string. Returns `None` if `data` couldn't be decoded.
         """
-        kwargs_ = {"length": 25}.update(kwargs)
-        return Base58Decoder.run(_input, alt_chars=CHARSETS_BASE58["ripple"], **kwargs_)
+        return base58.b58decode(
+            _input, alphabet=CHARSETS_BASE58["ripple"].encode("ascii")
+        )

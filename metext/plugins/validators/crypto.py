@@ -1,6 +1,7 @@
 from hashlib import sha256
 from typing import Optional, Union
 
+import cashaddress
 import sha3
 
 from metext.plugin_base import BaseValidator
@@ -79,6 +80,21 @@ class BitcoinValidator(BaseValidator):
         return is_valid_base58_address(
             _input, prefixes=["1", "3"]
         ) or is_valid_segwit_address(_input, hrps=["bc"])
+
+
+class BitcoinCashValidator(BaseValidator):
+    PLUGIN_NAME = "bch"
+    PLUGIN_ACTIVE = False
+
+    @classmethod
+    def run(cls, _input: Union[bytes, str], **kwargs) -> bool:
+        if not isinstance(_input, str):
+            try:
+                _input = _input.decode("ascii")
+            except:
+                return False
+
+        return cashaddress.convert.is_valid(_input)
 
 
 class EthereumValidator(BaseValidator):

@@ -82,6 +82,7 @@ RE_BASE64 = re.compile(
 
 PATTERN_BTC_BASE58 = r"\b[13][a-km-zA-HJ-NP-Z1-9]{25,34}\b"
 PATTERN_BTC_SEGWIT = r"\b(?:[bB][cC])1[a-zA-HJ-NP-Z0-9]{25,39}\b"
+PATTERN_BCH = r"\b(?:(?:bitcoincash:)?[qp][a-z0-9]{41}|(?:BITCOINCASH:)?[QP][A-Z0-9]{41})\b"
 PATTERN_ETH = r"\b0x[0-9a-f]{40}\b"
 RE_BTC = re.compile("{}|{}".format(PATTERN_BTC_SEGWIT, PATTERN_BTC_BASE58))
 RE_LTC = re.compile(r"\b[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}\b")
@@ -89,6 +90,8 @@ RE_XRP = re.compile(r"\br[0-9a-zA-Z]{24,34}\b")
 RE_ETH = re.compile(PATTERN_ETH, re.IGNORECASE)
 RE_USDT = re.compile(r"{}|{}".format(PATTERN_BTC_BASE58, PATTERN_ETH), re.IGNORECASE)
 RE_LINK = RE_ETH
+RE_BCH = re.compile(PATTERN_BCH)
+RE_BCH_WITH_LEGACY = re.compile(r"{}|{}".format(PATTERN_BTC_BASE58, PATTERN_BCH))
 
 RE_PEM = re.compile(
     r"(?:-----BEGIN (?P<label>.+?)-----).+?(?:-----END (?P=label)-----)", re.DOTALL

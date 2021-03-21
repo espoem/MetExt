@@ -34,7 +34,7 @@ class Bech32Decoder(BaseDecoder):
             return None, None
         _input = _input.lower()
         pos = _input.rfind("1")
-        if pos < 1 or pos + 7 > len(_input) or len(_input) > 90:
+        if pos < 1 or pos + 7 > len(_input) or len(_input) > 110:
             return None, None
         if any(x not in ALPHABET for x in _input[pos + 1 :]):
             return None, None

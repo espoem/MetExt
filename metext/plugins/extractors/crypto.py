@@ -2,6 +2,7 @@ from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
 from metext.plugins.validators.crypto import (
+    BitcoinCashValidator,
     BitcoinValidator,
     ChainlinkValidator,
     EthereumValidator,
@@ -9,7 +10,16 @@ from metext.plugins.validators.crypto import (
     RippleValidator,
     TetherValidator,
 )
-from metext.utils.regex import RE_BTC, RE_ETH, RE_LINK, RE_LTC, RE_USDT, RE_XRP
+from metext.utils.regex import (
+    RE_BCH,
+    RE_BCH_WITH_LEGACY,
+    RE_BTC,
+    RE_ETH,
+    RE_LINK,
+    RE_LTC,
+    RE_USDT,
+    RE_XRP,
+)
 
 
 class BitcoinAddress(BaseExtractor):
@@ -129,6 +139,33 @@ class TetherAddress(BaseExtractor):
                 address
                 for address in RE_USDT.findall(part)
                 if TetherValidator.run(address)
+            )
+
+
+class BitcoinCashAddress(BaseExtractor):
+    PLUGIN_NAME = "bch"
+
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+        """Extracts valid Bitcoin Cash (BCH) addresses from a string or a list of strings.
+
+        :param _input: String or a list of strings
+        :keyword include_legacy: Flag to include legacy addresses
+        conforming to BTC address format. Defaults to True
+        :return: Generator of formally valid Bitcoin Cash addresses
+        """
+        include_legacy = kwargs.get("include_legacy", True)
+        re_ = RE_BCH_WITH_LEGACY if include_legacy else RE_BCH
+
+        for part in _input if isinstance(_input, list) else [_input]:
+            yield from (
+                address
+                for address in re_.findall(part)
+                if BitcoinCashValidator.run(
+                    "bitcoincash:" + address
+                    if address[0].lower() in ["q", "p"]
+                    else address
+                )
             )
 
 

@@ -1,13 +1,13 @@
 import base64
+import binhex
 import codecs
+import gzip
+import quopri
 import random
 import string
 import tempfile
 from io import StringIO
 from string import printable
-import quopri
-import gzip
-import binhex
 
 import base91
 
@@ -29,7 +29,7 @@ if __name__ == "__main__":
         "3PfwaZNVCdgVwy5i667aB4bjypthLhazxB",
         "prc3awvqkuw9e23mpy524ajfgazv5hf39v4w5xuhnl",
         "35hK24tcLEWcgNA4JxpvbkNkoAcDGqQPsP",
-        "pq47a3s9exn9zt64l6f66an48cj0eptekq3vk6udg0"
+        "pq47a3s9exn9zt64l6f66an48cj0eptekq3vk6udg0",
     ]
     ripple = [
         "rDbWJ9C7uExThZYAwV8m6LsZ5YSX3sa6US",
@@ -56,7 +56,7 @@ if __name__ == "__main__":
         "37btjrVyb4KEB2STADSsj3MYSAdj52X5FrFWpw2r7Wmj2GDzXjFRsHWuZqrw7zSkwopv8Ci3VWeg6bisU9dgJxW5hb2MZYeduNKbQJrqz3zVBsu9nT",
         "addr1q93qu0rz5g4dynwyt0r4ketkl38wvphpsk3e8z0clhj6pxnrvjgxcwl3ssf7sm4hg3c6x74vn3806m28mjtlclnemflswjxsdr",
         "addr1q8y56n0qpezuvgjtcc46vztyfryznvn8p437gq0exjpwfkz2fp2uyt8lrdestzu08ey2j244v5lpq2tfv42pvjrymlks2xxxgp",
-        "stake1uyygesl7gvduqlpt2pcu2g3aamfwccsrl66eez25935uzyqyjpwpx"
+        "stake1uyygesl7gvduqlpt2pcu2g3aamfwccsrl66eez25935uzyqyjpwpx",
     ]
     polkadot = [
         "16KkAKG7GHMejE8DjeVz32WxJEyLBkdNyrCSdqiyJSQE6mNc",
@@ -65,7 +65,7 @@ if __name__ == "__main__":
         "4pbsSkWcBaYoFHrKJZp5fDVUKbqSYD9dhZZGvpp3vQ5ysVs5ybV",
         "yGF4JP7q5AK46d1FPCEm9sYQ4KooSjHMpyVAjLnsCSWVafPnf",
         "KWCv1L3QX9LDPwY4VzvLmarEmXjVJidUzZcinvVnmxAJJCBou",
-        "GLdQ4D4wkeEJUX8DBT9HkpycFVYQZ3fmJyQ5ZgBRxZ4LD3S"
+        "GLdQ4D4wkeEJUX8DBT9HkpycFVYQZ3fmJyQ5ZgBRxZ4LD3S",
     ]
     ips = [
         "1762:0:0:0:0:B03:1:AF18",
@@ -277,7 +277,8 @@ if __name__ == "__main__":
     binhex.binhex("examples/gen/ex_input.txt", "examples/gen/ex_binhex")
 
     with open("examples/gen/ex_mime_multipart", "w") as g:
-        g.write("""From: Nathaniel Borenstein <nsb@bellcore.com> 
+        g.write(
+            """From: Nathaniel Borenstein <nsb@bellcore.com> 
 To:  Ned Freed <ned@innosoft.com> 
 Subject: Sample message 
 MIME-Version: 1.0 
@@ -302,6 +303,9 @@ It DOES end with a linebreak.
 {}
 
 --simple boundary-- 
-This is the epilogue.  It is also to be ignored.""".format(res_to_print))
+This is the epilogue.  It is also to be ignored.""".format(
+                res_to_print
+            )
+        )
 
 # to create yEnc demo encoded output, use https://www.webutils.pl/yEnc

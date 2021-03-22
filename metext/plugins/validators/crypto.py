@@ -107,11 +107,11 @@ class BitcoinPrivKeyValidator(BaseValidator):
     def run(cls, _input: Union[bytes, str], **kwargs) -> bool:
         if isinstance(_input, str):
             try:
-                _input = _input.encode("ascii")
+                _input = _input.encode("ascii").lower()
             except:
                 return False
 
-        if len(_input) != 64:
+        if len(_input) != 64 or _input > b"fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364140":
             return False
 
         try:

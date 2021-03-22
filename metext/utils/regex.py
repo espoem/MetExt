@@ -92,6 +92,10 @@ PATTERN_ADA_SHELLEY = (
 )
 
 RE_BTC = re.compile("{}|{}".format(PATTERN_BTC_SEGWIT, PATTERN_BTC_BASE58))
+RE_BTC_WIF = re.compile(
+    r"\b(?:[59][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50}|[LKc][123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{51})\b"
+)
+RE_BTC_PRIVKEY = re.compile(r"\b[0-9a-fA-f]{64}\b")
 RE_LTC = re.compile(r"\b[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}\b")
 RE_XRP = re.compile(r"\br[0-9a-zA-Z]{24,34}\b")
 RE_ETH = re.compile(PATTERN_ETH, re.IGNORECASE)

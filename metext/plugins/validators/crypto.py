@@ -87,6 +87,44 @@ class BitcoinValidator(BaseValidator):
         ) or is_valid_segwit_address(_input, hrps=["bc"])
 
 
+class BitcoinWifValidator(BaseValidator):
+    PLUGIN_NAME = "btc-wif"
+
+    @classmethod
+    def run(cls, _input: Union[bytes, str], **kwargs) -> bool:
+        try:
+            base58.b58decode_check(_input)
+        except:
+            return False
+
+        return True
+
+
+class BitcoinPrivKeyValidator(BaseValidator):
+    PLUGIN_NAME = "btc-privkey"
+
+    @classmethod
+    def run(cls, _input: Union[bytes, str], **kwargs) -> bool:
+        if isinstance(_input, str):
+            try:
+                _input = _input.encode("ascii")
+            except:
+                return False
+
+        if len(_input) != 64:
+            return False
+
+        try:
+            wif = base58.b58encode_check(b"80" + _input)
+        except:
+            try:
+                wif = base58.b58encode_check(b"ef" + _input)
+            except:
+                return False
+
+        return BitcoinWifValidator.run(wif)
+
+
 class BitcoinCashValidator(BaseValidator):
     PLUGIN_NAME = "bch"
     PLUGIN_ACTIVE = False

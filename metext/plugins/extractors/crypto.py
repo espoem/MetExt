@@ -3,7 +3,9 @@ from typing import Iterable, List, Union
 from metext.plugin_base import BaseExtractor
 from metext.plugins.validators.crypto import (
     BitcoinCashValidator,
+    BitcoinPrivKeyValidator,
     BitcoinValidator,
+    BitcoinWifValidator,
     CardanoValidator,
     ChainlinkValidator,
     EthereumValidator,
@@ -17,6 +19,8 @@ from metext.utils.regex import (
     RE_BCH,
     RE_BCH_WITH_LEGACY,
     RE_BTC,
+    RE_BTC_PRIVKEY,
+    RE_BTC_WIF,
     RE_DOT,
     RE_ETH,
     RE_LINK,
@@ -51,6 +55,38 @@ class BitcoinAddress(BaseExtractor):
                 address
                 for address in RE_BTC.findall(part)
                 if BitcoinValidator.run(address)
+            )
+
+
+class BitcoinWif(BaseExtractor):
+    PLUGIN_NAME = "btc-wif"
+
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+
+        for part in _input if isinstance(_input, list) else _input.splitlines():
+            if not part:
+                continue
+            yield from (
+                address
+                for address in RE_BTC_WIF.findall(part)
+                if BitcoinWifValidator.run(address)
+            )
+
+
+class BitcoinPrivateKey(BaseExtractor):
+    PLUGIN_NAME = "btc-privkey"
+
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+
+        for part in _input if isinstance(_input, list) else _input.splitlines():
+            if not part:
+                continue
+            yield from (
+                address
+                for address in RE_BTC_PRIVKEY.findall(part)
+                if BitcoinPrivKeyValidator.run(address)
             )
 
 

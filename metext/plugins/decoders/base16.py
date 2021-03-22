@@ -53,6 +53,9 @@ class HexdumpDecoder(BaseDecoder):
         if isinstance(_input, str):
             _input = _input.encode("utf8")
 
+        if not _input:
+            return None
+
         first = _input.splitlines()[0]
         cols = [c.strip() for c in first.split(b" ") if c.strip()]
         if not cols:

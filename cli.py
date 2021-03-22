@@ -8,7 +8,7 @@ from metext.utils.fileinput import FileInputExtended
 decoders = [
     plug.PLUGIN_NAME
     for plug in plugin_base.BaseDecoder.get_active_plugins()
-    if plug.PLUGIN_NAME != "_id"
+    # if plug.PLUGIN_NAME != "_id"
 ]
 extractors = [
     plug.PLUGIN_NAME for plug in plugin_base.BaseExtractor.get_active_plugins()

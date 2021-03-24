@@ -5,6 +5,7 @@ from typing import Any, Callable, List, Optional, Tuple, Union
 from metext import plugin_base
 from metext.plugin_base import BaseDecoder, BaseExtractor, Decodable
 from metext.plugins import load_plugin_modules
+from metext.utils import decode_bytes
 from metext.utils.fileinput import FileInputExtended
 
 supported_decoders = {
@@ -167,7 +168,7 @@ def input_for_analysis(
 def _extract_single(_data, _executor):
     ex_name, ex_args, ex_kwargs = _executor
     return extract_patterns(
-        _data.decode("utf8") if isinstance(_data, bytes) else _data,
+        _data if isinstance(_data, str) else decode_bytes(_data),
         ex_name,
         *ex_args,
         **ex_kwargs,

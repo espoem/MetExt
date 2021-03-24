@@ -1,5 +1,7 @@
 from collections import OrderedDict
 
+import chardet
+
 
 def to_csv_printer_format(analyzed_data: list) -> list:
     out = []
@@ -37,3 +39,15 @@ def to_table_printer_format(analyzed_data: list) -> list:
 
 def to_xml_printer_format(analyzed_data: list) -> dict:
     return {"data": analyzed_data}
+
+
+def decode_bytes(bytes_):
+    try:
+        return bytes_.decode("utf-8")
+    except UnicodeDecodeError:
+        try:
+            # Try using 8-bit ASCII, if came from Windows
+            return bytes_.decode("ISO-8859-1")
+        except ValueError:
+            # Last resort we use the slow chardet package
+            return bytes_.decode(chardet.detect(bytes_)["encoding"])

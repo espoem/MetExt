@@ -3,8 +3,6 @@ email-validator
 tabulate
 base91
 pysha3
-pycryptodome
-pyopenssl
 base32-crockford
 chardet
 pem

@@ -2,7 +2,7 @@ import re
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
-from metext.utils.regex import RE_GUID, RE_JSON
+from metext.utils.regex import RE_JSON
 
 
 class JsonExtractor(BaseExtractor):

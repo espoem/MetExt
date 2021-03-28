@@ -109,3 +109,7 @@ RE_DOT = re.compile(r"\b1[a-zA-Z1-9]{25,60}\b")  # Polkadot
 RE_PEM = re.compile(
     r"(?:-----BEGIN (?P<label>.+?)-----).+?(?:-----END (?P=label)-----)", re.DOTALL
 )
+
+RE_GUID = re.compile(
+    r"\b[0-9a-fA-F]{8}[-]?(?:[0-9a-fA-F]{4}[-]?){3}[0-9a-fA-F]{12}\b"
+)

@@ -11,3 +11,4 @@ pem
 cashaddress
 cbor
 base58
+regex

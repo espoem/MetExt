@@ -22,7 +22,8 @@ class Base32Extractor(BaseExtractor):
         :return: Generator of Base32 strings
         """
         min_len = kwargs.get("min_len", 50)
-        for part in _input if isinstance(_input, list) else _input.splitlines():
+        for part in _input if isinstance(_input, list) else [_input]:
+            part = part.replace(r"\r\n", "").replace(r"\n", "").replace(r"\r", "")
             yield from (
                 b32
                 for b32 in RE_BASE32.findall(part)
@@ -45,7 +46,8 @@ class Base64Extractor(BaseExtractor):
         :return: Generator of Base64 strings
         """
         min_len = kwargs.get("min_len", 50)
-        for part in _input if isinstance(_input, list) else _input.splitlines():
+        for part in _input if isinstance(_input, list) else [_input]:
+            part = part.replace(r"\r\n", "").replace(r"\n", "").replace(r"\r", "")
             yield from (
                 b64
                 for b64 in RE_BASE64.findall(part)

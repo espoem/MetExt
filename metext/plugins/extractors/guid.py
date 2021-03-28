@@ -4,7 +4,7 @@ from metext.plugin_base import BaseExtractor
 from metext.utils.regex import RE_GUID
 
 
-class PemExtractor(BaseExtractor):
+class GuidExtractor(BaseExtractor):
     PLUGIN_NAME = "guid"
 
     @classmethod

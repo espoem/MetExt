@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
@@ -19,8 +20,12 @@ class EmailExtractor(BaseExtractor):
         for part in _input if isinstance(_input, list) else _input.splitlines():
             if not part or re.search(r"\w[^@]@[^@]\w", part) is None:
                 continue
+            chars = Counter(part)
+            if chars.get("=", -1) > 1 or chars.get("&", -1) > 1:
+                part = " ".join(p for p in re.split(r"[=&]", part) if "@" in p)
+
             yield from (
                 address
-                for address in (re.findall(r"\S+[^@]@[^@]\S+", part))
+                for address in re.findall(r"\S+[^@]@[^@]\S+", part)
                 if EmailValidator.run(address)
             )

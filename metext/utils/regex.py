@@ -79,9 +79,13 @@ RE_DOI = re.compile(r"\b10[.][0-9]{4,}(?:[.][0-9]+)*/(?:(?![\"&\'<>])\S)+\b")
 RE_BASE32 = re.compile(
     r"(?:[A-Z2-7]{8})*(?:[A-Z2-7]{2}={6}|[A-Z2-7]{4}={4}|[A-Z2-7]{5}={3}|[A-Z2-7]{7}=)?"
 )  # https://stackoverflow.com/a/27362880
+# RE_BASE64 = re.compile(
+#     r"\b(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/][AQgw]==|[A-Za-z0-9+/]{2}[AEIMQUYcgkosw048]=)?(?!\w)"
+# )  # https://www.rise4fun.com/Bek/tutorial/base64
+
 RE_BASE64 = re.compile(
-    r"\b(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/][AQgw]==|[A-Za-z0-9+/]{2}[AEIMQUYcgkosw048]=)?(?!\w)"
-)  # https://www.rise4fun.com/Bek/tutorial/base64
+    r"\b(?:(?:[A-Za-z0-9+/]{76}(?:\r\n|\\r\\n|\n|\\n|\r|\\r)|[A-Za-z0-9+/]{64}(?:\r\n|\\r\\n|\n|\\n|\r|\\r)|[A-Za-z0-9+/]{4})*)(?:[A-Za-z0-9+/][AQgw]==|[A-Za-z0-9+/]{2}[AEIMQUYcgkosw048]=)?"
+)
 
 PATTERN_BTC_BASE58 = r"\b[13][a-km-zA-HJ-NP-Z1-9]{25,42}\b"
 PATTERN_BTC_SEGWIT = r"\b(?:[bB][cC])1[a-zA-HJ-NP-Z0-9]{25,39}\b"

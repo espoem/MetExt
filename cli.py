@@ -8,7 +8,6 @@ from metext.utils.fileinput import FileInputExtended
 decoders = [
     plug.PLUGIN_NAME
     for plug in plugin_base.BaseDecoder.get_active_plugins()
-    # if plug.PLUGIN_NAME != "_id"
 ]
 extractors = [
     plug.PLUGIN_NAME for plug in plugin_base.BaseExtractor.get_active_plugins()
@@ -78,9 +77,6 @@ def build_parser():
         choices=printers,
         default=["json"],
     )
-    # main_parser.add_argument(
-    #     "-p", "--plugins", nargs=1, help="Directory path to custom plugins."
-    # )
     main_parser.add_argument(
         "--per-line",
         action="store_true",
@@ -135,8 +131,8 @@ if __name__ == "__main__":
     with FileInputExtended(input_files, mode="rb") as f:
         res = analyze(
             f,
-            [(dec, [], {}) for dec in args.decode],
-            [(ex, [], {}) for ex in args.extract],
+            [(dec, {}) for dec in args.decode],
+            [(ex, {}) for ex in args.extract],
             args.per_line,
         )
     printer = get_printer(args)

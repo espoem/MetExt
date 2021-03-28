@@ -67,13 +67,12 @@ def _is_supported_extractor(extractor: str):
     return extractor in supported_extractors.keys()
 
 
-def decode(data: Decodable, decoder: str, *args, **kwargs) -> Optional[Any]:
+def decode(data: Decodable, decoder: str, **kwargs) -> Optional[Any]:
     """Decode data with a chosen decoder. Decoder must be registered, i.e. it
     must be listed with :func:`list_decoders`.
 
     :param data: Data to decode
     :param decoder: Name of a registered decoder
-    :param args: Variable args for the decoder
     :param kwargs: Arbitrary keyword arguments for the decoder
     :return: Decoded data, None if data couldn't be decoded
     """
@@ -87,16 +86,16 @@ def decode(data: Decodable, decoder: str, *args, **kwargs) -> Optional[Any]:
             )
         )
 
-    return get_decoder(decoder)(data, *args, **kwargs)
+    return get_decoder(decoder)(data, **kwargs)
 
 
-def extract_patterns(data: str, extractor: str, *args, **kwargs) -> List[Any]:
-    """Finds patterns in input data via selected extractor. The type of pattern is defined by the extractor used.
-     The extractor must be registered, i.e. it must be listed with :func:`list_extractors`.
+def extract_patterns(data: str, extractor: str, **kwargs) -> List[Any]:
+    """Finds patterns in input data via selected extractor.
+    The type of pattern is defined by the extractor used.
+    The extractor must be registered, i.e. it must be listed with :func:`list_extractors`.
 
     :param data: Data in which to look for patterns
     :param extractor: Name of a registered extractor
-    :param args: Variable args for the extractor
     :param kwargs: Arbitrary keyword arguments for the extractor
     :return: List of found patterns
     """
@@ -107,13 +106,13 @@ def extract_patterns(data: str, extractor: str, *args, **kwargs) -> List[Any]:
             )
         )
 
-    return list(get_extractor(extractor)(data, *args, **kwargs))
+    return list(get_extractor(extractor)(data, **kwargs))
 
 
 def analyze(
     _input: Union[FileInputExtended, BufferedIOBase, TextIOBase],
-    decoders: List[Tuple[str, list, dict]],
-    extractors: List[Tuple[str, list, dict]],
+    decoders: List[Tuple[str, dict]],
+    extractors: List[Tuple[str, dict]],
     per_line: bool = False,
 ) -> List[dict]:
     """Common function to apply multiple decoders and multiple extractors on the input.
@@ -129,8 +128,8 @@ def analyze(
     with cf.ProcessPoolExecutor() as e:
         for data in _read(_input, per_line):
             for dec in decoders:
-                dec1, dec_args, dec_kwargs = dec
-                decoded = decode(data, dec1, *dec_args, **dec_kwargs)
+                dec_name, dec_kwargs = dec
+                decoded = decode(data, dec_name, **dec_kwargs)
                 patterns = {}
                 if decoded:
                     future_extracted = {
@@ -143,7 +142,7 @@ def analyze(
                             patterns[pattern_type] = future.result()
                         except:
                             patterns.setdefault(pattern_type, [])
-                _add_patterns_to_out(_input.name, dec1, patterns, out)
+                _add_patterns_to_out(_input.name, dec_name, patterns, out)
 
     return list(out.values())
 
@@ -166,12 +165,9 @@ def input_for_analysis(
 
 
 def _extract_single(_data, _executor):
-    ex_name, ex_args, ex_kwargs = _executor
+    ex_name, ex_kwargs = _executor
     return extract_patterns(
-        _data if isinstance(_data, str) else decode_bytes(_data),
-        ex_name,
-        *ex_args,
-        **ex_kwargs,
+        _data if isinstance(_data, str) else decode_bytes(_data), ex_name, **ex_kwargs
     )
 
 

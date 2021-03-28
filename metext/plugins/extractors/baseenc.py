@@ -48,9 +48,10 @@ class Base64Extractor(BaseExtractor):
         min_len = kwargs.get("min_len", 50)
         for part in _input if isinstance(_input, list) else [_input]:
             part = part.replace(r"\r\n", "").replace(r"\n", "").replace(r"\r", "")
+            b64_found = [re.sub("\r\n|\n|\r", "", b) for b in RE_BASE64.findall(part)]
             yield from (
                 b64
-                for b64 in RE_BASE64.findall(part)
+                for b64 in b64_found
                 if len(b64) >= min_len and Base64Validator.run(b64)
             )
 

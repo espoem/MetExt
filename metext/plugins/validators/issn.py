@@ -1,6 +1,20 @@
 import re
+import requests
+import xml.etree.ElementTree as ET
 
 from metext.plugin_base import BaseValidator
+
+
+def check_issn_via_oclc(isbn):
+    resp = requests.get(
+        r"http://classify.oclc.org/classify2/Classify?issn={}&summary=true".format(isbn)
+    )
+    if resp.status_code != 200:
+        return False
+    x = ET.fromstring(resp.content)
+    c = x.find("{http://classify.oclc.org}response")
+    cc = c.get("code")
+    return cc == "0"
 
 
 def is_issn(issn: str) -> bool:
@@ -36,4 +50,5 @@ class IssnValidator(BaseValidator):
         :return: True if input string is an ISSN identifier,
         else False
         """
-        return is_issn(_input.split(":")[-1])
+        issn = _input.split(":")[-1]
+        return is_issn(issn) and check_issn_via_oclc(issn)

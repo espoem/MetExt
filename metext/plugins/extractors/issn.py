@@ -8,6 +8,8 @@ from metext.utils.regex import RE_ISSN
 class IssnExtractor(BaseExtractor):
     PLUGIN_NAME = "issn"
 
+    valid_issns = set()
+
     @classmethod
     def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts valid ISSN identifiers
@@ -20,6 +22,11 @@ class IssnExtractor(BaseExtractor):
         for part in _input if isinstance(_input, list) else _input.splitlines():
             if not part:
                 continue
-            yield from (
-                issn for issn in (RE_ISSN.findall(part)) if IssnValidator.run(issn)
-            )
+            issn = RE_ISSN.findall(part)
+            for i in issn:
+                if i in cls.valid_issns:
+                    yield i
+                    continue
+                if IssnValidator.run(issn):
+                    cls.valid_issns.add(i)
+                    yield i

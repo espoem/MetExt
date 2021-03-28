@@ -15,16 +15,18 @@ RE_SHA512 = re.compile(r"\b[a-f0-9]{128}\b", re.IGNORECASE)
 RE_URI_REFERENCE = re.compile(r"\b{}\b".format(URI_reference), re.VERBOSE)
 RE_URI = re.compile(r"\b{}\b".format(URI), re.VERBOSE)
 RE_EMAIL = re.compile(addr_spec, re.VERBOSE)
+# RE_URL_FORM_FIELDS = re.compile(r"^(?:[\w_.-]+=(?![\"\'<>])[^=&\s?#]*&?)+|(?<=[/#?])(?:[\w_.-]+=(?![\"\'<>])[^=&\s?#]*&?)+")
+RE_URL_FORM_FIELDS = re.compile(r"^([\w_-]+=.*&?)+$", re.MULTILINE)
 
 # https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s13.html
 RE_ISBN10 = re.compile(
     r"""
 #(?:ISBN(?:-10)?:?\ ?)?     # Optional ISBN/ISBN-10 identifier.
 (?=                       # Basic format pre-checks (lookahead):
-  [0-9X]{10}             #   Require 10 digits/Xs (no separators).
+  \b[0-9X]{10}\b             #   Require 10 digits/Xs (no separators).
  |                        #  Or:
-  (?=(?:[0-9]+[-\ ]){3})  #   Require 3 separators
-  [-\ 0-9X]{13}          #     out of 13 characters total.
+  \b(?=(?:[0-9]+[-\ ]){3})  #   Require 3 separators
+  [-\ 0-9X]{13}\b          #     out of 13 characters total.
 )                         # End format pre-checks.
 [0-9]{1,5}[-\ ]?          # 1-5 digit group identifier.
 [0-9]+[-\ ]?[0-9]+[-\ ]?  # Publisher and title identifiers.
@@ -36,9 +38,9 @@ RE_ISBN13 = re.compile(
     r"""
 #(?:ISBN(?:-13)?:?\ ?)?     # Optional ISBN/ISBN-13 identifier.
 (?=                       # Basic format pre-checks (lookahead):
-  [0-9]{13}\b              #   Require 13 digits (no separators).
+  \b[0-9]{13}\b              #   Require 13 digits (no separators).
  |                        #  Or:
-  (?=(?:[0-9]+[-\ ]){4})  #   Require 4 separators
+  \b(?=(?:[0-9]+[-\ ]){4})  #   Require 4 separators
   [-\ 0-9]{17}\b           #     out of 17 characters total.
 )                         # End format pre-checks.
 97[89][-\ ]?              # ISBN-13 prefix.
@@ -52,14 +54,14 @@ RE_ISBN = re.compile(
     r"""
 #(?:ISBN(?:-1[03])?:?\ ?)?  # Optional ISBN/ISBN-10/ISBN-13 identifier.
 (?=                       # Basic format pre-checks (lookahead):
-  [0-9X]{10}\b             #   Require 10 digits/Xs (no separators).
+  \b[0-9X]{10}\b             #   Require 10 digits/Xs (no separators).
  |                        #  Or:
-  (?=(?:[0-9]+[-\ ]){3})  #   Require 3 separators
+  \b(?=(?:[0-9]+[-\ ]){3})  #   Require 3 separators
   [-\ 0-9X]{13}\b          #     out of 13 characters total.
  |                        #  Or:
-  97[89][0-9]{10}\b        #   978/979 plus 10 digits (13 total).
+  \b97[89][0-9]{10}\b        #   978/979 plus 10 digits (13 total).
  |                        #  Or:
-  (?=(?:[0-9]+[-\ ]){4})  #   Require 4 separators
+  \b(?=(?:[0-9]+[-\ ]){4})  #   Require 4 separators
   [-\ 0-9]{17}\b           #     out of 17 characters total.
 )                         # End format pre-checks.
 (?:97[89][-\ ]?)?         # Optional ISBN-13 prefix.
@@ -78,7 +80,7 @@ RE_BASE32 = re.compile(
     r"(?:[A-Z2-7]{8})*(?:[A-Z2-7]{2}={6}|[A-Z2-7]{4}={4}|[A-Z2-7]{5}={3}|[A-Z2-7]{7}=)?"
 )  # https://stackoverflow.com/a/27362880
 RE_BASE64 = re.compile(
-    r"\b(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/][AQgw]==|[A-Za-z0-9+/]{2}[AEIMQUYcgkosw048]=)?"
+    r"\b(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/][AQgw]==|[A-Za-z0-9+/]{2}[AEIMQUYcgkosw048]=)?(?!\w)"
 )  # https://www.rise4fun.com/Bek/tutorial/base64
 
 PATTERN_BTC_BASE58 = r"\b[13][a-km-zA-HJ-NP-Z1-9]{25,42}\b"
@@ -128,6 +130,4 @@ RE_JSON = regex.compile(
     regex.VERBOSE,
 )
 
-RE_GUID = re.compile(
-    r"\b[0-9a-fA-F]{8}[-]?(?:[0-9a-fA-F]{4}[-]?){3}[0-9a-fA-F]{12}\b"
-)
+RE_GUID = re.compile(r"\b[0-9a-fA-F]{8}[-]?(?:[0-9a-fA-F]{4}[-]?){3}[0-9a-fA-F]{12}\b")

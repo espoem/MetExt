@@ -8,6 +8,8 @@ from metext.utils.regex import RE_ISBN10, RE_ISBN13
 class IsbnExtractor(BaseExtractor):
     PLUGIN_NAME = "isbn"
 
+    valid_isbns = set()
+
     @classmethod
     def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
         """Extracts valid ISBN10 and ISBN13 identifiers
@@ -22,11 +24,20 @@ class IsbnExtractor(BaseExtractor):
                 continue
             isbn10 = RE_ISBN10.findall(part)
             isbn13 = RE_ISBN13.findall(part)
-            yield from (isbn for isbn in isbn10 + isbn13 if IsbnValidator.run(isbn))
+            isbn = isbn10 + isbn13
+            for i in isbn:
+                if i in cls.valid_isbns:
+                    yield i
+                    continue
+                if IsbnValidator.run(i):
+                    cls.valid_isbns.add(i)
+                    yield i
 
 
 class Isbn10Extractor(BaseExtractor):
     PLUGIN_NAME = "isbn10"
+
+    valid_isbns = set()
 
     @classmethod
     def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
@@ -39,13 +50,20 @@ class Isbn10Extractor(BaseExtractor):
         for part in _input if isinstance(_input, list) else _input.splitlines():
             if not part:
                 continue
-            yield from (
-                isbn for isbn in RE_ISBN10.findall(part) if IsbnValidator.run(isbn)
-            )
+            isbn = RE_ISBN10.findall(part)
+            for i in isbn:
+                if i in cls.valid_isbns:
+                    yield i
+                    continue
+                if IsbnValidator.run(i):
+                    cls.valid_isbns.add(i)
+                    yield i
 
 
 class Isbn13Extractor(BaseExtractor):
     PLUGIN_NAME = "isbn13"
+
+    valid_isbns = set()
 
     @classmethod
     def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
@@ -58,6 +76,12 @@ class Isbn13Extractor(BaseExtractor):
         for part in _input if isinstance(_input, list) else _input.splitlines():
             if not part:
                 continue
-            yield from (
-                isbn for isbn in RE_ISBN13.findall(part) if IsbnValidator.run(isbn)
-            )
+
+            isbn = RE_ISBN13.findall(part)
+            for i in isbn:
+                if i in cls.valid_isbns:
+                    yield i
+                    continue
+                if IsbnValidator.run(i):
+                    cls.valid_isbns.add(i)
+                    yield i

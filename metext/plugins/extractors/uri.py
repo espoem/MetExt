@@ -1,5 +1,6 @@
 import re
 from typing import Iterable, List, Union
+from urllib.parse import unquote_plus
 
 from metext.plugin_base import BaseExtractor
 from metext.plugins.validators.uri import (
@@ -7,9 +8,8 @@ from metext.plugins.validators.uri import (
     MagnetValidator,
     URIValidator,
     URLValidator,
-    URNValidator,
 )
-from metext.utils.regex import RE_URI, RE_URI_REFERENCE
+from metext.utils.regex import RE_URI, RE_URI_REFERENCE, RE_URL_FORM_FIELDS
 
 
 class URIExtractor(BaseExtractor):
@@ -123,6 +123,34 @@ class MagnetExtractor(BaseExtractor):
                 continue
             uris = URIExtractor.run(part, schemes=["magnet"], strict=False)
             yield from (magnet for magnet in uris if MagnetValidator.run(magnet))
+
+
+class FormFieldsExtractor(BaseExtractor):
+    PLUGIN_NAME = "form_fields"
+
+    @classmethod
+    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+        """Extracts form fields data in HTTP, URL.
+
+        :param _input: String or a list of strings
+        :param kwargs: Arbitrary keyword arguments
+        :keyword min_len: Minimum length of extracted pattern.
+        Defaults to 20.
+        :keyword decode: Flag to percent (URL) decode the found pattern. Defaults to True
+        :return: Generator of form fields in decoded format
+        """
+        min_len = kwargs.get("min_len", 20)
+        decode = kwargs.get("decode", True)
+        for part in _input if isinstance(_input, list) else [_input]:
+            for p in part.splitlines():
+                if len(p) < min_len or "=" not in p:
+                    continue
+                res = (
+                    unquote_plus(ff) if decode else ff
+                    for ff in RE_URL_FORM_FIELDS.findall(p)
+                    if not ("&" not in ff and ff.endswith("="))
+                )
+                yield from iter(res)
 
 
 URI_SCHEMES = [

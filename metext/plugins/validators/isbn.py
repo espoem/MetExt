@@ -1,6 +1,20 @@
 from metext.plugin_base import BaseValidator
+import requests
+import xml.etree.ElementTree as ET
 
 # Helper methods slightly modified from https://github.com/khimsh/is_isbn
+
+
+def check_isbn_via_oclc(isbn):
+    resp = requests.get(
+        r"http://classify.oclc.org/classify2/Classify?isbn={}&summary=true".format(isbn)
+    )
+    if resp.status_code != 200:
+        return False
+    x = ET.fromstring(resp.content)
+    c = x.find("{http://classify.oclc.org}response")
+    cc = c.get("code")
+    return cc == "0"
 
 
 def is_isbn(isbn: str) -> bool:
@@ -58,4 +72,5 @@ class IsbnValidator(BaseValidator):
         :return: True if input string is a ISBN-10 or ISBN-13 identifier,
         else False
         """
-        return is_isbn(_input.split(":")[-1])
+        isbn = _input.split(":")[-1]
+        return is_isbn(isbn) and check_isbn_via_oclc(isbn)

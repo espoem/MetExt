@@ -28,15 +28,17 @@ class URIExtractor(BaseExtractor):
         :param _input: String or a list of strings
         :param kwargs: Arbitrary keyword arguments
         :keyword strict: Flag to reduce the number of results,
-        if True then only path-like results with "/" path parts delimiter are returned, defaults to True
+        if True then only path-like results with "/" path parts delimiter are returned.
+        Defaults to False
         :keyword relative: Flag to allow URI relative references,
         otherwise some scheme must be present, default to False
         :keyword schemes: List of lower-cased schemes (e.g. http, data) URI must contain.
-        If empty list (not provided), then URI is not restricted by a scheme, defaults to empty list
+        If empty list (not provided), then URI is not restricted by a scheme,
+        defaults to registered schemes
         :return: Generator of URIs
         """
         include_relative = kwargs.get("relative", False)
-        strict = kwargs.get("strict", True)
+        strict = kwargs.get("strict", False)
         schemes = kwargs.get(
             "schemes", URI_SCHEMES
         )  # https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml

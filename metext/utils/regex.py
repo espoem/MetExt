@@ -15,8 +15,7 @@ RE_SHA512 = re.compile(r"\b[a-f0-9]{128}\b", re.IGNORECASE)
 RE_URI_REFERENCE = re.compile(r"\b{}\b".format(URI_reference), re.VERBOSE)
 RE_URI = re.compile(r"\b{}\b".format(URI), re.VERBOSE)
 RE_EMAIL = re.compile(addr_spec, re.VERBOSE)
-# RE_URL_FORM_FIELDS = re.compile(r"^(?:[\w_.-]+=(?![\"\'<>])[^=&\s?#]*&?)+|(?<=[/#?])(?:[\w_.-]+=(?![\"\'<>])[^=&\s?#]*&?)+")
-RE_URL_FORM_FIELDS = re.compile(r"^([\w_-]+=.*&?)+$", re.MULTILINE)
+RE_URL_FORM_FIELDS = re.compile(r"^(?:[a-zA-Z][0-9a-zA-Z._-]*=[ -~]*&?)+", re.MULTILINE)
 
 # https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s13.html
 RE_ISBN10 = re.compile(

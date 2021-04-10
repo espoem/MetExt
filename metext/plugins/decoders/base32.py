@@ -1,5 +1,4 @@
 import base64
-import math
 import sys
 from typing import Optional
 
@@ -7,7 +6,7 @@ import base32_crockford
 
 from metext.plugin_base import BaseDecoder, Decodable
 
-CHARSETS_BASE32 = {
+CHARSETS = {
     "std": "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567",
     "hex": "0123456789ABCDEFGHIJKLMNOPQRSTUV",
     "z-base-32": "ybndrfg8ejkmcpqxot1uwisza345h769",
@@ -33,17 +32,17 @@ class Base32Decoder(BaseDecoder):
         :keyword charset: Alphabet of 32 chars to use for decoding
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """
-        charset = kwargs.get("charset", CHARSETS_BASE32["std"])
+        charset = kwargs.get("charset", CHARSETS["std"])
         if len(charset) != 32:
             raise AssertionError("Only full chars set can be defined")
 
-        if charset != CHARSETS_BASE32["std"]:
+        if charset != CHARSETS["std"]:
             # https://stackoverflow.com/questions/5537750/decode-base64-like-string-with-different-index-tables
             if isinstance(_input, str):
-                tbl = str.maketrans(charset, CHARSETS_BASE32["std"])
+                tbl = str.maketrans(charset, CHARSETS["std"])
             else:
                 tbl = bytes.maketrans(
-                    bytes(charset, "utf8"), bytes(CHARSETS_BASE32["std"], "utf8")
+                    bytes(charset, "utf8"), bytes(CHARSETS["std"], "utf8")
                 )
             _input = _input.translate(tbl)
 
@@ -71,7 +70,7 @@ class Base32HexDecoder(BaseDecoder):
         :param kwargs: Arbitrary keyword arguments
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """
-        return Base32Decoder.run(_input, charset=CHARSETS_BASE32["hex"])
+        return Base32Decoder.run(_input, charset=CHARSETS["hex"])
 
 
 class Base32CrockfordDecoder(BaseDecoder):

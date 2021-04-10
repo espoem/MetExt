@@ -2,7 +2,6 @@ import re
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
-from metext.plugins import HEX_PATTERN_TEMPLATE
 from metext.plugins.validators.baseenc import Base32Validator, Base64Validator
 from metext.utils.regex import RE_BASE32, RE_BASE64
 
@@ -75,3 +74,18 @@ class HexExtractor(BaseExtractor):
         regex = re.compile(HEX_PATTERN_TEMPLATE.format(delim=delim), re.IGNORECASE)
         for part in _input if isinstance(_input, list) else _input.splitlines():
             yield from iter(regex.findall(part))
+
+
+HEX_DELIMITERS = {
+    "None": "",
+    "Space": " ",
+    "Comma": ",",
+    "Semicolon": ";",
+    "Colon": ":",
+    "LF": r"\n",
+    "CRLF": r"\r\n",
+    "0x": "0x",
+    "comma-0x": ",0x",
+    r"\x": r"[\]x",
+}
+HEX_PATTERN_TEMPLATE = r"[\dA-F]{{2}}(?:{delim}[\dA-F]{{2}})*"

@@ -4,7 +4,7 @@ import base91
 
 from metext.plugin_base import BaseDecoder, Decodable
 
-CHARSET_BASE91 = "".join(base91.base91_alphabet)
+CHARSET = "".join(base91.base91_alphabet)
 
 
 class Base91Decoder(BaseDecoder):
@@ -20,18 +20,18 @@ class Base91Decoder(BaseDecoder):
         :param kwargs:
         :return: `None` if `_input` couldn't be decoded, else decoded bytes string
         """
-        alt_chars = kwargs.get("alt_chars", CHARSET_BASE91)
+        alt_chars = kwargs.get("alt_chars", CHARSET)
         if len(alt_chars) != 91:
             raise AssertionError(
                 "Only full chars set or special chars set can be defined"
             )
 
-        if alt_chars != CHARSET_BASE91:
+        if alt_chars != CHARSET:
             if isinstance(_input, str):
-                tbl = str.maketrans(alt_chars, CHARSET_BASE91)
+                tbl = str.maketrans(alt_chars, CHARSET)
             else:
                 tbl = bytes.maketrans(
-                    bytes(alt_chars, "ascii"), bytes(CHARSET_BASE91, "ascii")
+                    bytes(alt_chars, "ascii"), bytes(CHARSET, "ascii")
                 )
             _input = _input.translate(tbl)
 

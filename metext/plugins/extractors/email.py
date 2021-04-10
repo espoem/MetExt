@@ -1,9 +1,8 @@
-import re
-from collections import Counter
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
 from metext.plugins.validators.email import EmailValidator
+from metext.utils.regex import RE_EMAIL
 
 
 class EmailExtractor(BaseExtractor):
@@ -21,8 +20,6 @@ class EmailExtractor(BaseExtractor):
             for line in part.splitlines():
                 yield from (
                     address
-                    for address in re.findall(
-                        r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b", line
-                    )
+                    for address in RE_EMAIL.findall(line)
                     if EmailValidator.run(address)
                 )

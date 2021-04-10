@@ -21,6 +21,10 @@ if __name__ == "__main__":
         "bc1q5s8fz9p8x0a59774jlr9cmuwf6kjdv3j5tqvxm",
         "3Fxq8ctmbr5CQEdoow189rAi64LePvxgfb",
     ]
+    btc_xkeys = [
+        "xprv9s21ZrQH143K24Mfq5zL5MhWK9hUhhGbd45hLXo2Pq2oqzMMo63oStZzF93Y5wvzdUayhgkkFoicQZcP3y52uPPxFnfoLZB21Teqt1VvEHx",
+        "xpub661MyMwAqRbcEYS8w7XLSVeEsBXy79zSzH1J8vCdxAZningWLdN3zgtU6LBpB85b3D2yc8sfvZU521AAwdZafEz7mnzBBsz4wKY5e4cp9LB"
+    ]
     bch_addresses = [
         "1NNAdw8phoJcQYJVvNKuD3QebGhdpWqNiW",
         "qr49k67fr3hxtfyx6dzlh9g5qup5r9ds0squ3cc86c",
@@ -214,6 +218,7 @@ if __name__ == "__main__":
         + random.choice(string.whitespace)
         + "".join(random.choice(printable) for _ in range(random.randint(0, 30000)))
         for item in btc_addresses
+        + btc_xkeys
         + bch_addresses
         + cardano
         + polkadot

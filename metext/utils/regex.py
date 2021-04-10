@@ -89,6 +89,8 @@ RE_BASE64 = re.compile(
 
 PATTERN_BTC_BASE58 = r"\b[13][a-km-zA-HJ-NP-Z1-9]{25,42}\b"
 PATTERN_BTC_SEGWIT = r"\b(?:[bB][cC])1[a-zA-HJ-NP-Z0-9]{25,39}\b"
+PATTERN_BTC_BIP32_XPRV = r"\bxprv[a-km-zA-HJ-NP-Z1-9]{107,108}\b"
+PATTERN_BTC_BIP32_XPUB = r"\bxpub[a-km-zA-HJ-NP-Z1-9]{107,108}\b"
 PATTERN_BCH = (
     r"\b(?:(?:bitcoincash:)?[qp][a-z0-9]{41}|(?:BITCOINCASH:)?[QP][A-Z0-9]{41})\b"
 )
@@ -103,6 +105,9 @@ RE_BTC_WIF = re.compile(
     r"\b(?:[59][a-km-zA-HJ-NP-Z1-9]{50}|[LKc][a-km-zA-HJ-NP-Z1-9]{51})\b"
 )
 RE_BTC_PRIVKEY = re.compile(r"\b[0-9a-fA-f]{64}\b")
+RE_BTC_BIP32_XPRV = re.compile(PATTERN_BTC_BIP32_XPRV)
+RE_BTC_BIP32_XPUB = re.compile(PATTERN_BTC_BIP32_XPUB)
+RE_BTC_BIP32_XKEY = re.compile(r"{}|{}".format(PATTERN_BTC_BIP32_XPRV, PATTERN_BTC_BIP32_XPUB))
 RE_LTC = re.compile(r"\b[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}\b")
 RE_XRP = re.compile(r"\br[0-9a-zA-Z]{24,34}\b")
 RE_ETH = re.compile(PATTERN_ETH, re.IGNORECASE)

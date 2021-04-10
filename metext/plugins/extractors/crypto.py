@@ -1,5 +1,12 @@
 from typing import Iterable, List, Union
 
+try:
+    from btclib import slip132
+
+    has_btclib = True
+except ImportError:
+    has_btclib = False
+
 from metext.plugin_base import BaseExtractor
 from metext.plugins.validators.crypto import (
     BitcoinCashValidator,
@@ -27,6 +34,7 @@ from metext.utils.regex import (
     RE_LTC,
     RE_USDT,
     RE_XRP,
+    RE_BTC_BIP32_XKEY,
 )
 
 
@@ -74,8 +82,40 @@ class BitcoinWif(BaseExtractor):
             )
 
 
+class BitcoinXKey(BaseExtractor):
+    PLUGIN_NAME = "btc-bip32-xkey"
+
+    @classmethod
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
+        if not isinstance(_input, str):
+            try:
+                _input = _input.decode("utf-8")
+            except:
+                yield from ()
+
+        global_pos_start = 0
+        for part in _input.splitlines(keepends=True):
+            matches = list(RE_BTC_BIP32_XKEY.finditer(part))
+            for match in matches:
+                if has_btclib:
+                    try:
+                        slip132.address_from_xkey(match.group(0))
+                    except:
+                        continue
+
+                yield {
+                    "value": match.group(0),
+                    "position": (
+                        global_pos_start + match.start(0),
+                        global_pos_start + match.end(0),
+                    ),
+                }
+            global_pos_start += len(part)
+
+
 class BitcoinPrivateKey(BaseExtractor):
     PLUGIN_NAME = "btc-privkey"
+    PLUGIN_ACTIVE = False
 
     @classmethod
     def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:

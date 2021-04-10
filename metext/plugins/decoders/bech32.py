@@ -2,7 +2,7 @@ from typing import List, Tuple, Union
 
 from metext.plugin_base import BaseDecoder, Decodable
 
-ALPHABET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
+CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 
 
 class Bech32Decoder(BaseDecoder):
@@ -36,10 +36,10 @@ class Bech32Decoder(BaseDecoder):
         pos = _input.rfind("1")
         if pos < 1 or pos + 7 > len(_input) or len(_input) > 110:
             return None, None
-        if any(x not in ALPHABET for x in _input[pos + 1 :]):
+        if any(x not in CHARSET for x in _input[pos + 1 :]):
             return None, None
         hrp = _input[:pos]
-        result = [ALPHABET.find(x) for x in _input[pos + 1 :]]
+        result = [CHARSET.find(x) for x in _input[pos + 1:]]
         if not cls.verify_checksum(hrp, result):
             return None, None
         return hrp, result[:-6]

@@ -8,7 +8,7 @@ import cbor
 import sha3
 
 from metext.plugin_base import BaseValidator
-from metext.plugins.decoders.base58 import CHARSETS_BASE58, Base58Decoder
+from metext.plugins.decoders.base58 import CHARSETS, Base58Decoder
 from metext.plugins.decoders.bech32 import Bech32Decoder
 from metext.plugins.decoders.segwit import SegwitDecoder
 from metext.utils.regex import RE_ETH
@@ -18,8 +18,7 @@ from metext.utils.ss58 import ss58_decode
 def is_valid_base58_address(
     address: Union[bytes, str],
     prefixes: Optional[list] = None,
-    charset=CHARSETS_BASE58["bitcoin"],
-    length=25,
+    charset=CHARSETS["bitcoin"],
     specs: Optional[list] = None,
 ) -> bool:
     """Checks validity of a address
@@ -30,8 +29,6 @@ def is_valid_base58_address(
     e.g. ["1", "3"] prefixes for bitcoin addresses
     :param charset: Base58 charset (different for bitcoin, ripple),
     defaults to bitcoin base58 charset
-    :param length: Number of bytes in which the decoded data should be represented,
-    defaults to 25
     :return: True if address is valid, else False
     """
     if prefixes is None and specs is None:
@@ -205,7 +202,7 @@ class RippleValidator(BaseValidator):
         :return: True if given address string represents a valid Ripple address, else False
         """
         return is_valid_base58_address(
-            _input, prefixes=["r"], charset=CHARSETS_BASE58["ripple"]
+            _input, prefixes=["r"], charset=CHARSETS["ripple"]
         )
 
 
@@ -224,7 +221,7 @@ class TetherValidator(BaseValidator):
         :return: True if address string represents a valid Tether address, else False
         """
         return is_valid_base58_address(
-            _input, charset=CHARSETS_BASE58["bitcoin"], specs=[b"\x00", b"\x05"]
+            _input, charset=CHARSETS["bitcoin"], specs=[b"\x00", b"\x05"]
         ) or EthereumValidator.run(_input)
 
 

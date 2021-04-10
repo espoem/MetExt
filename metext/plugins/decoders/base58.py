@@ -4,9 +4,10 @@ import base58
 
 from metext.plugin_base import BaseDecoder, Decodable
 
-CHARSETS_BASE58 = {
+CHARSETS = {
     "bitcoin": "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz",
     "ripple": "rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz",
+    "flickr": '123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'
 }
 
 
@@ -26,7 +27,7 @@ class Base58Decoder(BaseDecoder):
         :keyword charset: Alphabet for base58 decoding. Use Bitcoin alphabet by default
         :return: Decode bytes string. Returns `None` if `data` couldn't be decoded.
         """
-        charset = kwargs.get("charset", CHARSETS_BASE58["bitcoin"])
+        charset = kwargs.get("charset", CHARSETS["bitcoin"])
         assert len(charset) == 58
 
         try:
@@ -49,7 +50,7 @@ class Base58BitcoinDecoder(BaseDecoder):
         :param kwargs: Arbitrary keyword arguments
         :return: Decode bytes string. Returns `None` if `data` couldn't be decoded.
         """
-        return Base58Decoder.run(_input, charset=CHARSETS_BASE58["bitcoin"])
+        return Base58Decoder.run(_input, charset=CHARSETS["bitcoin"])
 
 
 class Base58RippleDecoder(BaseDecoder):
@@ -66,4 +67,4 @@ class Base58RippleDecoder(BaseDecoder):
         :param kwargs: Arbitrary keyword arguments
         :return: Decode bytes string. Returns `None` if `data` couldn't be decoded.
         """
-        return Base58Decoder.run(_input, charset=CHARSETS_BASE58["ripple"])
+        return Base58Decoder.run(_input, charset=CHARSETS["ripple"])

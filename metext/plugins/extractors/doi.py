@@ -10,7 +10,7 @@ class DoiExtractor(BaseExtractor):
     PLUGIN_NAME = "doi"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts valid DOI identifiers
         from a string or a lists of strings.
 

@@ -9,7 +9,7 @@ class GuidExtractor(BaseExtractor):
     PLUGIN_NAME = "guid"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts GUIDs strings.
 
         :param _input: String or a list of strings

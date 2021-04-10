@@ -10,7 +10,7 @@ class EmailExtractor(BaseExtractor):
     PLUGIN_NAME = "email"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts e-mail addresses from a string or a list of strings.
 
         :param _input: String or a list of strings to extract e-mail addresses from

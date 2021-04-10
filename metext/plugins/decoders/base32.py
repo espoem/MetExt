@@ -34,8 +34,7 @@ class Base32Decoder(BaseDecoder):
         :return: `None` if `data` couldn't be decoded, else decoded byte string
         """
         charset = kwargs.get("charset", CHARSETS_BASE32["std"])
-        lalt_chars = len(charset)
-        if lalt_chars != 32:
+        if len(charset) != 32:
             raise AssertionError("Only full chars set can be defined")
 
         if charset != CHARSETS_BASE32["std"]:

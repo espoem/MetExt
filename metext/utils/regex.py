@@ -107,7 +107,9 @@ RE_BTC_WIF = re.compile(
 RE_BTC_PRIVKEY = re.compile(r"\b[0-9a-fA-f]{64}\b")
 RE_BTC_BIP32_XPRV = re.compile(PATTERN_BTC_BIP32_XPRV)
 RE_BTC_BIP32_XPUB = re.compile(PATTERN_BTC_BIP32_XPUB)
-RE_BTC_BIP32_XKEY = re.compile(r"{}|{}".format(PATTERN_BTC_BIP32_XPRV, PATTERN_BTC_BIP32_XPUB))
+RE_BTC_BIP32_XKEY = re.compile(
+    r"{}|{}".format(PATTERN_BTC_BIP32_XPRV, PATTERN_BTC_BIP32_XPUB)
+)
 RE_LTC = re.compile(r"\b[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}\b")
 RE_XRP = re.compile(r"\br[0-9a-zA-Z]{24,34}\b")
 RE_ETH = re.compile(PATTERN_ETH, re.IGNORECASE)
@@ -140,3 +142,6 @@ RE_JSON = regex.compile(
 )
 
 RE_GUID = re.compile(r"\b[0-9a-fA-F]{8}[-]?(?:[0-9a-fA-F]{4}[-]?){3}[0-9a-fA-F]{12}\b")
+RE_MAC = re.compile(
+    r"\b(?<![:-])(?:(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}|(?:[0-9a-fA-F]{4}\.){2}[0-9a-fA-F]{4})(?![:-])\b"
+)

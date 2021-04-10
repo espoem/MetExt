@@ -273,12 +273,15 @@ class CardanoValidator(BaseValidator):
 
     @classmethod
     def is_valid_address_byron(cls, address):
-        decoded = cls._get_decoded(address)
-        if not decoded or len(decoded) != 2:
+        try:
+            decoded = cls._get_decoded(address)
+            if not decoded or len(decoded) != 2:
+                return False
+            tag = decoded[0]
+            expected_crc = decoded[1]
+            return expected_crc == crc32(tag.value)
+        except:
             return False
-        tag = decoded[0]
-        expected_crc = decoded[1]
-        return expected_crc == crc32(tag.value)
 
     @classmethod
     def _get_decoded(cls, address):

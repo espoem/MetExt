@@ -1,5 +1,5 @@
 import re
-from typing import Iterable, List, Union
+from typing import Iterable
 
 from metext.plugin_base import BaseExtractor
 from metext.plugins.extractors import _extract_with_regex
@@ -81,10 +81,7 @@ class HexExtractor(BaseExtractor):
         """
         delim = kwargs.get("delim", "")
         regex = re.compile(HEX_PATTERN_TEMPLATE.format(delim=delim), re.IGNORECASE)
-        yield from _extract_with_regex(
-            _input,
-            regex,
-        )
+        yield from _extract_with_regex(_input, regex)
 
 
 HEX_DELIMITERS = {

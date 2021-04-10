@@ -1,4 +1,4 @@
-from typing import Iterable, List, Union
+from typing import Iterable
 
 from metext.plugin_base import BaseExtractor
 from metext.plugins.extractors import _extract_with_regex

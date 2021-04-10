@@ -1,5 +1,4 @@
 import base64
-import sys
 from typing import Optional
 
 from metext.plugin_base import BaseDecoder, Decodable

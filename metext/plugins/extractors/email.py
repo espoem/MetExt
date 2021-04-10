@@ -1,6 +1,7 @@
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
+from metext.plugins.extractors import _extract_with_regex
 from metext.plugins.validators.email import EmailValidator
 from metext.utils.regex import RE_EMAIL
 
@@ -16,10 +17,6 @@ class EmailExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of e-mail addresses
         """
-        for part in _input if isinstance(_input, list) else [_input]:
-            for line in part.splitlines():
-                yield from (
-                    address
-                    for address in RE_EMAIL.findall(line)
-                    if EmailValidator.run(address)
-                )
+        yield from _extract_with_regex(
+            _input, RE_EMAIL, validator=EmailValidator.run, per_line=True
+        )

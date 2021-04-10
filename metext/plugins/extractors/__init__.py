@@ -23,7 +23,7 @@ def _extract_with_regex(
                 continue
             yield {
                 "value": value,
-                "position": (
+                "pos_span": (
                     global_pos_start + match.start(0),
                     global_pos_start + match.end(0),
                 ),

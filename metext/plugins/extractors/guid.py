@@ -1,6 +1,7 @@
 from typing import Iterable, List, Union
 
 from metext.plugin_base import BaseExtractor
+from metext.plugins.extractors import _extract_with_regex
 from metext.utils.regex import RE_GUID
 
 
@@ -15,5 +16,4 @@ class GuidExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of GUID strings
         """
-        for part in _input if isinstance(_input, list) else [_input]:
-            yield from iter(RE_GUID.findall(part))
+        yield from _extract_with_regex(_input, RE_GUID, per_line=True)

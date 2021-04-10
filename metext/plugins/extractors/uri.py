@@ -3,6 +3,7 @@ from typing import Iterable, List, Union
 from urllib.parse import unquote_plus
 
 from metext.plugin_base import BaseExtractor
+from metext.plugins.extractors import _extract_with_regex
 from metext.plugins.validators.uri import (
     DataURIValidator,
     MagnetValidator,
@@ -16,7 +17,7 @@ class URIExtractor(BaseExtractor):
     PLUGIN_NAME = "uri"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts URIs from a string or a list of strings.
 
         See https://tools.ietf.org/html/rfc3986
@@ -43,21 +44,18 @@ class URIExtractor(BaseExtractor):
             "schemes", URI_SCHEMES
         )  # https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
         regex = RE_URI_REFERENCE if include_relative else RE_URI
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                uri
-                for uri in regex.findall(part)
-                if URIValidator.run(uri, strict=strict, schemes=schemes)
-            )
+        yield from _extract_with_regex(
+            _input,
+            regex,
+            validator=lambda val: URIValidator.run(val, strict=strict, schemes=schemes),
+        )
 
 
 class URLExtractor(BaseExtractor):
     PLUGIN_NAME = "url"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts URLs from a string or a list of strings. URL must contain one of the following schemes:
         `http`, `https`, `ftp`, `ftps`
 
@@ -67,71 +65,61 @@ class URLExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator with URLs
         """
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (uri for uri in RE_URI.findall(part) if URLValidator.run(uri))
+        yield from _extract_with_regex(_input, RE_URI, validator=URLValidator.run)
 
 
 class URNExtractor(BaseExtractor):
     PLUGIN_NAME = "urn"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts URNs from a string or a list of strings.
 
         :param _input: String or a list of strings
         :param kwargs: Arbitrary keyword arguments
         :return: Generator with URNs
         """
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from URIExtractor.run(part, schemes=["urn"], strict=False)
+        yield from URIExtractor.run(_input, schemes=["urn"], strict=False)
 
 
 class DataURIExtractor(BaseExtractor):
     PLUGIN_NAME = "data_uri"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts valid data URIs from a string or a lists of strings.
 
         :param _input: String or a list of strings
         :param kwargs: Arbitrary keyword arguments
         :return: Generator with data URIs
         """
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                uri for uri in RE_URI.findall(part) if DataURIValidator.run(uri)
-            )
+        yield from _extract_with_regex(_input, RE_URI, validator=DataURIValidator.run)
 
 
 class MagnetExtractor(BaseExtractor):
     PLUGIN_NAME = "magnet"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts MAC addresses
 
         :param _input: String or a list of strings to extract MAC address from
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of MAC addresses
         """
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part or not re.search(r"magnet:", part, re.IGNORECASE):
-                continue
-            uris = URIExtractor.run(part, schemes=["magnet"], strict=False)
-            yield from (magnet for magnet in uris if MagnetValidator.run(magnet))
+
+        yield from (
+            magnet
+            for magnet in URIExtractor.run(_input, schemes=["magnet"], strict=False)
+            if MagnetValidator.run(magnet)
+        )
 
 
 class FormFieldsExtractor(BaseExtractor):
     PLUGIN_NAME = "form_fields"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts form fields data in HTTP, URL.
 
         :param _input: String or a list of strings
@@ -143,16 +131,14 @@ class FormFieldsExtractor(BaseExtractor):
         """
         min_len = kwargs.get("min_len", 20)
         decode = kwargs.get("decode", True)
-        for part in _input if isinstance(_input, list) else [_input]:
-            for p in part.splitlines():
-                if len(p) < min_len or "=" not in p:
-                    continue
-                res = (
-                    unquote_plus(ff) if decode else ff
-                    for ff in RE_URL_FORM_FIELDS.findall(p)
-                    if not ("&" not in ff and ff.endswith("="))
-                )
-                yield from iter(res)
+
+        yield from _extract_with_regex(
+            _input,
+            RE_URL_FORM_FIELDS,
+            validator=lambda val: len(val) >= min_len
+            and not ("&" not in val and val.endswith("=")),
+            postprocess=lambda val: unquote_plus(val) if decode else val,
+        )
 
 
 URI_SCHEMES = [

@@ -25,12 +25,11 @@ class HexDecoder(BaseDecoder):
         """
         delim = kwargs.get("delim", "")
         regex_auto = r"[^a-fA-F\d]|(0x)"
-        if isinstance(_input, str):
-            _input = re.sub(delim or regex_auto, "", _input)
-        else:
-            _input = re.sub(bytes(delim or regex_auto, "ascii"), b"", _input)
 
         try:
+            if isinstance(_input, str):
+                _input = _input.encode("utf8")
+            _input = re.sub(bytes(delim or regex_auto, "ascii"), b"", _input)
             return base64.b16decode(_input, casefold=True)
         except:
             return None

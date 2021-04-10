@@ -65,9 +65,7 @@ class BitcoinWif(BaseExtractor):
 
     @classmethod
     def run(cls, _input: str, **kwargs) -> Iterable[dict]:
-        yield from _extract_with_regex(
-            _input, RE_BTC_WIF, validator=BitcoinWifValidator.run
-        )
+        yield from _extract_with_regex(_input, RE_BTC_WIF, validator=BitcoinWifValidator.run)
 
 
 class BitcoinXKey(BaseExtractor):
@@ -75,9 +73,8 @@ class BitcoinXKey(BaseExtractor):
 
     @classmethod
     def run(cls, _input: str, **kwargs) -> Iterable[dict]:
-        yield from _extract_with_regex(
-            _input, RE_BTC_BIP32_XKEY, validator=slip132.address_from_xkey if has_btclib else None
-        )
+        yield from _extract_with_regex(_input, RE_BTC_BIP32_XKEY,
+                                       validator=slip132.address_from_xkey if has_btclib else None)
 
 
 class BitcoinPrivateKey(BaseExtractor):
@@ -86,9 +83,7 @@ class BitcoinPrivateKey(BaseExtractor):
 
     @classmethod
     def run(cls, _input: str, **kwargs) -> Iterable[dict]:
-        yield from _extract_with_regex(
-            _input, RE_BTC_PRIVKEY, validator=BitcoinPrivKeyValidator.run
-        )
+        yield from _extract_with_regex(_input, RE_BTC_PRIVKEY, validator=BitcoinPrivKeyValidator.run)
 
 
 class EthereumAddressExtractor(BaseExtractor):
@@ -180,9 +175,7 @@ class ChainlinkAddress(BaseExtractor):
         :param _input: String or a list of strings
         :return: Generator of formally valid chainlink addresses
         """
-        yield from _extract_with_regex(
-            _input, RE_LINK, validator=ChainlinkValidator.run
-        )
+        yield from _extract_with_regex(_input, RE_LINK, validator=ChainlinkValidator.run)
 
 
 class CardanoAddress(BaseExtractor):

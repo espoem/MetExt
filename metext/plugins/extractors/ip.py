@@ -1,7 +1,8 @@
 import re
-from typing import Iterable, List, Union
+from typing import Iterable
 
 from metext.plugin_base import BaseExtractor
+from metext.plugins.extractors import _extract_with_regex
 from metext.plugins.validators.ip import IPv4AddressValidator, IPv6AddressValidator
 from metext.utils.uri import IPv4address, IPv6address
 
@@ -22,7 +23,7 @@ class IPv4AddressExtractor(BaseExtractor):
     PLUGIN_NAME = "ipv4"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extract IPv4 addresses strings from a string or a list of strings.
 
         See https://tools.ietf.org/html/rfc3986#section-3.2.2 for the form of IPv4 address
@@ -31,19 +32,16 @@ class IPv4AddressExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of IPv4 addresses
         """
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            yield from (
-                address
-                for address in RE_IPV4.findall(part)
-                if IPv4AddressValidator.run(address)
-            )
+        yield from _extract_with_regex(
+            _input, RE_IPV4, validator=IPv4AddressValidator.run, per_line=True
+        )
 
 
 class IPv6AddressExtractor(BaseExtractor):
     PLUGIN_NAME = "ipv6"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extract IPv6 addresses strings from a string or a list of strings.
 
         See https://tools.ietf.org/html/rfc3986#section-3.2.2 for the form of IPv6 address
@@ -52,11 +50,9 @@ class IPv6AddressExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of IPv6 addresses
         """
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                address
-                for address in RE_IPV6.findall(part)
-                if len(address) > 6 and IPv6AddressValidator.run(address)
-            )
+        yield from _extract_with_regex(
+            _input,
+            RE_IPV6,
+            validator=lambda val: len(val) > 6 and IPv6AddressValidator.run(val),
+            per_line=True,
+        )

@@ -1,4 +1,5 @@
 from metext.plugin_base import BaseValidator
+import requests
 
 
 class DoiValidator(BaseValidator):
@@ -15,19 +16,18 @@ class DoiValidator(BaseValidator):
         :return: True if input string is a resolvable DOI identifier,
         else False
         """
-        import json
-        import urllib.parse
-        import urllib.request
         from urllib.error import HTTPError
+
+        if _input.lower().startswith("doi:"):
+            _input = _input[4:]
 
         if not _input.startswith("10."):
             return False
 
         url = "https://doi.org/api/handles/{doi}".format(doi=_input)
-        request = urllib.request.Request(url)
 
         try:
-            result = json.loads(urllib.request.urlopen(request).read().decode())
+            result = requests.get(url).json()
         except HTTPError:
             raise ValueError("HTTP 404: DOI not found")
 

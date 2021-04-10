@@ -70,16 +70,28 @@ class BitcoinWif(BaseExtractor):
     PLUGIN_NAME = "btc-wif"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
+        if not isinstance(_input, str):
+            try:
+                _input = _input.decode("utf-8")
+            except:
+                yield from ()
 
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                address
-                for address in RE_BTC_WIF.findall(part)
-                if BitcoinWifValidator.run(address)
-            )
+        global_pos_start = 0
+        for part in _input.splitlines(keepends=True):
+            matches = list(RE_BTC_WIF.finditer(part))
+            for match in matches:
+                wif = match.group(0)
+                if not BitcoinWifValidator.run(wif):
+                    continue
+                yield {
+                    "value": wif,
+                    "position": (
+                        global_pos_start + match.start(0),
+                        global_pos_start + match.end(0),
+                    ),
+                }
+            global_pos_start += len(part)
 
 
 class BitcoinXKey(BaseExtractor):

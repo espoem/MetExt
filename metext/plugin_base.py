@@ -58,7 +58,7 @@ class PluginBase(metaclass=RegisteredPluginMetaClass):
 
     @classmethod
     def run(cls, _input, **kwargs):
-        return _input
+        raise NotImplementedError("Must implement in subclass")
 
 
 Decodable = Union[bytes, str]

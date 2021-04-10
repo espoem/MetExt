@@ -17,15 +17,12 @@ class EmailExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of e-mail addresses
         """
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part or re.search(r"\w[^@]@[^@]\w", part) is None:
-                continue
-            chars = Counter(part)
-            if chars.get("=", -1) > 1 or chars.get("&", -1) > 1:
-                part = " ".join(p for p in re.split(r"[=&]", part) if "@" in p)
-
-            yield from (
-                address
-                for address in re.findall(r"\S+[^@]@[^@]\S+", part)
-                if EmailValidator.run(address)
-            )
+        for part in _input if isinstance(_input, list) else [_input]:
+            for line in part.splitlines():
+                yield from (
+                    address
+                    for address in re.findall(
+                        r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b", line
+                    )
+                    if EmailValidator.run(address)
+                )

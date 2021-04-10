@@ -134,6 +134,7 @@ class BitcoinCashValidator(BaseValidator):
             except:
                 return False
 
+        _input = "bitcoincash:" + _input if _input[0].lower() in ["q", "p"] else _input
         return cashaddress.convert.is_valid(_input)
 
 

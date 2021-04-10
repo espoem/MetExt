@@ -1,4 +1,6 @@
-from typing import Iterable, List, Union
+from typing import Iterable
+
+from metext.plugins.extractors import _extract_with_regex
 
 try:
     from btclib import slip132
@@ -42,7 +44,7 @@ class BitcoinAddress(BaseExtractor):
     PLUGIN_NAME = "btc"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts valid Bitcoin addresses from a string or a list of strings.
 
         Looks for addresses on mainnet:
@@ -55,15 +57,7 @@ class BitcoinAddress(BaseExtractor):
         :param _input: String or a list of strings to extract Bitcoin addresses from
         :return: Generator of found valid Bitcoin addresses
         """
-
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                address
-                for address in RE_BTC.findall(part)
-                if BitcoinValidator.run(address)
-            )
+        yield from _extract_with_regex(_input, RE_BTC, validator=BitcoinValidator.run)
 
 
 class BitcoinWif(BaseExtractor):
@@ -71,27 +65,9 @@ class BitcoinWif(BaseExtractor):
 
     @classmethod
     def run(cls, _input: str, **kwargs) -> Iterable[dict]:
-        if not isinstance(_input, str):
-            try:
-                _input = _input.decode("utf-8")
-            except:
-                yield from ()
-
-        global_pos_start = 0
-        for part in _input.splitlines(keepends=True):
-            matches = list(RE_BTC_WIF.finditer(part))
-            for match in matches:
-                wif = match.group(0)
-                if not BitcoinWifValidator.run(wif):
-                    continue
-                yield {
-                    "value": wif,
-                    "position": (
-                        global_pos_start + match.start(0),
-                        global_pos_start + match.end(0),
-                    ),
-                }
-            global_pos_start += len(part)
+        yield from _extract_with_regex(
+            _input, RE_BTC_WIF, validator=BitcoinWifValidator.run
+        )
 
 
 class BitcoinXKey(BaseExtractor):
@@ -99,30 +75,9 @@ class BitcoinXKey(BaseExtractor):
 
     @classmethod
     def run(cls, _input: str, **kwargs) -> Iterable[dict]:
-        if not isinstance(_input, str):
-            try:
-                _input = _input.decode("utf-8")
-            except:
-                yield from ()
-
-        global_pos_start = 0
-        for part in _input.splitlines(keepends=True):
-            matches = list(RE_BTC_BIP32_XKEY.finditer(part))
-            for match in matches:
-                if has_btclib:
-                    try:
-                        slip132.address_from_xkey(match.group(0))
-                    except:
-                        continue
-
-                yield {
-                    "value": match.group(0),
-                    "position": (
-                        global_pos_start + match.start(0),
-                        global_pos_start + match.end(0),
-                    ),
-                }
-            global_pos_start += len(part)
+        yield from _extract_with_regex(
+            _input, RE_BTC_BIP32_XKEY, validator=slip132.address_from_xkey if has_btclib else None
+        )
 
 
 class BitcoinPrivateKey(BaseExtractor):
@@ -130,23 +85,17 @@ class BitcoinPrivateKey(BaseExtractor):
     PLUGIN_ACTIVE = False
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
-
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                address
-                for address in RE_BTC_PRIVKEY.findall(part)
-                if BitcoinPrivKeyValidator.run(address)
-            )
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
+        yield from _extract_with_regex(
+            _input, RE_BTC_PRIVKEY, validator=BitcoinPrivKeyValidator.run
+        )
 
 
 class EthereumAddressExtractor(BaseExtractor):
     PLUGIN_NAME = "eth"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts valid Ethereum (ETH) addresses from a string or a list of strings.
 
         Looks for legacy addresses and EIP-55 addresses.
@@ -154,21 +103,14 @@ class EthereumAddressExtractor(BaseExtractor):
         :param _input: String or a list of strings
         :return: Generator of found valid Ethereum addresses
         """
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                address
-                for address in RE_ETH.findall(part)
-                if EthereumValidator.run(address)
-            )
+        yield from _extract_with_regex(_input, RE_ETH, validator=EthereumValidator.run)
 
 
 class LitecoinAddress(BaseExtractor):
     PLUGIN_NAME = "ltc"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts valid Litecoin addresses from a string or a list of strings.
 
         Looks for addresses that start with 'M', 'L', or '3' char.
@@ -179,14 +121,7 @@ class LitecoinAddress(BaseExtractor):
         :param _input: String or a list of strings
         :return: Generator of found valid Litecoin addresses
         """
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                address
-                for address in RE_LTC.findall(part)
-                if LitecoinValidator.run(address)
-            )
+        yield from _extract_with_regex(_input, RE_LTC, validator=LitecoinValidator.run)
 
 
 # TODO: Check X-format https://xrpaddress.info/
@@ -194,7 +129,7 @@ class RippleAddress(BaseExtractor):
     PLUGIN_NAME = "xrp"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts valid Ripple (XRP) addresses from a string or a list of strings.
 
         See: https://xrpl.org/accounts.html#addresses
@@ -202,43 +137,27 @@ class RippleAddress(BaseExtractor):
         :param _input: String or a list of strings to extract Ripple addresses from
         :return: Generator of found valid Ripple addresses
         """
-
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                address
-                for address in RE_XRP.findall(part)
-                if RippleValidator.run(address)
-            )
+        yield from _extract_with_regex(_input, RE_XRP, validator=RippleValidator.run)
 
 
 class TetherAddress(BaseExtractor):
     PLUGIN_NAME = "usdt"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts valid Tether (USDT) addresses from a string or a list of strings.
 
         :param _input: String or a list of strings
         :return: Generator of formally valid Tether addresses
         """
-
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                address
-                for address in RE_USDT.findall(part)
-                if TetherValidator.run(address)
-            )
+        yield from _extract_with_regex(_input, RE_USDT, validator=TetherValidator.run)
 
 
 class BitcoinCashAddress(BaseExtractor):
     PLUGIN_NAME = "bch"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts valid Bitcoin Cash (BCH) addresses from a string or a list of strings.
 
         :param _input: String or a list of strings
@@ -248,75 +167,45 @@ class BitcoinCashAddress(BaseExtractor):
         """
         include_legacy = kwargs.get("include_legacy", True)
         re_ = RE_BCH_WITH_LEGACY if include_legacy else RE_BCH
-
-        for part in _input if isinstance(_input, list) else [_input]:
-            yield from (
-                address
-                for address in re_.findall(part)
-                if BitcoinCashValidator.run(
-                    "bitcoincash:" + address
-                    if address[0].lower() in ["q", "p"]
-                    else address
-                )
-            )
+        yield from _extract_with_regex(_input, re_, validator=BitcoinCashValidator.run)
 
 
 class ChainlinkAddress(BaseExtractor):
     PLUGIN_NAME = "chainlink"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts valid Chainlink (LINK) addresses from a string or a list of strings.
 
         :param _input: String or a list of strings
         :return: Generator of formally valid chainlink addresses
         """
-
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                address
-                for address in RE_LINK.findall(part)
-                if ChainlinkValidator.run(address)
-            )
+        yield from _extract_with_regex(
+            _input, RE_LINK, validator=ChainlinkValidator.run
+        )
 
 
 class CardanoAddress(BaseExtractor):
     PLUGIN_NAME = "ada"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts valid Cardano (ADA) addresses from a string or a list of strings.
 
         :param _input: String or a list of strings
         :return: Generator of formally valid Cardano addresses
         """
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                address
-                for address in RE_ADA.findall(part)
-                if CardanoValidator.run(address)
-            )
+        yield from _extract_with_regex(_input, RE_ADA, validator=CardanoValidator.run)
 
 
 class PolkadotAddress(BaseExtractor):
     PLUGIN_NAME = "dot"
 
     @classmethod
-    def run(cls, _input: Union[str, List[str]], **kwargs) -> Iterable[str]:
+    def run(cls, _input: str, **kwargs) -> Iterable[dict]:
         """Extracts valid Cardano (ADA) addresses from a string or a list of strings.
 
         :param _input: String or a list of strings
         :return: Generator of formally valid Cardano addresses
         """
-        for part in _input if isinstance(_input, list) else _input.splitlines():
-            if not part:
-                continue
-            yield from (
-                address
-                for address in RE_DOT.findall(part)
-                if PolkadotValidator.run(address)
-            )
+        yield from _extract_with_regex(_input, RE_DOT, validator=PolkadotValidator.run)

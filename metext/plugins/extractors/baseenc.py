@@ -56,12 +56,12 @@ class Base64Extractor(BaseExtractor):
             RE_BASE64,
             validator=(lambda val: len(val) >= min_len and Base64Validator.run(val)),
             per_line=False,
-            preprocess=(
-                lambda val: val.replace(r"\r\n", "")
+            postprocess=(
+                lambda val: re.sub("\r\n|\n|\r", "", val)
+                .replace(r"\r\n", "")
                 .replace(r"\n", "")
                 .replace(r"\r", "")
             ),
-            postprocess=(lambda val: re.sub("\r\n|\n|\r", "", val)),
             data_kind=cls.PLUGIN_NAME,
         )
 

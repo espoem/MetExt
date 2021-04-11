@@ -1,4 +1,5 @@
 import quopri
+import re
 from typing import Optional
 
 from metext.plugin_base import BaseDecoder, Decodable
@@ -16,7 +17,13 @@ class QuoPriDecoder(BaseDecoder):
         :return: Bytes string if decoded successfully, else None
         """
         if isinstance(_input, str):
-            _input = bytes(_input, "utf8")
+            try:
+                _input = bytes(_input, "utf8")
+            except:
+                return None
+
+        if re.search(rb"[^ -~\s]", _input):
+            return None
 
         try:
             return quopri.decodestring(_input)

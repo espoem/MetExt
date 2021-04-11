@@ -48,6 +48,14 @@ class Base64Decoder(BaseDecoder):
         _input += b"=" * padding_len
 
         try:
+            base64.b64decode(_input[:76], altchars=charset[-2:], validate=True)
+        except:
+            try:
+                base64.b64decode(_input[:64], altchars=charset[-2:], validate=True)
+            except:
+                return None
+
+        try:
             return base64.b64decode(_input, altchars=charset[-2:], validate=False)
         except:
             return None

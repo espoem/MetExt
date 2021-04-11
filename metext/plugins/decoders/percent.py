@@ -1,3 +1,4 @@
+import re
 from typing import Optional
 from urllib.parse import unquote_to_bytes
 
@@ -15,6 +16,15 @@ class PercentDecoder(BaseDecoder):
         :param kwargs:
         :return: Bytes string if decoded successfully, else None
         """
+        if isinstance(_input, str):
+            try:
+                _input = bytes(_input, "utf8")
+            except:
+                return None
+
+        if re.search(rb"[^ -~\s]", _input):
+            return None
+
         try:
             return unquote_to_bytes(_input)
         except Exception:

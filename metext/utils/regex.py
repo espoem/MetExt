@@ -84,7 +84,7 @@ RE_BASE32 = re.compile(
 # )  # https://www.rise4fun.com/Bek/tutorial/base64
 
 RE_BASE64 = re.compile(
-    r"\b(?:(?:[A-Za-z0-9+/]{76}(?:\r\n|\\r\\n|\n|\\n|\r|\\r)|[A-Za-z0-9+/]{64}(?:\r\n|\\r\\n|\n|\\n|\r|\\r)|[A-Za-z0-9+/]{4})*)(?:[A-Za-z0-9+/][AQgw]==|[A-Za-z0-9+/]{2}[AEIMQUYcgkosw048]=)?"
+    r"\b(?:(?:[A-Za-z0-9+/]{76}(?:\r\n|\\r\\n|\n|\\n|\r|\\r)|[A-Za-z0-9+/]{64}(?:\r\n|\\r\\n|\n|\\n|\r|\\r)|[A-Za-z0-9+/]{4})*)(?:[A-Za-z0-9+/][AQgw]==|[A-Za-z0-9+/]{2}[AEIMQUYcgkosw048]=)?(?![A-Za-z0-9+/])"
 )
 
 PATTERN_BTC_BASE58 = r"\b[13][a-km-zA-HJ-NP-Z1-9]{25,42}\b"

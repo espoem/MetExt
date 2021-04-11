@@ -21,5 +21,9 @@ class IssnExtractor(BaseExtractor):
         :return: Generator with ISSN identifiers
         """
         yield from _extract_with_regex(
-            _input, RE_ISSN, validator=IssnValidator.run, cached_values=cls.valid_issns
+            _input,
+            RE_ISSN,
+            validator=IssnValidator.run,
+            cached_values=cls.valid_issns,
+            data_kind=cls.PLUGIN_NAME,
         )

@@ -16,4 +16,6 @@ class JsonExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of JSON strings
         """
-        yield from _extract_with_regex(_input, RE_JSON, per_line=False)
+        yield from _extract_with_regex(
+            _input, RE_JSON, per_line=False, data_kind=cls.PLUGIN_NAME
+        )

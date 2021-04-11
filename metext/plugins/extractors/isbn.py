@@ -21,7 +21,11 @@ class IsbnExtractor(BaseExtractor):
         :return: Generator with ISBN identifiers
         """
         yield from _extract_with_regex(
-            _input, RE_ISBN, validator=IsbnValidator.run, cached_values=cls.valid_isbns
+            _input,
+            RE_ISBN,
+            validator=IsbnValidator.run,
+            cached_values=cls.valid_isbns,
+            data_kind=cls.PLUGIN_NAME,
         )
 
 
@@ -44,6 +48,7 @@ class Isbn10Extractor(BaseExtractor):
             RE_ISBN10,
             validator=IsbnValidator.run,
             cached_values=cls.valid_isbns,
+            data_kind=cls.PLUGIN_NAME,
         )
 
 
@@ -66,4 +71,5 @@ class Isbn13Extractor(BaseExtractor):
             RE_ISBN13,
             validator=IsbnValidator.run,
             cached_values=cls.valid_isbns,
+            data_kind=cls.PLUGIN_NAME,
         )

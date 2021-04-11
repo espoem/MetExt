@@ -18,5 +18,9 @@ class EmailExtractor(BaseExtractor):
         :return: Generator of e-mail addresses
         """
         yield from _extract_with_regex(
-            _input, RE_EMAIL, validator=EmailValidator.run, per_line=True
+            _input,
+            RE_EMAIL,
+            validator=EmailValidator.run,
+            per_line=True,
+            data_kind=cls.PLUGIN_NAME,
         )

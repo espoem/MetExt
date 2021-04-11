@@ -31,6 +31,7 @@ class Base32Extractor(BaseExtractor):
             preprocess=lambda val: val.replace(r"\r\n", "")
             .replace(r"\n", "")
             .replace(r"\r", ""),
+            data_kind=cls.PLUGIN_NAME,
         )
 
 
@@ -61,6 +62,7 @@ class Base64Extractor(BaseExtractor):
                 .replace(r"\r", "")
             ),
             postprocess=(lambda val: re.sub("\r\n|\n|\r", "", val)),
+            data_kind=cls.PLUGIN_NAME,
         )
 
 
@@ -81,7 +83,7 @@ class HexExtractor(BaseExtractor):
         """
         delim = kwargs.get("delim", "")
         regex = re.compile(HEX_PATTERN_TEMPLATE.format(delim=delim), re.IGNORECASE)
-        yield from _extract_with_regex(_input, regex)
+        yield from _extract_with_regex(_input, regex, data_kind=cls.PLUGIN_NAME)
 
 
 HEX_DELIMITERS = {

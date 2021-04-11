@@ -57,7 +57,9 @@ class BitcoinAddress(BaseExtractor):
         :param _input: String or a list of strings to extract Bitcoin addresses from
         :return: Generator of found valid Bitcoin addresses
         """
-        yield from _extract_with_regex(_input, RE_BTC, validator=BitcoinValidator.run)
+        yield from _extract_with_regex(
+            _input, RE_BTC, validator=BitcoinValidator.run, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class BitcoinWif(BaseExtractor):
@@ -65,7 +67,12 @@ class BitcoinWif(BaseExtractor):
 
     @classmethod
     def run(cls, _input: str, **kwargs) -> Iterable[dict]:
-        yield from _extract_with_regex(_input, RE_BTC_WIF, validator=BitcoinWifValidator.run)
+        yield from _extract_with_regex(
+            _input,
+            RE_BTC_WIF,
+            validator=BitcoinWifValidator.run,
+            data_kind=cls.PLUGIN_NAME,
+        )
 
 
 class BitcoinXKey(BaseExtractor):
@@ -73,8 +80,12 @@ class BitcoinXKey(BaseExtractor):
 
     @classmethod
     def run(cls, _input: str, **kwargs) -> Iterable[dict]:
-        yield from _extract_with_regex(_input, RE_BTC_BIP32_XKEY,
-                                       validator=slip132.address_from_xkey if has_btclib else None)
+        yield from _extract_with_regex(
+            _input,
+            RE_BTC_BIP32_XKEY,
+            validator=slip132.address_from_xkey if has_btclib else None,
+            data_kind=cls.PLUGIN_NAME,
+        )
 
 
 class BitcoinPrivateKey(BaseExtractor):
@@ -83,7 +94,12 @@ class BitcoinPrivateKey(BaseExtractor):
 
     @classmethod
     def run(cls, _input: str, **kwargs) -> Iterable[dict]:
-        yield from _extract_with_regex(_input, RE_BTC_PRIVKEY, validator=BitcoinPrivKeyValidator.run)
+        yield from _extract_with_regex(
+            _input,
+            RE_BTC_PRIVKEY,
+            validator=BitcoinPrivKeyValidator.run,
+            data_kind=cls.PLUGIN_NAME,
+        )
 
 
 class EthereumAddressExtractor(BaseExtractor):
@@ -98,7 +114,9 @@ class EthereumAddressExtractor(BaseExtractor):
         :param _input: String or a list of strings
         :return: Generator of found valid Ethereum addresses
         """
-        yield from _extract_with_regex(_input, RE_ETH, validator=EthereumValidator.run)
+        yield from _extract_with_regex(
+            _input, RE_ETH, validator=EthereumValidator.run, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class LitecoinAddress(BaseExtractor):
@@ -116,7 +134,9 @@ class LitecoinAddress(BaseExtractor):
         :param _input: String or a list of strings
         :return: Generator of found valid Litecoin addresses
         """
-        yield from _extract_with_regex(_input, RE_LTC, validator=LitecoinValidator.run)
+        yield from _extract_with_regex(
+            _input, RE_LTC, validator=LitecoinValidator.run, data_kind=cls.PLUGIN_NAME
+        )
 
 
 # TODO: Check X-format https://xrpaddress.info/
@@ -132,7 +152,9 @@ class RippleAddress(BaseExtractor):
         :param _input: String or a list of strings to extract Ripple addresses from
         :return: Generator of found valid Ripple addresses
         """
-        yield from _extract_with_regex(_input, RE_XRP, validator=RippleValidator.run)
+        yield from _extract_with_regex(
+            _input, RE_XRP, validator=RippleValidator.run, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class TetherAddress(BaseExtractor):
@@ -145,7 +167,9 @@ class TetherAddress(BaseExtractor):
         :param _input: String or a list of strings
         :return: Generator of formally valid Tether addresses
         """
-        yield from _extract_with_regex(_input, RE_USDT, validator=TetherValidator.run)
+        yield from _extract_with_regex(
+            _input, RE_USDT, validator=TetherValidator.run, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class BitcoinCashAddress(BaseExtractor):
@@ -162,7 +186,9 @@ class BitcoinCashAddress(BaseExtractor):
         """
         include_legacy = kwargs.get("include_legacy", True)
         re_ = RE_BCH_WITH_LEGACY if include_legacy else RE_BCH
-        yield from _extract_with_regex(_input, re_, validator=BitcoinCashValidator.run)
+        yield from _extract_with_regex(
+            _input, re_, validator=BitcoinCashValidator.run, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class ChainlinkAddress(BaseExtractor):
@@ -175,7 +201,9 @@ class ChainlinkAddress(BaseExtractor):
         :param _input: String or a list of strings
         :return: Generator of formally valid chainlink addresses
         """
-        yield from _extract_with_regex(_input, RE_LINK, validator=ChainlinkValidator.run)
+        yield from _extract_with_regex(
+            _input, RE_LINK, validator=ChainlinkValidator.run, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class CardanoAddress(BaseExtractor):
@@ -188,7 +216,9 @@ class CardanoAddress(BaseExtractor):
         :param _input: String or a list of strings
         :return: Generator of formally valid Cardano addresses
         """
-        yield from _extract_with_regex(_input, RE_ADA, validator=CardanoValidator.run)
+        yield from _extract_with_regex(
+            _input, RE_ADA, validator=CardanoValidator.run, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class PolkadotAddress(BaseExtractor):
@@ -201,4 +231,6 @@ class PolkadotAddress(BaseExtractor):
         :param _input: String or a list of strings
         :return: Generator of formally valid Cardano addresses
         """
-        yield from _extract_with_regex(_input, RE_DOT, validator=PolkadotValidator.run)
+        yield from _extract_with_regex(
+            _input, RE_DOT, validator=PolkadotValidator.run, data_kind=cls.PLUGIN_NAME
+        )

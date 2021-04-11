@@ -17,4 +17,6 @@ class PemExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of PEM objects strings
         """
-        yield from _extract_with_regex(_input, RE_PEM, per_line=False)
+        yield from _extract_with_regex(
+            _input, RE_PEM, per_line=False, data_kind=cls.PLUGIN_NAME
+        )

@@ -18,4 +18,4 @@ class MACAddressExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of MAC addresses
         """
-        yield from _extract_with_regex(_input, RE_MAC)
+        yield from _extract_with_regex(_input, RE_MAC, data_kind=cls.PLUGIN_NAME)

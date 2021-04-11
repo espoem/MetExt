@@ -23,7 +23,9 @@ class MD5Extractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of MD5 hash strings
         """
-        yield from _extract_with_regex(_input, RE_MD5, per_line=True)
+        yield from _extract_with_regex(
+            _input, RE_MD5, per_line=True, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class SHA1Extractor(BaseExtractor):
@@ -37,7 +39,9 @@ class SHA1Extractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of SHA-1 hash strings
         """
-        yield from _extract_with_regex(_input, RE_SHA1, per_line=True)
+        yield from _extract_with_regex(
+            _input, RE_SHA1, per_line=True, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class SHA224Extractor(BaseExtractor):
@@ -51,7 +55,9 @@ class SHA224Extractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of SHA-224 hash strings
         """
-        yield from _extract_with_regex(_input, RE_SHA224, per_line=True)
+        yield from _extract_with_regex(
+            _input, RE_SHA224, per_line=True, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class SHA256Extractor(BaseExtractor):
@@ -65,7 +71,9 @@ class SHA256Extractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of SHA-256 hash strings
         """
-        yield from _extract_with_regex(_input, RE_SHA256, per_line=True)
+        yield from _extract_with_regex(
+            _input, RE_SHA256, per_line=True, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class SHA384Extractor(BaseExtractor):
@@ -79,7 +87,9 @@ class SHA384Extractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of SHA-384 hash strings
         """
-        yield from _extract_with_regex(_input, RE_SHA384, per_line=True)
+        yield from _extract_with_regex(
+            _input, RE_SHA384, per_line=True, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class SHA512Extractor(BaseExtractor):
@@ -93,4 +103,6 @@ class SHA512Extractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of SHA-512 hash strings
         """
-        yield from _extract_with_regex(_input, RE_SHA512, per_line=True)
+        yield from _extract_with_regex(
+            _input, RE_SHA512, per_line=True, data_kind=cls.PLUGIN_NAME
+        )

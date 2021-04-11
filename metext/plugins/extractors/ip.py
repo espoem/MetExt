@@ -33,7 +33,11 @@ class IPv4AddressExtractor(BaseExtractor):
         :return: Generator of IPv4 addresses
         """
         yield from _extract_with_regex(
-            _input, RE_IPV4, validator=IPv4AddressValidator.run, per_line=True
+            _input,
+            RE_IPV4,
+            validator=IPv4AddressValidator.run,
+            per_line=True,
+            data_kind=cls.PLUGIN_NAME,
         )
 
 
@@ -55,4 +59,5 @@ class IPv6AddressExtractor(BaseExtractor):
             RE_IPV6,
             validator=lambda val: len(val) > 6 and IPv6AddressValidator.run(val),
             per_line=True,
+            data_kind=cls.PLUGIN_NAME,
         )

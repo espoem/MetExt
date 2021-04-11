@@ -16,4 +16,6 @@ class GuidExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of GUID strings
         """
-        yield from _extract_with_regex(_input, RE_GUID, per_line=True)
+        yield from _extract_with_regex(
+            _input, RE_GUID, per_line=True, data_kind=cls.PLUGIN_NAME
+        )

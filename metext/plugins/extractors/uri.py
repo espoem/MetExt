@@ -48,6 +48,7 @@ class URIExtractor(BaseExtractor):
             _input,
             regex,
             validator=lambda val: URIValidator.run(val, strict=strict, schemes=schemes),
+            data_kind=cls.PLUGIN_NAME,
         )
 
 
@@ -65,7 +66,9 @@ class URLExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator with URLs
         """
-        yield from _extract_with_regex(_input, RE_URI, validator=URLValidator.run)
+        yield from _extract_with_regex(
+            _input, RE_URI, validator=URLValidator.run, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class URNExtractor(BaseExtractor):
@@ -79,7 +82,9 @@ class URNExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator with URNs
         """
-        yield from URIExtractor.run(_input, schemes=["urn"], strict=False)
+        yield from URIExtractor.run(
+            _input, schemes=["urn"], strict=False, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class DataURIExtractor(BaseExtractor):
@@ -93,7 +98,9 @@ class DataURIExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator with data URIs
         """
-        yield from _extract_with_regex(_input, RE_URI, validator=DataURIValidator.run)
+        yield from _extract_with_regex(
+            _input, RE_URI, validator=DataURIValidator.run, data_kind=cls.PLUGIN_NAME
+        )
 
 
 class MagnetExtractor(BaseExtractor):
@@ -138,6 +145,7 @@ class FormFieldsExtractor(BaseExtractor):
             validator=lambda val: len(val) >= min_len
             and not ("&" not in val and val.endswith("=")),
             postprocess=lambda val: unquote_plus(val) if decode else val,
+            data_kind=cls.PLUGIN_NAME,
         )
 
 

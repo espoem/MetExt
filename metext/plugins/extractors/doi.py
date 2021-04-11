@@ -19,5 +19,9 @@ class DoiExtractor(BaseExtractor):
         :return: Generator with DOI identifiers
         """
         yield from _extract_with_regex(
-            _input, RE_DOI, validator=DoiValidator.run, per_line=True
+            _input,
+            RE_DOI,
+            validator=DoiValidator.run,
+            per_line=True,
+            data_kind=cls.PLUGIN_NAME,
         )

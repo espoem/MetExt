@@ -44,7 +44,7 @@ def _extract_with_regex(
         cur_pos += len(part)
 
 
-def _create_res_dict(value, position=None, original=None, value_kind=None):
+def _create_res_dict(value, position=None, original=None, value_kind=None, **kwargs):
     res = {"value": value}
     if position is not None:
         res.update({"position": position})
@@ -52,4 +52,6 @@ def _create_res_dict(value, position=None, original=None, value_kind=None):
         res.update({"original": original})
     if value_kind is not None:
         res.update({"value_kind": value_kind})
+    if kwargs:
+        res.update(kwargs)
     return res

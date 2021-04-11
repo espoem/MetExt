@@ -1,8 +1,9 @@
+import json
 from typing import Iterable
 
-from metext.plugin_base import BaseExtractor
+from netaddr import EUI
 
-# https://www.geeksforgeeks.org/how-to-validate-mac-address-using-regular-expression/
+from metext.plugin_base import BaseExtractor
 from metext.plugins.extractors import _extract_with_regex
 from metext.utils.regex import RE_MAC
 
@@ -18,4 +19,11 @@ class MACAddressExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of MAC addresses
         """
-        yield from _extract_with_regex(_input, RE_MAC, data_kind=cls.PLUGIN_NAME)
+        for mac in _extract_with_regex(_input, RE_MAC, data_kind=cls.PLUGIN_NAME):
+            try:
+                info = EUI(mac["value"]).info
+                if info:
+                    mac.update({"info": (json.loads(str(info).replace("'", '"')))})
+            except:
+                pass
+            yield mac

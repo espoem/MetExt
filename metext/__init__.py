@@ -148,7 +148,7 @@ def analyze(
 
 
 def input_for_analysis(
-    value: Union[List[str], bytes, str], mode="r"
+    value: Union[List[str], bytes, str], mode="rb"
 ) -> Union[FileInputExtended, StringIO, BytesIO]:
     """Helper function to create an input for the :func:`analyze` function.
     Takes either a list of file paths, a string, or a byte string.

@@ -86,4 +86,4 @@ def _extract_with_regex(
             if isinstance(cached_values, set):
                 cached_values.add(value)
         cur_pos += len(part)
-    yield from extracted_values.values()
+    yield from sorted(extracted_values.values(), key=lambda x: x.get("frequency"), reverse=True)

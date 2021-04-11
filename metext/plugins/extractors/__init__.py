@@ -1,4 +1,11 @@
-import json
+try:
+    import orjson as json
+except ImportError:
+    try:
+        import ujson as json
+    except ImportError:
+        import json
+
 
 from metext.utils import decode_bytes
 

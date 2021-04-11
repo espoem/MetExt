@@ -39,7 +39,7 @@ class Bech32Decoder(BaseDecoder):
         if any(x not in CHARSET for x in _input[pos + 1 :]):
             return None, None
         hrp = _input[:pos]
-        result = [CHARSET.find(x) for x in _input[pos + 1:]]
+        result = [CHARSET.find(x) for x in _input[pos + 1 :]]
         if not cls.verify_checksum(hrp, result):
             return None, None
         return hrp, result[:-6]

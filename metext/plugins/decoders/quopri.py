@@ -25,6 +25,9 @@ class QuoPriDecoder(BaseDecoder):
         if re.search(rb"[^ -~\s]", _input):
             return None
 
+        if b"=" not in _input:
+            return None
+
         try:
             return quopri.decodestring(_input)
         except Exception:

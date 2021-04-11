@@ -1,6 +1,8 @@
-from metext.plugin_base import BaseValidator
-import requests
 import xml.etree.ElementTree as ET
+
+import requests
+
+from metext.plugin_base import BaseValidator
 
 # Helper methods slightly modified from https://github.com/khimsh/is_isbn
 

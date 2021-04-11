@@ -19,6 +19,7 @@ def _extract_with_regex(
     postprocess=None,
     cached_values=None,
     data_kind=None,
+    include_original=False,
 ):
     def create_item(value_, position_=None, original_=None, value_kind_=None, **kwargs):
         res = {"value": value_}
@@ -62,7 +63,9 @@ def _extract_with_regex(
             value = match.group(0)
             if postprocess is not None:
                 value = postprocess(value)
-            orig_value = match.group(0) if match.group(0) != value else None
+            orig_value = (
+                match.group(0) if include_original and match.group(0) != value else None
+            )
             if cached_values is not None and value in cached_values:
                 add_update_item_to_out(
                     create_item(
@@ -86,4 +89,6 @@ def _extract_with_regex(
             if isinstance(cached_values, set):
                 cached_values.add(value)
         cur_pos += len(part)
-    yield from sorted(extracted_values.values(), key=lambda x: x.get("frequency"), reverse=True)
+    yield from sorted(
+        extracted_values.values(), key=lambda x: x.get("frequency"), reverse=True
+    )

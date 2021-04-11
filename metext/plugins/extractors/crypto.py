@@ -28,6 +28,7 @@ from metext.utils.regex import (
     RE_BCH,
     RE_BCH_WITH_LEGACY,
     RE_BTC,
+    RE_BTC_BIP32_XKEY,
     RE_BTC_PRIVKEY,
     RE_BTC_WIF,
     RE_DOT,
@@ -36,7 +37,6 @@ from metext.utils.regex import (
     RE_LTC,
     RE_USDT,
     RE_XRP,
-    RE_BTC_BIP32_XKEY,
 )
 
 

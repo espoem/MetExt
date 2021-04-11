@@ -1,4 +1,5 @@
 import email
+import re
 from email import policy
 from typing import Optional
 
@@ -24,6 +25,10 @@ class MimeDecoder(BaseDecoder):
         try:
             if isinstance(_input, str):
                 _input = bytes(_input, "utf8")
+
+            if not re.search(rb"MIME-Version:\s\d+\.\d+", _input):
+                return None
+
             msg = email.message_from_bytes(
                 _input, policy=policy.default.clone(raise_on_defect=True)
             )

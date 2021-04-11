@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 from metext.plugin_base import BaseValidator
 from metext.plugins.validators.baseenc import Base64Validator
 from metext.utils._torf._magnet import Magnet
+from metext.utils.uri import URI_SCHEMES
 
 
 class URIValidator(BaseValidator):
@@ -19,8 +20,11 @@ class URIValidator(BaseValidator):
         If schemes is an empty list (none provided), then there is no scheme restriction, defaults to empty list
         :return:
         """
+        if len(_input) < 8:
+            return False
+
         strict = kwargs.get("strict", True)
-        schemes = kwargs.get("schemes", [])
+        schemes = kwargs.get("schemes", URI_SCHEMES)
         parsed = urlparse(_input)
         is_path_like = ("/" in parsed.path) if strict else True
         has_selected_scheme = parsed.scheme in schemes if schemes else True

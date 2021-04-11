@@ -108,7 +108,11 @@ class BitcoinPrivKeyValidator(BaseValidator):
             except:
                 return False
 
-        if len(_input) != 64 or _input > b"fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364140":
+        if (
+            len(_input) != 64
+            or _input
+            > b"fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364140"
+        ):
             return False
 
         try:

@@ -54,7 +54,10 @@ class Base64Extractor(BaseExtractor):
         yield from _extract_with_regex(
             _input,
             RE_BASE64,
-            validator=(lambda val: len(val) >= min_len and Base64Validator.run(val)),
+            validator=(
+                lambda val: len(val) >= min_len
+                and Base64Validator.run(val, strict=True)
+            ),
             per_line=False,
             postprocess=(
                 lambda val: re.sub("\r\n|\n|\r", "", val)

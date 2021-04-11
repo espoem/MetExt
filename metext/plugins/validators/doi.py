@@ -1,5 +1,6 @@
-from metext.plugin_base import BaseValidator
 import requests
+
+from metext.plugin_base import BaseValidator
 
 
 class DoiValidator(BaseValidator):

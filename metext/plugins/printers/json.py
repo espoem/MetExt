@@ -2,6 +2,7 @@ import json
 import sys
 
 from metext.plugin_base import BasePrinter
+from metext.utils import CustomJsonEncoder
 
 
 class JsonPrinter(BasePrinter):
@@ -23,4 +24,4 @@ class JsonPrinter(BasePrinter):
         with (
             sys.stdout if out_file == "-" else open(out_file, "w", encoding="utf8")
         ) as f:
-            json.dump(_input, f, indent=indent, sort_keys=sort_keys)
+            json.dump(_input, f, indent=indent, sort_keys=sort_keys, cls=CustomJsonEncoder)

@@ -1,13 +1,7 @@
-try:
-    import orjson as json
-except ImportError:
-    try:
-        import ujson as json
-    except ImportError:
-        import json
+import json
 
 
-from metext.utils import decode_bytes
+from metext.utils import decode_bytes, CustomJsonEncoder
 
 
 def _extract_with_regex(
@@ -19,9 +13,13 @@ def _extract_with_regex(
     postprocess=None,
     cached_values=None,
     data_kind=None,
-    include_original=False,
+    include_original=True,
+    include_contexts=True,
+    context_length=30,
 ):
-    def create_item(value_, position_=None, original_=None, value_kind_=None, **kwargs):
+    def create_item(
+        value_, position_=None, original_=None, value_kind_=None, context_=None, **kwargs
+    ):
         res = {"value": value_}
         if position_ is not None:
             res.update({"position": position_})
@@ -29,12 +27,14 @@ def _extract_with_regex(
             res.update({"original": original_})
         if value_kind_ is not None:
             res.update({"value_kind": value_kind_})
+        if context_ is not None:
+            res.update({"context": context_})
         if kwargs:
             res.update(kwargs)
         return res
 
     def add_update_item_to_out(item):
-        key_ = json.dumps(item["value"])
+        key_ = json.dumps(item["value"], cls=CustomJsonEncoder)
         if key_ not in extracted_values:
             extracted_values[key_] = item
         if "frequency" not in extracted_values[key_]:
@@ -46,6 +46,12 @@ def _extract_with_regex(
             extracted_values[key_]["positions"].append(item["position"])
         if "position" in extracted_values[key_]:
             del extracted_values[key_]["position"]
+        if "contexts" not in extracted_values[key_]:
+            extracted_values[key_]["contexts"] = set()
+        if item.get("context"):
+            extracted_values[key_]["contexts"].add(item["context"])
+        if "context" in extracted_values[key_]:
+            del extracted_values[key_]["context"]
 
     if not isinstance(_input, str):
         try:
@@ -66,6 +72,20 @@ def _extract_with_regex(
             orig_value = (
                 match.group(0) if include_original and match.group(0) != value else None
             )
+            context = None
+            if include_contexts:
+                context = (
+                    _input[
+                        cur_pos
+                        + match.start(0)
+                        - context_length : cur_pos
+                        + match.start(0)
+                    ]
+                    + ">>>>value<<<<"
+                    + _input[
+                        cur_pos + match.end(0) : cur_pos + match.end(0) + context_length
+                    ]
+                )
             if cached_values is not None and value in cached_values:
                 add_update_item_to_out(
                     create_item(
@@ -73,6 +93,7 @@ def _extract_with_regex(
                         cur_pos + match.start(0),
                         orig_value,
                         value_kind_=data_kind,
+                        context_=context,
                     )
                 )
                 continue
@@ -80,7 +101,11 @@ def _extract_with_regex(
                 continue
             add_update_item_to_out(
                 create_item(
-                    value, cur_pos + match.start(0), orig_value, value_kind_=data_kind
+                    value,
+                    cur_pos + match.start(0),
+                    orig_value,
+                    value_kind_=data_kind,
+                    context_=context,
                 )
             )
 

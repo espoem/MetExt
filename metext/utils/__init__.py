@@ -1,10 +1,4 @@
-try:
-    import orjson as json
-except ImportError:
-    try:
-        import ujson as json
-    except ImportError:
-        import json
+import json
 import itertools
 from collections import OrderedDict
 
@@ -18,7 +12,15 @@ excluded = {
     "position",
     "value",
     "original",
+    "contexts",
+    "context"
 }
+
+class CustomJsonEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, set):
+            return list(obj)
+        return json.JSONEncoder.default(self, obj)
 
 
 def _create_keys_list(analyzed_data):
@@ -50,7 +52,7 @@ def to_csv_printer_format(analyzed_data: list) -> list:
                                 ("source", str(source)),
                                 ("format", str(f_name)),
                                 ("pattern_type", str(p_type)),
-                                ("pattern", json.dumps(val)),
+                                ("pattern", json.dumps(val, cls=CustomJsonEncoder)),
                                 ("frequency", v.get("frequency", 1)),
                                 ("positions", v.get("positions", [])),
                             ]

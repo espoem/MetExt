@@ -1,4 +1,5 @@
 import concurrent.futures as cf
+import os
 from io import BufferedIOBase, BytesIO, StringIO, TextIOBase
 from typing import Any, Callable, List, Optional, Tuple, Union
 
@@ -125,7 +126,8 @@ def analyze(
     """
     out = {}
 
-    with cf.ProcessPoolExecutor() as e:
+    max_workers = max([min([len(extractors), os.cpu_count() - 1]), 1])
+    with cf.ProcessPoolExecutor(max_workers=max_workers) as e:
         for data in _read(_input, per_line):
             for dec in decoders:
                 dec_name, dec_kwargs = dec

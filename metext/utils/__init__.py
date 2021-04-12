@@ -13,8 +13,9 @@ excluded = {
     "value",
     "original",
     "contexts",
-    "context"
+    "context",
 }
+
 
 class CustomJsonEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -45,16 +46,35 @@ def to_csv_printer_format(analyzed_data: list) -> list:
                 continue
             for p_type, p_values in f_value.get("patterns", {}).items():
                 for v in p_values:
-                    val = v.get("value")
                     out.append(
                         OrderedDict(
                             [
                                 ("source", str(source)),
                                 ("format", str(f_name)),
                                 ("pattern_type", str(p_type)),
-                                ("pattern", json.dumps(val, cls=CustomJsonEncoder)),
+                                (
+                                    "pattern",
+                                    json.dumps(v.get("value"), cls=CustomJsonEncoder),
+                                ),
+                                (
+                                    "original",
+                                    json.dumps(
+                                        v.get("original"), cls=CustomJsonEncoder
+                                    ),
+                                ),
                                 ("frequency", v.get("frequency", 1)),
-                                ("positions", v.get("positions", [])),
+                                (
+                                    "positions",
+                                    json.dumps(
+                                        v.get("positions", []), cls=CustomJsonEncoder
+                                    ),
+                                ),
+                                (
+                                    "contexts",
+                                    json.dumps(
+                                        v.get("contexts", []), cls=CustomJsonEncoder
+                                    ),
+                                ),
                             ]
                         )
                     )

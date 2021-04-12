@@ -118,7 +118,7 @@ class MagnetExtractor(BaseExtractor):
         yield from (
             magnet
             for magnet in URIExtractor.run(_input, schemes=["magnet"], strict=False)
-            if MagnetValidator.run(magnet)
+            if MagnetValidator.run(magnet["value"])
         )
 
 

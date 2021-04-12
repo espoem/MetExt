@@ -45,8 +45,7 @@ class UuidExtractor(BaseExtractor):
             postprocess=normalize,
         ):
             info = get_info(obj["value"])
-            if info:
-                if info["version"] is None:
-                    continue
-                obj.update({"info": info})
+            if not info or info["version"] is None:
+                continue
+            obj.update({"info": info})
             yield obj

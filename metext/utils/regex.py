@@ -1,4 +1,5 @@
 import re
+
 import regex
 
 from metext.utils.uri import URI, URI_reference, addr_spec
@@ -141,7 +142,9 @@ RE_JSON = regex.compile(
     regex.VERBOSE,
 )
 
-RE_GUID = re.compile(r"\b(?<!-)[0-9a-fA-F]{8}[-]?(?:[0-9a-fA-F]{4}[-]?){3}[0-9a-fA-F]{12}(?!-)\b")
+RE_GUID = re.compile(
+    r"\b(?<!-)[0-9a-fA-F]{8}[-]?(?:[0-9a-fA-F]{4}[-]?){3}[0-9a-fA-F]{12}(?!-)\b"
+)
 RE_MAC = re.compile(
     r"\b(?<![:-])(?:(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}|(?:[0-9a-fA-F]{4}\.){2}[0-9a-fA-F]{4})(?![:-])\b"
 )

@@ -28,13 +28,14 @@ class Bech32Decoder(BaseDecoder):
         except Exception:
             return None, None
 
+        max_length = kwargs.get("max_length", 90)
         if (any(ord(x) < 33 or ord(x) > 126 for x in _input)) or (
             _input.lower() != _input and _input.upper() != _input
         ):
             return None, None
         _input = _input.lower()
         pos = _input.rfind("1")
-        if pos < 1 or pos + 7 > len(_input) or len(_input) > 110:
+        if pos < 1 or pos + 7 > len(_input) or len(_input) > max_length:
             return None, None
         if any(x not in CHARSET for x in _input[pos + 1 :]):
             return None, None

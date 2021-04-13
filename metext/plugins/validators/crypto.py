@@ -270,7 +270,7 @@ class CardanoValidator(BaseValidator):
 
     @classmethod
     def is_valid_address_shelley(cls, address):
-        hrp, decoded = Bech32Decoder.run(address)
+        hrp, decoded = Bech32Decoder.run(address, max_length=110)
         if decoded is None:
             return False
 

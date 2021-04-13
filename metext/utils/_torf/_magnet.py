@@ -45,9 +45,12 @@ class Magnet:
         | http://shareaza.sourceforge.net/mediawiki/index.php/Magnet_URI_scheme
     """
 
-    _INFOHASH_REGEX = re.compile(r"^[0-9a-f]{40}|[a-z2-7]{32}|1220[a-f0-9]{64}$", flags=re.IGNORECASE)
+    _INFOHASH_REGEX = re.compile(
+        r"^[0-9a-f]{40}|[a-z2-7]{32}|1220[a-f0-9]{64}$", flags=re.IGNORECASE
+    )
     _XT_REGEX = re.compile(
-        r"^(?:urn:btih:([0-9a-f]{40}|[a-z2-7]{32})|urn:btmh:1220[a-f0-9]{64})$", flags=re.IGNORECASE
+        r"^(?:urn:btih:([0-9a-f]{40}|[a-z2-7]{32})|urn:btmh:1220[a-f0-9]{64})$",
+        flags=re.IGNORECASE,
     )
 
     def __init__(

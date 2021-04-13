@@ -24,4 +24,6 @@ class JsonPrinter(BasePrinter):
         with (
             sys.stdout if out_file == "-" else open(out_file, "w", encoding="utf8")
         ) as f:
-            json.dump(_input, f, indent=indent, sort_keys=sort_keys, cls=CustomJsonEncoder)
+            json.dump(
+                _input, f, indent=indent, sort_keys=sort_keys, cls=CustomJsonEncoder
+            )

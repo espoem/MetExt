@@ -1,5 +1,5 @@
-import json
 import itertools
+import json
 from collections import OrderedDict
 
 import chardet

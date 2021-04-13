@@ -5,10 +5,7 @@ from metext import analyze, plugin_base
 from metext.utils import to_csv_printer_format, to_table_printer_format
 from metext.utils.fileinput import FileInputExtended
 
-decoders = [
-    plug.PLUGIN_NAME
-    for plug in plugin_base.BaseDecoder.get_active_plugins()
-]
+decoders = [plug.PLUGIN_NAME for plug in plugin_base.BaseDecoder.get_active_plugins()]
 extractors = [
     plug.PLUGIN_NAME for plug in plugin_base.BaseExtractor.get_active_plugins()
 ]

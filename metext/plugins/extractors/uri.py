@@ -67,7 +67,10 @@ class URLExtractor(BaseExtractor):
         :return: Generator with URLs
         """
         yield from _extract_with_regex(
-            _input, RE_URI, validator=URLValidator.run, data_kind=URLExtractor.PLUGIN_NAME
+            _input,
+            RE_URI,
+            validator=URLValidator.run,
+            data_kind=URLExtractor.PLUGIN_NAME,
         )
 
 
@@ -99,7 +102,10 @@ class DataURIExtractor(BaseExtractor):
         :return: Generator with data URIs
         """
         yield from _extract_with_regex(
-            _input, RE_URI, validator=DataURIValidator.run, data_kind=DataURIExtractor.PLUGIN_NAME
+            _input,
+            RE_URI,
+            validator=DataURIValidator.run,
+            data_kind=DataURIExtractor.PLUGIN_NAME,
         )
 
 

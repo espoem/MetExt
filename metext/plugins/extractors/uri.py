@@ -48,7 +48,7 @@ class URIExtractor(BaseExtractor):
             _input,
             regex,
             validator=lambda val: URIValidator.run(val, strict=strict, schemes=schemes),
-            data_kind=cls.PLUGIN_NAME,
+            data_kind=URIExtractor.PLUGIN_NAME,
         )
 
 
@@ -67,7 +67,7 @@ class URLExtractor(BaseExtractor):
         :return: Generator with URLs
         """
         yield from _extract_with_regex(
-            _input, RE_URI, validator=URLValidator.run, data_kind=cls.PLUGIN_NAME
+            _input, RE_URI, validator=URLValidator.run, data_kind=URLExtractor.PLUGIN_NAME
         )
 
 
@@ -83,7 +83,7 @@ class URNExtractor(BaseExtractor):
         :return: Generator with URNs
         """
         yield from URIExtractor.run(
-            _input, schemes=["urn"], strict=False, data_kind=cls.PLUGIN_NAME
+            _input, schemes=["urn"], strict=False, data_kind=URNExtractor.PLUGIN_NAME
         )
 
 
@@ -99,7 +99,7 @@ class DataURIExtractor(BaseExtractor):
         :return: Generator with data URIs
         """
         yield from _extract_with_regex(
-            _input, RE_URI, validator=DataURIValidator.run, data_kind=cls.PLUGIN_NAME
+            _input, RE_URI, validator=DataURIValidator.run, data_kind=DataURIExtractor.PLUGIN_NAME
         )
 
 
@@ -145,5 +145,5 @@ class FormFieldsExtractor(BaseExtractor):
             validator=lambda val: len(val) >= min_len
             and not ("&" not in val and val.endswith("=")),
             postprocess=lambda val: unquote_plus(val) if decode else val,
-            data_kind=cls.PLUGIN_NAME,
+            data_kind=FormFieldsExtractor.PLUGIN_NAME,
         )

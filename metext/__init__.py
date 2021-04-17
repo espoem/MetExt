@@ -4,6 +4,7 @@ import gzip
 import io
 import lzma
 import os
+import tarfile
 import zipfile
 from io import BufferedIOBase, BytesIO, StringIO, TextIOBase
 from typing import Any, Callable, List, Optional, Tuple, Union
@@ -206,6 +207,18 @@ def _add_patterns_to_out(_source: str, _format: str, _patterns: dict, _out: dict
 def _try_decompress_to_data_list(data):
     data = convert_to_bytes(data)
     mime = guess_mime(data)
+    try:
+        if mime in [
+            "application/x-tar",
+            "application/gzip",
+            "application/x-bzip2",
+            "application/x-xz",
+        ]:
+            with tarfile.open(fileobj=io.BytesIO(data)) as tf:
+                return [tf.extractfile(f).read() for f in tf.getmembers()]
+    except:
+        pass
+
     try:
         if mime == "application/gzip":
             return [gzip.decompress(data)]

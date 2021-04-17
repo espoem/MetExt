@@ -6,7 +6,7 @@ import lzma
 import os
 import tarfile
 import zipfile
-from io import BufferedIOBase, BytesIO, StringIO, TextIOBase
+from io import BytesIO, StringIO
 from typing import Any, Callable, List, Optional, Tuple, Union
 
 import brotli
@@ -145,19 +145,20 @@ def analyze(
                 for dec in decoders:
                     dec_name, dec_kwargs = dec
                     decoded = decode(data, dec_name, **dec_kwargs)
-                    patterns = {}
-                    if decoded:
-                        future_extracted = {
-                            e.submit(_extract_single, decoded, extractor): extractor[0]
-                            for extractor in extractors
-                        }
-                        for future in cf.as_completed(future_extracted):
-                            pattern_type = future_extracted[future]
-                            try:
-                                patterns[pattern_type] = future.result()
-                            except:
-                                patterns.setdefault(pattern_type, [])
-                    _add_patterns_to_out(_input.name, dec_name, patterns, out)
+                    for decoded_data in _try_decompress_to_data_list(decoded):
+                        patterns = {}
+                        if decoded_data:
+                            future_extracted = {
+                                e.submit(_extract_single, decoded_data, extractor): extractor[0]
+                                for extractor in extractors
+                            }
+                            for future in cf.as_completed(future_extracted):
+                                pattern_type = future_extracted[future]
+                                try:
+                                    patterns[pattern_type] = future.result()
+                                except:
+                                    patterns.setdefault(pattern_type, [])
+                        _add_patterns_to_out(_input.name, dec_name, patterns, out)
 
     return list(out.values())
 
@@ -209,6 +210,8 @@ def _add_patterns_to_out(_source: str, _format: str, _patterns: dict, _out: dict
 
 
 def _try_decompress_to_data_list(data):
+    if not data:
+        return []
     data = convert_to_bytes(data)
     mime = guess_mime(data)
     try:
@@ -236,6 +239,6 @@ def _try_decompress_to_data_list(data):
         if mime in ["application/x-lzip", "application/x-lzma", "application/x-xz"]:
             return [lzma.decompress(data)]
     except:
-        return [data]
+        pass
 
     return [data]

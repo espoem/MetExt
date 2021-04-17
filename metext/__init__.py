@@ -116,6 +116,9 @@ def extract_patterns(data: str, extractor: str, **kwargs) -> List[Any]:
             )
         )
 
+    if not isinstance(data, str):
+        data = decode_bytes(data)
+
     return list(get_extractor(extractor)(data, **kwargs))
 
 
@@ -149,7 +152,9 @@ def analyze(
                         patterns = {}
                         if decoded_data:
                             future_extracted = {
-                                e.submit(_extract_single, decoded_data, extractor): extractor[0]
+                                e.submit(
+                                    _extract_single, decoded_data, extractor
+                                ): extractor[0]
                                 for extractor in extractors
                             }
                             for future in cf.as_completed(future_extracted):
@@ -182,9 +187,7 @@ def input_for_analysis(
 
 def _extract_single(_data, _executor):
     ex_name, ex_kwargs = _executor
-    return extract_patterns(
-        _data if isinstance(_data, str) else decode_bytes(_data), ex_name, **ex_kwargs
-    )
+    return extract_patterns(_data, ex_name, **ex_kwargs)
 
 
 def _read(_input):

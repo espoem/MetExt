@@ -120,9 +120,9 @@ def extract_patterns(data: str, extractor: str, **kwargs) -> List[Any]:
 
 
 def analyze(
-    _input: Union[FileInputExtended, BufferedIOBase, TextIOBase],
-    decoders: List[Tuple[str, dict]],
-    extractors: List[Tuple[str, dict]],
+    _input: Union[FileInputExtended, BytesIO, StringIO, str, bytes],
+    decoders: List[Tuple[str, dict]] = None,
+    extractors: List[Tuple[str, dict]] = None,
 ) -> List[dict]:
     """Common function to apply multiple decoders and multiple extractors on the input.
     Tries to decompress data first if recognized compression is applied.
@@ -133,6 +133,10 @@ def analyze(
     :return: List of dictionaries with the results for each input source
     """
     out = {}
+    if not decoders or decoders in ["auto", "id"]:
+        decoders = [(dec_name, {}) for dec_name in list_decoders().keys()]
+    if not extractors or extractors in ["auto", "id"]:
+        extractors = [(ex_name, {}) for ex_name in list_extractors().keys()]
 
     max_workers = max([min([len(extractors), os.cpu_count() - 1]), 1])
     with cf.ProcessPoolExecutor(max_workers=max_workers) as e:

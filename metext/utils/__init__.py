@@ -4,18 +4,6 @@ from collections import OrderedDict
 
 import chardet
 
-excluded = {
-    "name",
-    "value_kind",
-    "frequency",
-    "positions",
-    "position",
-    "value",
-    "original",
-    "contexts",
-    "context",
-}
-
 
 class CustomJsonEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -39,6 +27,13 @@ def to_csv_printer_format(analyzed_data: list) -> list:
     if not analyzed_data:
         return out
 
+    keys = _create_keys_list(analyzed_data)
+    excluded = {
+        "name",
+        "value_kind",
+        "value",
+    }
+
     for item in analyzed_data:
         source = item.get("name")
         for f_name, f_value in item.get("formats", {}).items():
@@ -56,25 +51,14 @@ def to_csv_printer_format(analyzed_data: list) -> list:
                                     "pattern",
                                     json.dumps(v.get("value"), cls=CustomJsonEncoder),
                                 ),
+                            ]
+                            + [
                                 (
-                                    "original",
-                                    json.dumps(
-                                        v.get("original"), cls=CustomJsonEncoder
-                                    ),
-                                ),
-                                ("frequency", v.get("frequency", 1)),
-                                (
-                                    "positions",
-                                    json.dumps(
-                                        v.get("positions", []), cls=CustomJsonEncoder
-                                    ),
-                                ),
-                                (
-                                    "contexts",
-                                    json.dumps(
-                                        v.get("contexts", []), cls=CustomJsonEncoder
-                                    ),
-                                ),
+                                    col_name,
+                                    json.dumps(v.get(col_name), cls=CustomJsonEncoder),
+                                )
+                                for col_name in keys
+                                if col_name not in excluded
                             ]
                         )
                     )

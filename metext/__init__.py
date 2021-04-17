@@ -1,12 +1,20 @@
+import bz2
 import concurrent.futures as cf
+import gzip
+import io
+import lzma
 import os
+import zipfile
 from io import BufferedIOBase, BytesIO, StringIO, TextIOBase
 from typing import Any, Callable, List, Optional, Tuple, Union
+
+import brotli
+from filetype import guess_mime
 
 from metext import plugin_base
 from metext.plugin_base import BaseDecoder, BaseExtractor, Decodable
 from metext.plugins import load_plugin_modules
-from metext.utils import decode_bytes
+from metext.utils import convert_to_bytes, decode_bytes
 from metext.utils.fileinput import FileInputExtended
 
 supported_decoders = {
@@ -114,37 +122,37 @@ def analyze(
     _input: Union[FileInputExtended, BufferedIOBase, TextIOBase],
     decoders: List[Tuple[str, dict]],
     extractors: List[Tuple[str, dict]],
-    per_line: bool = False,
 ) -> List[dict]:
     """Common function to apply multiple decoders and multiple extractors on the input.
+    Tries to decompress data first if recognized compression is applied.
 
     :param _input: File-like input (text or binary), see :func:`input_for_analysis` to create a suitable input.
     :param decoders: List of decoder (`decoder_name`, `decoder_args`, `decoder_kwargs`) to apply
     :param extractors: List of extractors (`extractor_name`, `extractor_args`, `extractor_kwargs`) to apply
-    :param per_line: Flag whether to analyze input per line
     :return: List of dictionaries with the results for each input source
     """
     out = {}
 
     max_workers = max([min([len(extractors), os.cpu_count() - 1]), 1])
     with cf.ProcessPoolExecutor(max_workers=max_workers) as e:
-        for data in _read(_input, per_line):
-            for dec in decoders:
-                dec_name, dec_kwargs = dec
-                decoded = decode(data, dec_name, **dec_kwargs)
-                patterns = {}
-                if decoded:
-                    future_extracted = {
-                        e.submit(_extract_single, decoded, extractor): extractor[0]
-                        for extractor in extractors
-                    }
-                    for future in cf.as_completed(future_extracted):
-                        pattern_type = future_extracted[future]
-                        try:
-                            patterns[pattern_type] = future.result()
-                        except:
-                            patterns.setdefault(pattern_type, [])
-                _add_patterns_to_out(_input.name, dec_name, patterns, out)
+        for data_read in _read(_input):
+            for data in _try_decompress_to_data_list(data_read):
+                for dec in decoders:
+                    dec_name, dec_kwargs = dec
+                    decoded = decode(data, dec_name, **dec_kwargs)
+                    patterns = {}
+                    if decoded:
+                        future_extracted = {
+                            e.submit(_extract_single, decoded, extractor): extractor[0]
+                            for extractor in extractors
+                        }
+                        for future in cf.as_completed(future_extracted):
+                            pattern_type = future_extracted[future]
+                            try:
+                                patterns[pattern_type] = future.result()
+                            except:
+                                patterns.setdefault(pattern_type, [])
+                    _add_patterns_to_out(_input.name, dec_name, patterns, out)
 
     return list(out.values())
 
@@ -173,13 +181,11 @@ def _extract_single(_data, _executor):
     )
 
 
-def _read(_input, per_line: bool = False):
+def _read(_input):
     if isinstance(_input, str):
         _input = StringIO(_input)
-    elif isinstance(_input, bytes):
+    elif isinstance(_input, (bytes, bytearray)):
         _input = BytesIO(_input)
-    if per_line:
-        return _input
     if isinstance(_input, FileInputExtended):
         return _input.read()
     return (_input.read(),)
@@ -195,3 +201,24 @@ def _add_patterns_to_out(_source: str, _format: str, _patterns: dict, _out: dict
     item_formats[_format] = item_formats.get(_format) or {}
     for k, v in _patterns.items():
         item_formats[_format].setdefault("patterns", {}).setdefault(k, []).extend(v)
+
+
+def _try_decompress_to_data_list(data):
+    data = convert_to_bytes(data)
+    mime = guess_mime(data)
+    try:
+        if mime == "application/gzip":
+            return [gzip.decompress(data)]
+        if mime == "application/zip":
+            with zipfile.ZipFile(io.BytesIO(data)) as zf:
+                return [zf.read(f) for f in zf.infolist()]
+        if mime == "application/x-brotli":
+            return [brotli.decompress(data)]
+        if mime == "application/x-bzip2":
+            return [bz2.decompress(data)]
+        if mime in ["application/x-lzip", "application/x-lzma", "application/x-xz"]:
+            return [lzma.decompress(data)]
+    except:
+        return [data]
+
+    return [data]

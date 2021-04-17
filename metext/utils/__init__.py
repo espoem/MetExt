@@ -104,3 +104,22 @@ def decode_bytes(bytes_):
             return bytes_.decode(
                 chardet.detect(bytes_)["encoding"],
             )
+
+
+def convert_to_bytes(obj):
+    if isinstance(obj, bytes):
+        return obj
+    if isinstance(obj, str):
+        return obj.encode()
+    if isinstance(obj, int):
+        return str(obj).encode()
+    if isinstance(obj, dict):
+        return str(obj).encode()
+    if isinstance(obj, list):
+        return str(obj).encode()
+    if isinstance(obj, bool):
+        return str(obj).encode()
+    if isinstance(obj, bytearray):
+        return bytes(obj)
+
+    raise NotImplementedError

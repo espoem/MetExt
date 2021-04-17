@@ -5,10 +5,7 @@ from metext import analyze, plugin_base
 from metext.utils import to_csv_printer_format, to_table_printer_format
 from metext.utils.fileinput import FileInputExtended
 
-decoders = [
-    plug.PLUGIN_NAME
-    for plug in plugin_base.BaseDecoder.get_active_plugins()
-]
+decoders = [plug.PLUGIN_NAME for plug in plugin_base.BaseDecoder.get_active_plugins()]
 extractors = [
     plug.PLUGIN_NAME for plug in plugin_base.BaseExtractor.get_active_plugins()
 ]
@@ -130,10 +127,7 @@ if __name__ == "__main__":
 
     with FileInputExtended(input_files, mode="rb") as f:
         res = analyze(
-            f,
-            [(dec, {}) for dec in args.decode],
-            [(ex, {}) for ex in args.extract],
-            args.per_line,
+            f, [(dec, {}) for dec in args.decode], [(ex, {}) for ex in args.extract]
         )
     printer = get_printer(args)
     to_print = res

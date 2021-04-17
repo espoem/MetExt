@@ -151,6 +151,7 @@ def analyze(
                     for decoded_data in _try_decompress_to_data_list(decoded):
                         patterns = {}
                         if decoded_data:
+                            decoded_data = decode_bytes(decoded_data)
                             future_extracted = {
                                 e.submit(
                                     _extract_single, decoded_data, extractor

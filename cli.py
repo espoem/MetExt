@@ -121,11 +121,13 @@ if __name__ == "__main__":
         set(unglob_filepaths(args.input, args.recursive)).union(
             set(read_filepaths(args.file, args.recursive))
         )
-    ) or [
-        "-"  # STDIN
-    ]
+    )
 
-    with FileInputExtended(input_files, mode="rb") as f:
+    if not input_files and args.input:
+        print("No input files were found")
+        exit(1)
+
+    with FileInputExtended(input_files or ["-"], mode="rb") as f:
         res = analyze(
             f, [(dec, {}) for dec in args.decode], [(ex, {}) for ex in args.extract]
         )

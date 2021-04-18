@@ -124,6 +124,7 @@ class MagnetExtractor(BaseExtractor):
 
 class FormFieldsExtractor(BaseExtractor):
     PLUGIN_NAME = "form_fields"
+    PLUGIN_ACTIVE = False
 
     @classmethod
     def run(cls, _input: str, **kwargs) -> Iterable[dict]:

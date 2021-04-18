@@ -52,7 +52,7 @@ def build_parser():
             "Select formats that should be tried for decoding from."
             " If no format selected, all will be tried."
         ),
-        choices=decoders + ["_id"],
+        choices=decoders,
         default=decoders,
     )
     main_parser.add_argument(
@@ -61,7 +61,7 @@ def build_parser():
         nargs="*",
         help=(
             "Select patterns that should be extracted."
-            " If no pattern selected, all supported patterns will be tried."
+            " If no pattern is selected, all supported patterns will be searched."
         ),
         choices=extractors,
         default=extractors,
@@ -73,14 +73,6 @@ def build_parser():
         help="Select output format of found patterns.",
         choices=printers,
         default=["json"],
-    )
-    main_parser.add_argument(
-        "--per-line",
-        action="store_true",
-        help=(
-            "Read and process input files per line."
-            " Otherwise, read and process all data in each file at once."
-        ),
     )
     return main_parser
 

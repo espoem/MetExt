@@ -72,7 +72,7 @@ def to_table_printer_format(analyzed_data: list) -> list:
     return [list(csv_out[0].keys())] + [list(item.values()) for item in csv_out]
 
 
-def decode_bytes(bytes_):
+def str_from_bytes(bytes_):
     try:
         return bytes_.decode(
             "utf-8",

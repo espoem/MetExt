@@ -1,7 +1,7 @@
 import json
 
 
-from metext.utils import decode_bytes, CustomJsonEncoder
+from metext.utils import str_from_bytes, CustomJsonEncoder
 
 
 def _extract_with_regex(
@@ -18,7 +18,12 @@ def _extract_with_regex(
     context_length=30,
 ):
     def create_item(
-        value_, position_=None, original_=None, value_kind_=None, context_=None, **kwargs
+        value_,
+        position_=None,
+        original_=None,
+        value_kind_=None,
+        context_=None,
+        **kwargs
     ):
         res = {"value": value_}
         if position_ is not None:
@@ -55,7 +60,7 @@ def _extract_with_regex(
 
     if not isinstance(_input, str):
         try:
-            _input = decode_bytes(_input)
+            _input = str_from_bytes(_input)
         except:
             yield from ()
 
@@ -64,8 +69,7 @@ def _extract_with_regex(
     for part in _input.splitlines(keepends=True) if per_line else [_input]:
         if preprocess is not None:
             part = preprocess(part)
-        matches = list(regex.finditer(part))
-        for match in matches:
+        for match in regex.finditer(part):
             value = match.group(0)
             if postprocess is not None:
                 value = postprocess(value)

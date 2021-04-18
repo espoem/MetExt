@@ -15,7 +15,7 @@ from filetype import guess_mime
 from metext import plugin_base
 from metext.plugin_base import BaseDecoder, BaseExtractor, Decodable
 from metext.plugins import load_plugin_modules
-from metext.utils import convert_to_bytes, decode_bytes
+from metext.utils import convert_to_bytes, str_from_bytes
 from metext.utils.fileinput import FileInputExtended
 
 supported_decoders = {
@@ -117,7 +117,7 @@ def extract_patterns(data: str, extractor: str, **kwargs) -> List[Any]:
         )
 
     if not isinstance(data, str):
-        data = decode_bytes(data)
+        data = str_from_bytes(data)
 
     return list(get_extractor(extractor)(data, **kwargs))
 
@@ -147,11 +147,12 @@ def analyze(
             for data in _try_decompress_to_data_list(data_read):
                 for dec in decoders:
                     dec_name, dec_kwargs = dec
-                    decoded = decode(data, dec_name, **dec_kwargs)
-                    for decoded_data in _try_decompress_to_data_list(decoded):
+                    for decoded_data in _try_decompress_to_data_list(
+                        decode(data, dec_name, **dec_kwargs)
+                    ):
                         patterns = {}
                         if decoded_data:
-                            decoded_data = decode_bytes(decoded_data)
+                            decoded_data = str_from_bytes(decoded_data)
                             future_extracted = {
                                 e.submit(
                                     _extract_single, decoded_data, extractor

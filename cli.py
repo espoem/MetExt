@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import sys
 
 from metext import analyze, plugin_base
 from metext.utils import to_csv_printer_format, to_table_printer_format
@@ -116,8 +117,7 @@ if __name__ == "__main__":
     )
 
     if not input_files and args.input:
-        print("No input files were found")
-        exit(1)
+        sys.exit("No input files were found")
 
     with FileInputExtended(input_files or ["-"], mode="rb") as f:
         res = analyze(

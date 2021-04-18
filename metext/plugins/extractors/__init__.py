@@ -1,7 +1,6 @@
-import json
+import hashlib
 
-
-from metext.utils import str_from_bytes, CustomJsonEncoder
+from metext.utils import convert_to_bytes, str_from_bytes
 
 
 def _extract_with_regex(
@@ -39,7 +38,9 @@ def _extract_with_regex(
         return res
 
     def add_update_item_to_out(item):
-        key_ = json.dumps(item["value"], cls=CustomJsonEncoder)
+        h = hashlib.sha1()
+        h.update(convert_to_bytes(item["value"]))
+        key_ = h.hexdigest()
         if key_ not in extracted_values:
             extracted_values[key_] = item
         if "frequency" not in extracted_values[key_]:

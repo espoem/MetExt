@@ -144,28 +144,38 @@ def analyse(
     max_workers = max([min([len(extractors), os.cpu_count() - 1]), 1])
     with cf.ProcessPoolExecutor(max_workers=max_workers) as e:
         for data_read in _read(_input):
+            try:
+                source_name = _input.name
+            except:
+                source_name = "<file-data>"
             for data in _try_decompress_to_data_list(data_read):
                 for dec in decoders:
                     dec_name, dec_kwargs = dec
                     for decoded_data in _try_decompress_to_data_list(
                         decode(data, dec_name, **dec_kwargs)
                     ):
+                        if not decoded_data:
+                            continue
                         patterns = {}
-                        if decoded_data:
-                            decoded_data = str_from_bytes(decoded_data)
-                            future_extracted = {
-                                e.submit(
-                                    _extract_single, decoded_data, extractor
-                                ): extractor[0]
-                                for extractor in extractors
-                            }
-                            for future in cf.as_completed(future_extracted):
-                                pattern_type = future_extracted[future]
-                                try:
-                                    patterns[pattern_type] = future.result()
-                                except:
-                                    patterns.setdefault(pattern_type, [])
-                        _add_patterns_to_out(_input.name, dec_name, patterns, out)
+                        decoded_data = str_from_bytes(decoded_data)
+                        future_extracted = {
+                            e.submit(
+                                _extract_single, decoded_data, extractor
+                            ): extractor[0]
+                            for extractor in extractors
+                        }
+                        for future in cf.as_completed(future_extracted):
+                            pattern_type = future_extracted[future]
+                            try:
+                                patterns[pattern_type] = future.result()
+                            except:
+                                patterns.setdefault(pattern_type, [])
+                        _add_patterns_to_out(source_name, dec_name, patterns, out)
+            if source_name not in out:
+                out[source_name] = {
+                    "name": source_name,
+                    "message": "Couldn't decode data nor find any patterns.",
+                }
 
     return list(out.values())
 

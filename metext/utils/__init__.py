@@ -21,7 +21,7 @@ def _create_keys_list(analyzed_data):
     return sorted(keys)
 
 
-def to_csv_printer_format(analyzed_data: list) -> list:
+def to_csv_printer_format(analyzed_data: list, json_encoder=CustomJsonEncoder) -> list:
     out = []
 
     if not analyzed_data:
@@ -49,13 +49,13 @@ def to_csv_printer_format(analyzed_data: list) -> list:
                                 ("pattern_type", str(p_type)),
                                 (
                                     "pattern",
-                                    json.dumps(v.get("value"), cls=CustomJsonEncoder),
+                                    json.dumps(v.get("value"), cls=json_encoder),
                                 ),
                             ]
                             + [
                                 (
                                     col_name,
-                                    json.dumps(v.get(col_name), cls=CustomJsonEncoder),
+                                    json.dumps(v.get(col_name), cls=json_encoder),
                                 )
                                 for col_name in keys
                                 if col_name not in excluded

@@ -148,12 +148,14 @@ def analyse(
                 source_name = _input.name
             except:
                 source_name = "<file-data>"
-            for data in _try_decompress_to_data_list(data_read):
+            dl, dec_name_pre = _try_decompress_to_data_list(data_read)
+            for data in dl:
                 for dec in decoders:
                     dec_name, dec_kwargs = dec
-                    for decoded_data in _try_decompress_to_data_list(
+                    data_list, dec_name_post = _try_decompress_to_data_list(
                         decode(data, dec_name, **dec_kwargs)
-                    ):
+                    )
+                    for decoded_data in data_list:
                         if not decoded_data:
                             continue
                         patterns = {}
@@ -170,6 +172,11 @@ def analyse(
                                 patterns[pattern_type] = future.result()
                             except:
                                 patterns.setdefault(pattern_type, [])
+                        dec_name = "+".join(
+                            n
+                            for n in (dec_name_pre, dec_name, dec_name_post)
+                            if bool(n)
+                        )
                         _add_patterns_to_out(source_name, dec_name, patterns, out)
             if source_name not in out:
                 out[source_name] = {
@@ -226,34 +233,40 @@ def _add_patterns_to_out(_source: str, _format: str, _patterns: dict, _out: dict
 
 def _try_decompress_to_data_list(data):
     if not data:
-        return []
+        return [], ""
     data = convert_to_bytes(data)
     mime = guess_mime(data)
     try:
-        if mime in [
-            "application/x-tar",
-            "application/gzip",
-            "application/x-bzip2",
-            "application/x-xz",
-        ]:
+        if mime == "application/x-tar":
             with tarfile.open(fileobj=io.BytesIO(data)) as tf:
-                return [tf.extractfile(f).read() for f in tf.getmembers()]
+                return [tf.extractfile(f).read() for f in tf.getmembers()], "tar"
+        if mime == "application/gzip":
+            with tarfile.open(fileobj=io.BytesIO(data)) as tf:
+                return [tf.extractfile(f).read() for f in tf.getmembers()], "gzip+tar"
+        if mime == "application/x-xz":
+            with tarfile.open(fileobj=io.BytesIO(data)) as tf:
+                return [tf.extractfile(f).read() for f in tf.getmembers()], "xz+tar"
+        if mime == "application/x-bzip2":
+            with tarfile.open(fileobj=io.BytesIO(data)) as tf:
+                return [tf.extractfile(f).read() for f in tf.getmembers()], "bzip2+tar"
     except:
         pass
 
     try:
         if mime == "application/gzip":
-            return [gzip.decompress(data)]
+            return [gzip.decompress(data)], "gzip"
         if mime == "application/zip":
             with zipfile.ZipFile(io.BytesIO(data)) as zf:
-                return [zf.read(f) for f in zf.infolist()]
+                return [zf.read(f) for f in zf.infolist()], "zip"
         if mime == "application/x-brotli":
-            return [brotli.decompress(data)]
+            return [brotli.decompress(data)], "brotli"
         if mime == "application/x-bzip2":
-            return [bz2.decompress(data)]
-        if mime in ["application/x-lzip", "application/x-lzma", "application/x-xz"]:
-            return [lzma.decompress(data)]
+            return [bz2.decompress(data)], "bzip2"
+        if mime == "application/x-xz":
+            return [lzma.decompress(data)], "xz"
+        if mime in ["application/x-lzip", "application/x-lzma"]:
+            return [lzma.decompress(data)], "lzma"
     except:
         pass
 
-    return [data]
+    return [data], ""

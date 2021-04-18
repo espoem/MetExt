@@ -2,7 +2,7 @@
 import argparse
 import sys
 
-from metext import analyze, plugin_base
+from metext import analyse, plugin_base
 from metext.utils import to_csv_printer_format, to_table_printer_format
 from metext.utils.fileinput import FileInputExtended
 
@@ -120,7 +120,7 @@ if __name__ == "__main__":
         sys.exit("No input files were found")
 
     with FileInputExtended(input_files or ["-"], mode="rb") as f:
-        res = analyze(
+        res = analyse(
             f, [(dec, {}) for dec in args.decode], [(ex, {}) for ex in args.extract]
         )
     printer = get_printer(args)

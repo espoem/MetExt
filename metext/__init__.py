@@ -122,7 +122,7 @@ def extract_patterns(data: str, extractor: str, **kwargs) -> List[Any]:
     return list(get_extractor(extractor)(data, **kwargs))
 
 
-def analyze(
+def analyse(
     _input: Union[FileInputExtended, BytesIO, StringIO, str, bytes],
     decoders: List[Tuple[str, dict]] = None,
     extractors: List[Tuple[str, dict]] = None,
@@ -170,7 +170,7 @@ def analyze(
     return list(out.values())
 
 
-def input_for_analysis(
+def convert_to_analysis_input(
     value: Union[List[str], bytes, str], mode="rb"
 ) -> Union[FileInputExtended, StringIO, BytesIO]:
     """Helper function to create an input for the :func:`analyze` function.

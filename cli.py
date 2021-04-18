@@ -3,7 +3,7 @@ import argparse
 import sys
 
 from metext import analyse, plugin_base
-from metext.utils import to_csv_printer_format, to_table_printer_format
+from metext.utils import convert_to_csv_format, convert_to_table_format
 from metext.utils.fileinput import FileInputExtended
 
 decoders = [plug.PLUGIN_NAME for plug in plugin_base.BaseDecoder.get_active_plugins()]
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     printer = get_printer(args)
     to_print = res
     if printer.PLUGIN_NAME == "csv":
-        to_print = to_csv_printer_format(res)
+        to_print = convert_to_csv_format(res)
     if printer.PLUGIN_NAME == "text":
-        to_print = to_table_printer_format(res)
+        to_print = convert_to_table_format(res)
     printer.run(to_print, filename=args.output[0])

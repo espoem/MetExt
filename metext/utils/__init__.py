@@ -21,7 +21,7 @@ def _create_keys_list(analyzed_data):
     return sorted(keys)
 
 
-def to_csv_printer_format(analyzed_data: list, json_encoder=CustomJsonEncoder) -> list:
+def convert_to_csv_format(analyzed_data: list, json_encoder=CustomJsonEncoder) -> list:
     out = []
 
     if not analyzed_data:
@@ -65,8 +65,8 @@ def to_csv_printer_format(analyzed_data: list, json_encoder=CustomJsonEncoder) -
     return out
 
 
-def to_table_printer_format(analyzed_data: list) -> list:
-    csv_out = to_csv_printer_format(analyzed_data)
+def convert_to_table_format(analyzed_data: list) -> list:
+    csv_out = convert_to_csv_format(analyzed_data)
     if not csv_out:
         return []
     return [list(csv_out[0].keys())] + [list(item.values()) for item in csv_out]

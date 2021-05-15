@@ -1,8 +1,9 @@
 import base64
+import re
 from typing import Optional
 
 from metext.plugin_base import BaseDecoder, Decodable
-from metext.utils import z85
+from metext.utils import convert_to_bytes, z85
 
 
 class Base85Decoder(BaseDecoder):
@@ -36,10 +37,7 @@ class Ascii85Decoder(BaseDecoder):
         if not _input:
             return None
 
-        if isinstance(_input, str):
-            _input = _input.encode("utf-8")
-
-        _input = _input.strip()
+        _input = convert_to_bytes(_input).strip()
 
         try:
             if _input[:2] == b"<~" and _input[-2:] == b"~>":
@@ -61,6 +59,15 @@ class Z85Decoder(BaseDecoder):
         :return: `None` if `data` couldn't be decoded, else decoded byte string'
         """
         try:
+            _input = convert_to_bytes(_input).strip()
+            if (
+                re.search(
+                    rb"[^0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.\-:+=^!/*?&<>()[]{}@%\$#]",
+                    _input,
+                )
+                is not None
+            ):
+                return None
             return z85.decode(_input)
         except:
             return None

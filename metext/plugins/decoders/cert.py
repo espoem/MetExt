@@ -21,6 +21,9 @@ class PemDecoder(BaseDecoder):
         if isinstance(_input, str):
             _input = _input.encode("utf-8")
 
+        if not _input.startswith(b"-----"):
+            return None
+
         try:
             pems = pem.parse(_input)
         except:
@@ -28,9 +31,8 @@ class PemDecoder(BaseDecoder):
 
         res = []
         for p in pems:
-            data = b"".join(p.as_bytes().splitlines()[1:-1])
             try:
-                res.append(base64.b64decode(data))
+                res.append(base64.b64decode(b"".join(p.as_bytes().splitlines()[1:-1])))
             except:
                 continue
 

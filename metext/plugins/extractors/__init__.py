@@ -84,9 +84,7 @@ def _extract_with_regex(
             if include_contexts:
                 context = (
                     _input[
-                        cur_pos
-                        + match.start(0)
-                        - context_length : cur_pos
+                        max(cur_pos + match.start(0) - context_length, 0) : cur_pos
                         + match.start(0)
                     ]
                     + ">>>>value<<<<"

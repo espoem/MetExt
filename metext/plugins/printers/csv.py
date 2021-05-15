@@ -24,12 +24,16 @@ class CsvPrinter(BasePrinter):
         if not _input:
             return
         with (
-            sys.stdout if out_file == "-" else open(out_file, "w", encoding="utf8")
+            sys.stdout
+            if out_file == "-"
+            else open(out_file, "w", encoding="utf8", newline="")
         ) as f:
             if isinstance(_input[0], dict):
                 fieldnames = list(_input[0].keys())
-                writer = DictWriter(f, fieldnames=fieldnames, quoting=QUOTE_MINIMAL)
+                writer = DictWriter(
+                    f, fieldnames=fieldnames, quoting=QUOTE_MINIMAL, lineterminator="\n"
+                )
                 writer.writeheader()
             else:
-                writer = csvwriter(f, quoting=QUOTE_MINIMAL)
+                writer = csvwriter(f, quoting=QUOTE_MINIMAL, lineterminator="\n")
             writer.writerows(_input)

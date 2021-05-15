@@ -2,12 +2,12 @@ import base64
 from typing import Optional
 
 from metext.plugin_base import BaseDecoder, Decodable
+from metext.utils import convert_to_bytes
 
 CHARSETS_BASE64 = {
     "std": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
     "urlsafe": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_",
     "filenamesafe": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_",
-    "itoa64": "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
     "radix-64": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/",
 }
 
@@ -36,27 +36,26 @@ class Base64Decoder(BaseDecoder):
             )
 
         if isinstance(_input, str):
-            _input = bytes(_input, "utf8")
+            _input = convert_to_bytes(_input)
         if charset != CHARSETS_BASE64["std"]:
             # https://stackoverflow.com/questions/5537750/decode-base64-like-string-with-different-index-tables
             tbl = bytes.maketrans(
-                bytes(charset, "utf8"), bytes(CHARSETS_BASE64["std"], "utf8")
+                convert_to_bytes(charset), convert_to_bytes(CHARSETS_BASE64["std"])
             )
             _input = _input.translate(tbl)
 
-        padding_len = (4 - len(_input) & 3) & 3
-        _input += b"=" * padding_len
-
+        _input += b"=" * ((4 - len(_input) & 3) & 3)
         try:
-            base64.b64decode(_input[:76], altchars=charset[-2:], validate=True)
+            base64.b64decode(_input[:64], altchars=charset[-2:], validate=True)
         except:
-            try:
-                base64.b64decode(_input[:64], altchars=charset[-2:], validate=True)
-            except:
-                return None
+            return None
 
         try:
-            return base64.b64decode(_input, altchars=charset[-2:], validate=False)
+            return base64.b64decode(
+                b"".join(p.strip() for p in _input.splitlines()),
+                altchars=charset[-2:],
+                validate=True,
+            )
         except:
             return None
 

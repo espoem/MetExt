@@ -1,10 +1,11 @@
 import base64
-import sys
+import re
 from typing import Optional
 
 import base32_crockford
 
 from metext.plugin_base import BaseDecoder, Decodable
+from metext.utils import convert_to_bytes, str_from_bytes
 
 CHARSETS = {
     "std": "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567",
@@ -36,23 +37,26 @@ class Base32Decoder(BaseDecoder):
         if len(charset) != 32:
             raise AssertionError("Only full chars set can be defined")
 
+        _input = convert_to_bytes(_input)
+
+        if (
+            re.search(convert_to_bytes(r"[^{}=\r\n]".format(charset)), _input)
+            is not None
+        ):
+            return None
+
         if charset != CHARSETS["std"]:
             # https://stackoverflow.com/questions/5537750/decode-base64-like-string-with-different-index-tables
-            if isinstance(_input, str):
-                tbl = str.maketrans(charset, CHARSETS["std"])
-            else:
-                tbl = bytes.maketrans(
-                    bytes(charset, "utf8"), bytes(CHARSETS["std"], "utf8")
-                )
+            tbl = bytes.maketrans(
+                bytes(charset, "utf8"), bytes(CHARSETS["std"], "utf8")
+            )
             _input = _input.translate(tbl)
 
-        padding_len = (8 - len(_input) & 7) & 7
-        _input += ("=" if isinstance(_input, str) else b"=") * padding_len
+        _input += b"=" * ((8 - len(_input) & 7) & 7)
 
         try:
             return base64.b32decode(_input)
-        except Exception as e:
-            print(e.with_traceback, file=sys.stderr)
+        except:
             return None
 
 
@@ -89,9 +93,14 @@ class Base32CrockfordDecoder(BaseDecoder):
         """
         try:
             if not isinstance(_input, str):
-                _input = _input.decode("ascii")
-            decoded = base32_crockford.decode(_input)
+                _input = str_from_bytes(_input)
+
+            if (
+                re.search(r"[^0123456789ABCDEFGHJKMNPQRSTVWXYZ]", _input.upper())
+                is not None
+            ):
+                return None
+            decoded = base32_crockford.decode(_input, strict=True)
             return decoded.to_bytes((decoded.bit_length() + 7) // 8, byteorder="big")
-        except Exception as e:
-            print(e.with_traceback, file=sys.stderr)
+        except:
             return None

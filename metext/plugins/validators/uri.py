@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 from metext.plugin_base import BaseValidator
 from metext.plugins.validators.baseenc import Base64Validator
 from metext.utils._torf._magnet import Magnet
+from metext.utils.regex import RE_URN
 from metext.utils.uri import URI_SCHEMES
 
 
@@ -68,7 +69,8 @@ class URNValidator(BaseValidator):
         :param kwargs:
         :return: True if _input is URN, else False
         """
-        return URIValidator.run(_input, schemes=("urn",), **kwargs)
+        match = RE_URN.match(_input)
+        return match is not None and match.group(0) == _input
 
 
 class DataURIValidator(BaseValidator):

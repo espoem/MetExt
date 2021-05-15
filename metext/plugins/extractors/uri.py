@@ -104,7 +104,6 @@ class URNExtractor(BaseExtractor):
         yield from _extract_with_regex(
             _input,
             RE_URN,
-            validator=DataURIValidator.run,
             data_kind=URNExtractor.PLUGIN_NAME,
         )
 

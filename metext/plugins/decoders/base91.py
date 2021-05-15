@@ -1,8 +1,10 @@
+import re
 from typing import Optional
 
 import base91
 
 from metext.plugin_base import BaseDecoder, Decodable
+from metext.utils import str_from_bytes, convert_to_bytes
 
 CHARSET = "".join(base91.base91_alphabet)
 
@@ -18,24 +20,31 @@ class Base91Decoder(BaseDecoder):
 
         :param _input: Base91 encoded (bytes) string
         :param kwargs:
+        :keyword charset: Optional custom alphabet of 91 characters
         :return: `None` if `_input` couldn't be decoded, else decoded bytes string
         """
-        alt_chars = kwargs.get("alt_chars", CHARSET)
-        if len(alt_chars) != 91:
-            raise AssertionError(
-                "Only full chars set or special chars set can be defined"
-            )
-
-        if alt_chars != CHARSET:
-            if isinstance(_input, str):
-                tbl = str.maketrans(alt_chars, CHARSET)
-            else:
-                tbl = bytes.maketrans(
-                    bytes(alt_chars, "ascii"), bytes(CHARSET, "ascii")
-                )
-            _input = _input.translate(tbl)
+        charset = kwargs.get("charset", CHARSET)
+        assert len(charset) == 91
 
         try:
-            return bytes(base91.decode(str(_input, encoding="ascii")))
+            if not isinstance(_input, str):
+                _input = str_from_bytes(_input).strip()
+        except:
+            return None
+
+        if (
+            re.search(
+                "[^" + charset + "]",
+                _input,
+            )
+            is not None
+        ):
+            return None
+
+        if charset != CHARSET:
+            _input = _input.translate(str.maketrans(charset, CHARSET))
+
+        try:
+            return convert_to_bytes(base91.decode(_input))
         except Exception:
             return None

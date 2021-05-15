@@ -1,5 +1,5 @@
-import json
 import itertools
+import json
 from collections import OrderedDict
 
 import chardet
@@ -16,7 +16,7 @@ def _create_keys_list(analyzed_data):
     keys = set()
     for item in analyzed_data:
         for f_name, f_value in item.get("formats", {}).items():
-            for p_type, p_values in f_value.get("patterns", {}).items():
+            for p_type, p_values in (f_value or {}).get("patterns", {}).items():
                 keys.update(set(itertools.chain(*[list(v.keys()) for v in p_values])))
     return sorted(keys)
 

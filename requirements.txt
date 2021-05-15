@@ -11,7 +11,7 @@ cbor
 base58
 regex
 requests
-btclib=="2020.12.19";python_version>"3.5"
+btclib==2020.12.19;python_version>"3.5"
 netaddr
 brotli
 filetype

@@ -15,7 +15,12 @@ from filetype import guess_mime
 from metext import plugin_base
 from metext.plugin_base import BaseDecoder, BaseExtractor, Decodable
 from metext.plugins import load_plugin_modules
-from metext.utils import convert_to_bytes, str_from_bytes
+from metext.utils import (
+    convert_to_bytes,
+    str_from_bytes,
+    convert_to_csv_format,
+    convert_to_table_format,
+)
 from metext.utils.fileinput import FileInputExtended
 
 register_plugin_modules = load_plugin_modules
@@ -108,6 +113,10 @@ def __is_supported_decoder(decoder: str):
 
 def __is_supported_extractor(extractor: str):
     return extractor in list_extractors().keys()
+
+
+def __is_supported_printer(printer: str):
+    return printer in list_printers().keys()
 
 
 def decode(data: Decodable, decoder: str, **kwargs) -> Optional[Any]:
@@ -360,3 +369,14 @@ def __decompress_to_data_list(data):
         pass
 
     return [data], ""
+
+
+def print_analysis_output(data, filename="-", printer="json", **kwargs):
+    assert __is_supported_printer(printer) is True
+
+    to_print = data
+    if printer == "csv":
+        to_print = convert_to_csv_format(data)
+    if printer == "text":
+        to_print = convert_to_table_format(data)
+    get_printer(printer)(to_print, filename=filename, **kwargs)

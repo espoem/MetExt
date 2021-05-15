@@ -2,8 +2,7 @@
 import argparse
 import sys
 
-from metext import analyse, plugin_base
-from metext.utils import convert_to_csv_format, convert_to_table_format
+from metext import analyse, plugin_base, print_analysis_output
 from metext.utils.fileinput import FileInputExtended
 
 decoders = [plug.PLUGIN_NAME for plug in plugin_base.BaseDecoder.get_active_plugins()]
@@ -91,19 +90,8 @@ def unglob_filepaths(filepaths, recursive=False):
 def read_filepaths(file, recursive=False):
     if not file:
         return
-    with open(file, "r") as f:
-        yield from unglob_filepaths(f.readlines(), recursive=recursive)
-
-
-def get_printer(_args):
-    printers = [
-        p
-        for p in plugin_base.BasePrinter.get_active_plugins()
-        if _args.out_format and _args.out_format[0] == p.PLUGIN_NAME
-    ]
-    if printers:
-        return printers[0]
-    return None
+    with open(file, "r") as fp:
+        yield from unglob_filepaths(fp.readlines(), recursive=recursive)
 
 
 if __name__ == "__main__":
@@ -116,17 +104,11 @@ if __name__ == "__main__":
         )
     )
 
-    if not input_files and args.input:
+    if not input_files and (args.input or args.file):
         sys.exit("No input files were found")
 
     with FileInputExtended(input_files or ["-"], mode="rb") as f:
         res = analyse(
             f, [(dec, {}) for dec in args.decode], [(ex, {}) for ex in args.extract]
         )
-    printer = get_printer(args)
-    to_print = res
-    if printer.PLUGIN_NAME == "csv":
-        to_print = convert_to_csv_format(res)
-    if printer.PLUGIN_NAME == "text":
-        to_print = convert_to_table_format(res)
-    printer.run(to_print, filename=args.output[0])
+    print_analysis_output(res, filename=args.output[0], printer=args.out_format[0])

@@ -6,7 +6,6 @@ from typing import Optional
 
 from base58 import b58decode
 
-from metext.plugins.decoders.base58 import Base58Decoder
 
 # Python Substrate Interface Library
 #

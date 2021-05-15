@@ -13,9 +13,8 @@ def check_issn_via_oclc(isbn):
     if resp.status_code != 200:
         return False
     x = ET.fromstring(resp.content)
-    c = x.find("{http://classify.oclc.org}response")
-    cc = c.get("code")
-    return cc == "0"
+    works = x.find("{http://classify.oclc.org}works")
+    return len(works) > 0
 
 
 def is_issn(issn: str) -> bool:

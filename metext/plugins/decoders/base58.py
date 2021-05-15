@@ -3,6 +3,7 @@ from typing import Optional
 import base58
 
 from metext.plugin_base import BaseDecoder, Decodable
+from metext.utils import convert_to_bytes
 
 CHARSETS = {
     "bitcoin": "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz",
@@ -31,7 +32,7 @@ class Base58Decoder(BaseDecoder):
         assert len(charset) == 58
 
         try:
-            return base58.b58decode(_input, alphabet=charset.encode("ascii"))
+            return base58.b58decode(_input, alphabet=convert_to_bytes(charset))
         except:
             return None
 

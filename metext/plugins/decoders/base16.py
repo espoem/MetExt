@@ -29,6 +29,8 @@ class HexDecoder(BaseDecoder):
         try:
             if isinstance(_input, str):
                 _input = _input.encode("utf8")
+            if re.search(rb"[g-wyz\x80-\xff]", _input, re.IGNORECASE) is not None:
+                return None
             _input = re.sub(bytes(delim or regex_auto, "ascii"), b"", _input)
             return base64.b16decode(_input, casefold=True)
         except:

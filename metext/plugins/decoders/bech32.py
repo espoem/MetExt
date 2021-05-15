@@ -1,6 +1,7 @@
 from typing import List, Tuple, Union
 
 from metext.plugin_base import BaseDecoder, Decodable
+from metext.utils import str_from_bytes
 
 CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 
@@ -24,7 +25,7 @@ class Bech32Decoder(BaseDecoder):
         """
         try:
             if not isinstance(_input, str):
-                _input = _input.decode("ascii")
+                _input = str_from_bytes(_input)
         except Exception:
             return None, None
 
@@ -48,7 +49,7 @@ class Bech32Decoder(BaseDecoder):
     @classmethod
     def verify_checksum(cls, hrp, data):
         """Verify a checksum given HRP and converted data characters."""
-        return cls.polymod(cls.hrp_expand(hrp) + data) == 1
+        return cls.polymod(cls.hrp_expand(hrp) + data) in (1, 0x2BC830A3)
 
     @classmethod
     def polymod(cls, values):

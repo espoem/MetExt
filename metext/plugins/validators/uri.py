@@ -27,7 +27,12 @@ class URIValidator(BaseValidator):
         schemes = kwargs.get("schemes", URI_SCHEMES)
         parsed = urlparse(_input)
         is_path_like = ("/" in parsed.path) if strict else True
-        has_selected_scheme = parsed.scheme in schemes if schemes else True
+        has_selected_scheme = (
+            parsed.scheme in schemes
+            and _input.split(":")[0] in [parsed.scheme.lower(), parsed.scheme.upper()]
+            if schemes
+            else True
+        )
         return (
             bool(parsed.netloc)
             or (bool(parsed.path) and is_path_like)
@@ -80,10 +85,8 @@ class DataURIValidator(BaseValidator):
         :return: True if _input is valid data URI string
         """
         parsed = urlparse(_input)
-        base64_valid = (
-            "base64," not in _input
-            or Base64Validator.run(_input.split("base64,")[-1])
-            or True
+        base64_valid = "base64," not in _input or Base64Validator.run(
+            _input.split("base64,")[-1]
         )
         return parsed.scheme == "data" and bool(parsed.path) and base64_valid
 

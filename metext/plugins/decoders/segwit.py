@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple, Union
+from typing import List, Tuple, Union
 
 from metext.plugin_base import BaseDecoder, Decodable
 from metext.plugins.decoders.bech32 import Bech32Decoder

@@ -304,27 +304,14 @@ def __create_decoders_exclusivity():
     for edp in exclusive_decoders:
         for ed in edp:
             exclusive_decoders_dict.setdefault(ed, set()).update(edp)
-    exclusive_decoders_dict["raw"].update(
-        {
-            "raw",
-            "base32",
-            "base32hex",
-        }
-    )
-    exclusive_decoders_dict["percent"].update(
-        {
-            "percent",
-            "base32",
-            "base32hex",
-        }
-    )
-    exclusive_decoders_dict["quopri"].update(
-        {
-            "quopri",
-            "base32",
-            "base32hex",
-        }
-    )
+    for i in ("raw", "percent", "quopri"):
+        exclusive_decoders_dict[i].update(
+            {
+                i,
+                "base32",
+                "base32hex",
+            }
+        )
     return exclusive_decoders_dict
 
 

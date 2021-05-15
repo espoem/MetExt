@@ -17,9 +17,9 @@ from metext.plugin_base import BaseDecoder, BaseExtractor, Decodable
 from metext.plugins import load_plugin_modules
 from metext.utils import (
     convert_to_bytes,
-    str_from_bytes,
     convert_to_csv_format,
     convert_to_table_format,
+    str_from_bytes,
 )
 from metext.utils.fileinput import FileInputExtended
 

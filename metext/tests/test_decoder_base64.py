@@ -1,6 +1,6 @@
 import pytest
 
-from metext.plugins.decoders.base64 import Base64Decoder, CHARSETS_BASE64
+from metext.plugins.decoders.base64 import CHARSETS_BASE64, Base64Decoder
 
 
 @pytest.mark.parametrize(

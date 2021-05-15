@@ -18,23 +18,52 @@ from metext.plugins import load_plugin_modules
 from metext.utils import convert_to_bytes, str_from_bytes
 from metext.utils.fileinput import FileInputExtended
 
-supported_decoders = {
-    plug.PLUGIN_NAME: plug for plug in plugin_base.BaseDecoder.get_plugins()
-}
-
-supported_extractors = {
-    plug.PLUGIN_NAME: plug for plug in plugin_base.BaseExtractor.get_plugins()
-}
-
 register_plugin_modules = load_plugin_modules
 
 
-def list_decoders() -> dict:
+def list_decoders(active_only: bool = True) -> dict:
     """Gets a dict of registered decoders
 
-    :return: Dict of registered decoding plugins
+    :param active_only: Flag to include only enabled decoders,
+    otherwise all decoders
+    :return: Dict of registered decoders
     """
-    return supported_decoders
+    if active_only:
+        return {
+            plug.PLUGIN_NAME: plug
+            for plug in plugin_base.BaseDecoder.get_active_plugins()
+        }
+    return {plug.PLUGIN_NAME: plug for plug in plugin_base.BaseDecoder.get_plugins()}
+
+
+def list_extractors(active_only: bool = True) -> dict:
+    """Gets registered extractors
+
+    :param active_only: Flag to include only enabled extractors,
+    otherwise all extractors
+    :return: Dict of registered extractors
+    """
+    if active_only:
+        return {
+            plug.PLUGIN_NAME: plug
+            for plug in plugin_base.BaseExtractor.get_active_plugins()
+        }
+    return {plug.PLUGIN_NAME: plug for plug in plugin_base.BaseExtractor.get_plugins()}
+
+
+def list_printers(active_only: bool = True) -> dict:
+    """Gets registered printers
+
+    :param active_only: Flag to include only enabled printers,
+    otherwise all printers
+    :return: Dict of registered printers
+    """
+    if active_only:
+        return {
+            plug.PLUGIN_NAME: plug
+            for plug in plugin_base.BasePrinter.get_active_plugins()
+        }
+    return {plug.PLUGIN_NAME: plug for plug in plugin_base.BasePrinter.get_plugins()}
 
 
 def get_decoder(name) -> Optional[Callable]:
@@ -44,7 +73,7 @@ def get_decoder(name) -> Optional[Callable]:
     :return: Decoding function
     """
     try:
-        return supported_decoders.get(name).run
+        return list_decoders().get(name).run
     except:
         return None
 
@@ -56,25 +85,29 @@ def get_extractor(name) -> Optional[Callable]:
     :return: Extracting function
     """
     try:
-        return supported_extractors.get(name).run
+        return list_extractors().get(name).run
     except:
         return None
 
 
-def list_extractors() -> dict:
-    """Gets a dict of registered extractors
+def get_printer(name) -> Optional[Callable]:
+    """Get printer execution function
 
-    :return: Dict of registered extracting plugins
+    :param name: Printer name
+    :return: Printing function
     """
-    return supported_extractors
+    try:
+        return list_printers().get(name).run
+    except:
+        return None
 
 
-def _is_supported_decoder(decoder: str):
-    return decoder in supported_decoders.keys()
+def __is_supported_decoder(decoder: str):
+    return decoder in list_decoders().keys()
 
 
-def _is_supported_extractor(extractor: str):
-    return extractor in supported_extractors.keys()
+def __is_supported_extractor(extractor: str):
+    return extractor in list_extractors().keys()
 
 
 def decode(data: Decodable, decoder: str, **kwargs) -> Optional[Any]:
@@ -89,14 +122,24 @@ def decode(data: Decodable, decoder: str, **kwargs) -> Optional[Any]:
     if not decoder:
         return data
 
-    if not _is_supported_decoder(decoder):
+    if not __is_supported_decoder(decoder):
         raise ValueError(
-            "Invalid decoder. Supported values: {}".format(
-                list(supported_decoders.keys())
-            )
+            "Invalid decoder. Supported values: {}".format(list(list_decoders_names()))
         )
 
     return get_decoder(decoder)(data, **kwargs)
+
+
+def list_decoders_names(active_only: bool = True) -> list:
+    return list(list_decoders(active_only=active_only).keys())
+
+
+def list_extractors_names(active_only: bool = True) -> list:
+    return list(list_extractors(active_only=active_only).keys())
+
+
+def list_printers_names(active_only: bool = True) -> list:
+    return list(list_printers(active_only=active_only).keys())
 
 
 def extract_patterns(data: str, extractor: str, **kwargs) -> List[Any]:
@@ -105,14 +148,14 @@ def extract_patterns(data: str, extractor: str, **kwargs) -> List[Any]:
     The extractor must be registered, i.e. it must be listed with :func:`list_extractors`.
 
     :param data: Data in which to look for patterns
-    :param extractor: Name of a registered extractor
+    :param extractor: Name of a registered active extractor
     :param kwargs: Arbitrary keyword arguments for the extractor
     :return: List of found patterns
     """
-    if not _is_supported_extractor(extractor):
+    if not __is_supported_extractor(extractor):
         raise ValueError(
             "Invalid extractor name. Supported values: {}".format(
-                list(supported_extractors.keys())
+                list_extractors_names(active_only=True)
             )
         )
 
@@ -126,6 +169,7 @@ def analyse(
     _input: Union[FileInputExtended, BytesIO, StringIO, str, bytes],
     decoders: List[Tuple[str, dict]] = None,
     extractors: List[Tuple[str, dict]] = None,
+    **kwargs
 ) -> List[dict]:
     """Common function to apply multiple decoders and multiple extractors on the input.
     Tries to decompress data first if recognized compression is applied.
@@ -135,49 +179,90 @@ def analyse(
     :param extractors: List of extractors (`extractor_name`, `extractor_args`, `extractor_kwargs`) to apply
     :return: List of dictionaries with the results for each input source
     """
+
+    def __read(_value):
+        if isinstance(_value, str):
+            _value = StringIO(_value)
+        elif isinstance(_value, (bytes, bytearray)):
+            _value = BytesIO(_value)
+        if isinstance(_value, FileInputExtended):
+            return _value.read()
+        return (_value.read(),)
+
+    def __add_patterns_to_out(_source: str, _format: str, _patterns: dict, _out: dict):
+        item = _out.setdefault(_source, {})
+        item.setdefault("name", _source)
+        item_formats = item.setdefault("formats", {})
+        if not _patterns and _format not in item_formats:
+            item_formats[_format] = None
+            return
+        item_formats[_format] = item_formats.get(_format) or {}
+        for k, v in _patterns.items():
+            item_formats[_format].setdefault("patterns", {}).setdefault(k, []).extend(v)
+
+    exclusive_decoders_dict = __create_decoders_exclusivity()
     out = {}
-    if not decoders or decoders in ["auto", "id"]:
+
+    if not decoders or decoders in ["auto", "all"]:
         decoders = [(dec_name, {}) for dec_name in list_decoders().keys()]
-    if not extractors or extractors in ["auto", "id"]:
+    if not extractors or extractors in ["auto", "all"]:
         extractors = [(ex_name, {}) for ex_name in list_extractors().keys()]
 
-    max_workers = max([min([len(extractors), os.cpu_count() - 1]), 1])
+    max_workers = kwargs.get("max_workers", None)
+    if max_workers is None:
+        max_workers = max([min([len(extractors), os.cpu_count() - 1]), 1])
     with cf.ProcessPoolExecutor(max_workers=max_workers) as e:
-        for data_read in _read(_input):
+        success_decode_extract = {}
+        for data_read in __read(_input):
             try:
                 source_name = _input.name
             except:
-                source_name = "<file-data>"
-            dl, dec_name_pre = _try_decompress_to_data_list(data_read)
+                source_name = "<data>"
+            dl, dec_name_pre = __decompress_to_data_list(data_read)
             for data in dl:
                 for dec in decoders:
                     dec_name, dec_kwargs = dec
-                    data_list, dec_name_post = _try_decompress_to_data_list(
+                    skip_decoder = bool(
+                        exclusive_decoders_dict.get(dec_name, set())
+                        & success_decode_extract.get(source_name, set())
+                    )
+                    if skip_decoder:
+                        continue
+
+                    data_list, dec_name_post = __decompress_to_data_list(
                         decode(data, dec_name, **dec_kwargs)
                     )
                     for decoded_data in data_list:
                         if not decoded_data:
                             continue
                         patterns = {}
-                        decoded_data = str_from_bytes(decoded_data)
                         future_extracted = {
                             e.submit(
-                                _extract_single, decoded_data, extractor
+                                __extract_single,
+                                str_from_bytes(decoded_data),
+                                extractor,
                             ): extractor[0]
                             for extractor in extractors
                         }
                         for future in cf.as_completed(future_extracted):
                             pattern_type = future_extracted[future]
                             try:
-                                patterns[pattern_type] = future.result()
+                                result = future.result()
+                                if result:
+                                    patterns[pattern_type] = result
+                                    success_decode_extract.setdefault(
+                                        source_name, set()
+                                    ).add(dec_name)
                             except:
-                                patterns.setdefault(pattern_type, [])
-                        dec_name = "+".join(
+                                pass
+                        dec_name_final = "+".join(
                             n
                             for n in (dec_name_pre, dec_name, dec_name_post)
                             if bool(n)
                         )
-                        _add_patterns_to_out(source_name, dec_name, patterns, out)
+                        __add_patterns_to_out(
+                            source_name, dec_name_final, patterns, out
+                        )
             if source_name not in out:
                 out[source_name] = {
                     "name": source_name,
@@ -187,51 +272,63 @@ def analyse(
     return list(out.values())
 
 
-def convert_to_analysis_input(
-    value: Union[List[str], bytes, str], mode="rb"
-) -> Union[FileInputExtended, StringIO, BytesIO]:
-    """Helper function to create an input for the :func:`analyze` function.
-    Takes either a list of file paths, a string, or a byte string.
-
-    :param value: Data to wrap in a suitable input object
-    :param mode: Supports "r" (text), "rb" (binary) modes if input value is a list of file paths.
-    :return: IO object wrapper for the input value
-    """
-    if isinstance(value, list):
-        return FileInputExtended(value, mode=mode)
-    if isinstance(value, str):
-        return StringIO(value)
-    return BytesIO(value)
-
-
-def _extract_single(_data, _executor):
-    ex_name, ex_kwargs = _executor
+def __extract_single(_data, _extractor):
+    ex_name, ex_kwargs = _extractor
     return extract_patterns(_data, ex_name, **ex_kwargs)
 
 
-def _read(_input):
-    if isinstance(_input, str):
-        _input = StringIO(_input)
-    elif isinstance(_input, (bytes, bytearray)):
-        _input = BytesIO(_input)
-    if isinstance(_input, FileInputExtended):
-        return _input.read()
-    return (_input.read(),)
+def __create_decoders_exclusivity():
+    exclusive_decoders = (
+        ("hex", "hexdump"),
+        ("base64", "base64url"),
+        ("base32", "base32hex", "base32crockford"),
+        ("base85", "z85", "ascii85"),
+        ("base58btc", "base58ripple"),
+    )
+    exclusive_decoders_dict = {
+        d: {
+            "hex",
+            "hexdump",
+            "base91",
+            "base58btc",
+            "base58ripple",
+            "z85",
+            "ascii85",
+            "base85",
+            "binhex",
+            "yenc",
+            "uu",
+        }
+        for d in list_decoders_names()
+    }
+    for edp in exclusive_decoders:
+        for ed in edp:
+            exclusive_decoders_dict.setdefault(ed, set()).update(edp)
+    exclusive_decoders_dict["raw"].update(
+        {
+            "raw",
+            "base32",
+            "base32hex",
+        }
+    )
+    exclusive_decoders_dict["percent"].update(
+        {
+            "percent",
+            "base32",
+            "base32hex",
+        }
+    )
+    exclusive_decoders_dict["quopri"].update(
+        {
+            "quopri",
+            "base32",
+            "base32hex",
+        }
+    )
+    return exclusive_decoders_dict
 
 
-def _add_patterns_to_out(_source: str, _format: str, _patterns: dict, _out: dict):
-    item = _out.setdefault(_source, {})
-    item.setdefault("name", _source)
-    item_formats = item.setdefault("formats", {})
-    if not _patterns and _format not in item_formats:
-        item_formats[_format] = None
-        return
-    item_formats[_format] = item_formats.get(_format) or {}
-    for k, v in _patterns.items():
-        item_formats[_format].setdefault("patterns", {}).setdefault(k, []).extend(v)
-
-
-def _try_decompress_to_data_list(data):
+def __decompress_to_data_list(data):
     if not data:
         return [], ""
     data = convert_to_bytes(data)
@@ -255,7 +352,7 @@ def _try_decompress_to_data_list(data):
     try:
         if mime == "application/gzip":
             return [gzip.decompress(data)], "gzip"
-        if mime == "application/zip":
+        if mime in ("application/zip", "application/epub+zip"):
             with zipfile.ZipFile(io.BytesIO(data)) as zf:
                 return [zf.read(f) for f in zf.infolist()], "zip"
         if mime == "application/x-brotli":
@@ -264,8 +361,14 @@ def _try_decompress_to_data_list(data):
             return [bz2.decompress(data)], "bzip2"
         if mime == "application/x-xz":
             return [lzma.decompress(data)], "xz"
-        if mime in ["application/x-lzip", "application/x-lzma"]:
+        if mime in ("application/x-lzip", "application/x-lzma"):
             return [lzma.decompress(data)], "lzma"
+    except:
+        pass
+
+    try:
+        # brotli has no standard magic numbers yet, try decompress data anyway
+        return [brotli.decompress(data)], "brotli"
     except:
         pass
 

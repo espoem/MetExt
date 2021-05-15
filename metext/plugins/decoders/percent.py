@@ -3,6 +3,7 @@ from typing import Optional
 from urllib.parse import unquote_to_bytes
 
 from metext.plugin_base import BaseDecoder, Decodable
+from metext.utils import convert_to_bytes
 
 
 class PercentDecoder(BaseDecoder):
@@ -16,16 +17,15 @@ class PercentDecoder(BaseDecoder):
         :param kwargs:
         :return: Bytes string if decoded successfully, else None
         """
-        if isinstance(_input, str):
-            try:
-                _input = bytes(_input, "utf8")
-            except:
-                return None
-
-        if re.search(rb"[^ -~\s]", _input):
+        try:
+            _input = convert_to_bytes(_input)
+        except:
             return None
 
-        if b"%" not in _input:
+        if (
+            re.search(rb"[^ -~\s]", _input)
+            or re.search(rb"%(?:[0-9a-f]{2}|[0-9A-F]{2})", _input) is None
+        ):
             return None
 
         try:

@@ -2,14 +2,18 @@
 import argparse
 import sys
 
-from metext import analyse, plugin_base, print_analysis_output
+from metext import (
+    analyse,
+    list_decoders_names,
+    list_extractors_names,
+    list_printers_names,
+    print_analysis_output,
+)
 from metext.utils.fileinput import FileInputExtended
 
-decoders = [plug.PLUGIN_NAME for plug in plugin_base.BaseDecoder.get_active_plugins()]
-extractors = [
-    plug.PLUGIN_NAME for plug in plugin_base.BaseExtractor.get_active_plugins()
-]
-printers = [plug.PLUGIN_NAME for plug in plugin_base.BasePrinter.get_active_plugins()]
+decoders = list_decoders_names(active_only=True)
+extractors = list_extractors_names(active_only=True)
+printers = list_printers_names(active_only=True)
 
 
 def build_parser():

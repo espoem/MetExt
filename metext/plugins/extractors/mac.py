@@ -19,7 +19,9 @@ class MACAddressExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of MAC addresses
         """
-        for mac in _extract_with_regex(_input, RE_MAC, data_kind=cls.PLUGIN_NAME):
+        for mac in _extract_with_regex(
+            _input, RE_MAC, data_kind=MACAddressExtractor.PLUGIN_NAME
+        ):
             try:
                 info = EUI(mac["value"]).info
                 if info:

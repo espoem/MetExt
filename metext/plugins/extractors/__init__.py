@@ -65,6 +65,9 @@ def _extract_with_regex(
         except:
             yield from ()
 
+    if cached_values is None:
+        cached_values = set()
+
     cur_pos = 0
     extracted_values = {}
     for part in _input.splitlines(keepends=True) if per_line else [_input]:
@@ -102,7 +105,10 @@ def _extract_with_regex(
                     )
                 )
                 continue
-            if validator is not None and not validator(value):
+            try:
+                if validator is not None and not validator(value):
+                    continue
+            except:
                 continue
             add_update_item_to_out(
                 create_item(

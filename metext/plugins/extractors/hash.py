@@ -24,7 +24,7 @@ class MD5Extractor(BaseExtractor):
         :return: Generator of MD5 hash strings
         """
         yield from _extract_with_regex(
-            _input, RE_MD5, per_line=True, data_kind=cls.PLUGIN_NAME
+            _input, RE_MD5, per_line=True, data_kind=MD5Extractor.PLUGIN_NAME
         )
 
 
@@ -40,7 +40,7 @@ class SHA1Extractor(BaseExtractor):
         :return: Generator of SHA-1 hash strings
         """
         yield from _extract_with_regex(
-            _input, RE_SHA1, per_line=True, data_kind=cls.PLUGIN_NAME
+            _input, RE_SHA1, per_line=True, data_kind=SHA1Extractor.PLUGIN_NAME
         )
 
 
@@ -56,7 +56,7 @@ class SHA224Extractor(BaseExtractor):
         :return: Generator of SHA-224 hash strings
         """
         yield from _extract_with_regex(
-            _input, RE_SHA224, per_line=True, data_kind=cls.PLUGIN_NAME
+            _input, RE_SHA224, per_line=True, data_kind=SHA224Extractor.PLUGIN_NAME
         )
 
 
@@ -72,7 +72,7 @@ class SHA256Extractor(BaseExtractor):
         :return: Generator of SHA-256 hash strings
         """
         yield from _extract_with_regex(
-            _input, RE_SHA256, per_line=True, data_kind=cls.PLUGIN_NAME
+            _input, RE_SHA256, per_line=True, data_kind=SHA256Extractor.PLUGIN_NAME
         )
 
 
@@ -88,7 +88,7 @@ class SHA384Extractor(BaseExtractor):
         :return: Generator of SHA-384 hash strings
         """
         yield from _extract_with_regex(
-            _input, RE_SHA384, per_line=True, data_kind=cls.PLUGIN_NAME
+            _input, RE_SHA384, per_line=True, data_kind=SHA384Extractor.PLUGIN_NAME
         )
 
 
@@ -104,5 +104,5 @@ class SHA512Extractor(BaseExtractor):
         :return: Generator of SHA-512 hash strings
         """
         yield from _extract_with_regex(
-            _input, RE_SHA512, per_line=True, data_kind=cls.PLUGIN_NAME
+            _input, RE_SHA512, per_line=True, data_kind=SHA512Extractor.PLUGIN_NAME
         )

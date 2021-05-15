@@ -1,4 +1,4 @@
-import re
+import json
 from typing import Iterable
 
 from metext.plugin_base import BaseExtractor
@@ -17,10 +17,22 @@ class JsonExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator of JSON strings
         """
+
+        def validate(data):
+            try:
+                d = json.loads(data)
+            except:
+                return False
+            if len(d) == 0:
+                return False
+            if isinstance(d, list) and len(d) < 2:
+                return False
+            return True
+
         yield from _extract_with_regex(
             _input,
             RE_JSON,
-            validator=lambda val: re.sub(r"\s", "", val) not in ["[]", "{}"],
+            validator=validate,
             per_line=False,
-            data_kind=cls.PLUGIN_NAME,
+            data_kind=JsonExtractor.PLUGIN_NAME,
         )

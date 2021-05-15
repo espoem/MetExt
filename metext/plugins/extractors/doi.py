@@ -23,5 +23,6 @@ class DoiExtractor(BaseExtractor):
             RE_DOI,
             validator=DoiValidator.run,
             per_line=True,
-            data_kind=cls.PLUGIN_NAME,
+            data_kind=DoiExtractor.PLUGIN_NAME,
+            postprocess=lambda x: x.split("(")[0] if "(" in x and ")" not in x else x,
         )

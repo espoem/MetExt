@@ -18,5 +18,5 @@ class PemExtractor(BaseExtractor):
         :return: Generator of PEM objects strings
         """
         yield from _extract_with_regex(
-            _input, RE_PEM, per_line=False, data_kind=cls.PLUGIN_NAME
+            _input, RE_PEM, per_line=False, data_kind=PemExtractor.PLUGIN_NAME
         )

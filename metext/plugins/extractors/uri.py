@@ -1,3 +1,4 @@
+import re
 from typing import Iterable
 from urllib.parse import unquote_plus
 
@@ -9,8 +10,8 @@ from metext.plugins.validators.uri import (
     URIValidator,
     URLValidator,
 )
-from metext.utils.regex import RE_URI, RE_URI_REFERENCE, RE_URL_FORM_FIELDS
-from metext.utils.uri import URI_SCHEMES
+from metext.utils.regex import RE_DATA_URI, RE_URL, RE_URL_FORM_FIELDS, RE_URN
+from metext.utils.uri import URI, URI_SCHEMES
 
 
 class URIExtractor(BaseExtractor):
@@ -38,15 +39,29 @@ class URIExtractor(BaseExtractor):
         defaults to registered schemes
         :return: Generator of URIs
         """
-        include_relative = kwargs.get("relative", False)
         strict = kwargs.get("strict", False)
         schemes = kwargs.get(
             "schemes", URI_SCHEMES
         )  # https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
-        regex = RE_URI_REFERENCE if include_relative else RE_URI
+        re_uri = re.compile(
+            r"\b(?=(?:{}):){}\b".format(
+                "|".join(
+                    set(
+                        schemes
+                        + [s.upper() for s in schemes]
+                        + [s.lower() for s in schemes]
+                    )
+                ),
+                URI,
+            ),
+            re.VERBOSE,
+        )
         yield from _extract_with_regex(
             _input,
-            regex,
+            re_uri,
+            preprocess=lambda x: ""
+            if re.search(r"(?:[a-z]{2}|[A-Z]{2}):", x) is None
+            else x,
             validator=lambda val: URIValidator.run(val, strict=strict, schemes=schemes),
             data_kind=URIExtractor.PLUGIN_NAME,
         )
@@ -57,8 +72,9 @@ class URLExtractor(BaseExtractor):
 
     @classmethod
     def run(cls, _input: str, **kwargs) -> Iterable[dict]:
-        """Extracts URLs from a string or a list of strings. URL must contain one of the following schemes:
-        `http`, `https`, `ftp`, `ftps`
+        """Extracts URLs from a string or a list of strings.
+        URL must contain one of the following schemes:
+        - `http`, `https`, `ftp`
 
         See https://tools.ietf.org/html/rfc3986
 
@@ -67,7 +83,10 @@ class URLExtractor(BaseExtractor):
         :return: Generator with URLs
         """
         yield from _extract_with_regex(
-            _input, RE_URI, validator=URLValidator.run, data_kind=URLExtractor.PLUGIN_NAME
+            _input,
+            RE_URL,
+            validator=URLValidator.run,
+            data_kind=URLExtractor.PLUGIN_NAME,
         )
 
 
@@ -82,8 +101,11 @@ class URNExtractor(BaseExtractor):
         :param kwargs: Arbitrary keyword arguments
         :return: Generator with URNs
         """
-        yield from URIExtractor.run(
-            _input, schemes=["urn"], strict=False, data_kind=URNExtractor.PLUGIN_NAME
+        yield from _extract_with_regex(
+            _input,
+            RE_URN,
+            validator=DataURIValidator.run,
+            data_kind=URNExtractor.PLUGIN_NAME,
         )
 
 
@@ -99,7 +121,10 @@ class DataURIExtractor(BaseExtractor):
         :return: Generator with data URIs
         """
         yield from _extract_with_regex(
-            _input, RE_URI, validator=DataURIValidator.run, data_kind=DataURIExtractor.PLUGIN_NAME
+            _input,
+            RE_DATA_URI,
+            validator=DataURIValidator.run,
+            data_kind=DataURIExtractor.PLUGIN_NAME,
         )
 
 

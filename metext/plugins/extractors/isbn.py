@@ -24,8 +24,8 @@ class IsbnExtractor(BaseExtractor):
             _input,
             RE_ISBN,
             validator=IsbnValidator.run,
-            cached_values=cls.valid_isbns,
-            data_kind=cls.PLUGIN_NAME,
+            cached_values=IsbnExtractor.valid_isbns,
+            data_kind=IsbnExtractor.PLUGIN_NAME,
         )
 
 
@@ -47,8 +47,8 @@ class Isbn10Extractor(BaseExtractor):
             _input,
             RE_ISBN10,
             validator=IsbnValidator.run,
-            cached_values=cls.valid_isbns,
-            data_kind=cls.PLUGIN_NAME,
+            cached_values=Isbn10Extractor.valid_isbns,
+            data_kind=Isbn10Extractor.PLUGIN_NAME,
         )
 
 
@@ -70,6 +70,6 @@ class Isbn13Extractor(BaseExtractor):
             _input,
             RE_ISBN13,
             validator=IsbnValidator.run,
-            cached_values=cls.valid_isbns,
-            data_kind=cls.PLUGIN_NAME,
+            cached_values=Isbn13Extractor.valid_isbns,
+            data_kind=Isbn13Extractor.PLUGIN_NAME,
         )

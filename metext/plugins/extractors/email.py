@@ -22,5 +22,5 @@ class EmailExtractor(BaseExtractor):
             RE_EMAIL,
             validator=EmailValidator.run,
             per_line=True,
-            data_kind=cls.PLUGIN_NAME,
+            data_kind=EmailExtractor.PLUGIN_NAME,
         )

@@ -24,6 +24,6 @@ class IssnExtractor(BaseExtractor):
             _input,
             RE_ISSN,
             validator=IssnValidator.run,
-            cached_values=cls.valid_issns,
-            data_kind=cls.PLUGIN_NAME,
+            cached_values=IssnExtractor.valid_issns,
+            data_kind=IssnExtractor.PLUGIN_NAME,
         )

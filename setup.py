@@ -92,5 +92,10 @@ setup(
         "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
         "Programming Language :: Python :: 3",
     ],
+    url="https://github.com/espoem/MetExt",
+    project_urls={
+        "Source": "https://github.com/espoem/MetExt",
+        "Tracker": "https://github.com/espoem/MetExt/issues",
+    },
     cmdclass={"upload": UploadCommand, "tupload": UploadTestCommand},
 )

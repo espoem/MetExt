@@ -81,6 +81,7 @@ setup(
     long_description_content_type="text/markdown",
     author=about["__author__"],
     packages=find_packages(exclude=["tests"]),
+    py_modules=["cli"],
     install_requires=requirements,
     include_package_data=True,
     entry_points={"console_scripts": ["metext=cli:main"]},

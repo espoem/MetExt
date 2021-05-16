@@ -21,4 +21,12 @@ setup(
     install_requires=requirements,
     include_package_data=True,
     entry_points={"console_scripts": ["metext=cli:main"]},
+    python_requires=">=3.5",
+    license="LGPLv3+",
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+        "Programming Language :: Python :: 3",
+    ],
 )

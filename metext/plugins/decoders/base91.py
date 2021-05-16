@@ -4,7 +4,7 @@ from typing import Optional
 import base91
 
 from metext.plugin_base import BaseDecoder, Decodable
-from metext.utils import str_from_bytes, convert_to_bytes
+from metext.utils import convert_to_bytes, str_from_bytes
 
 CHARSET = "".join(base91.base91_alphabet)
 

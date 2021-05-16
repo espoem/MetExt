@@ -47,7 +47,7 @@ def correct_unknown_encoding(str_or_bytes_in):
 
 
 def old_yenc(data_plain):
-    """ Use the older decoder to verify the new one """
+    """Use the older decoder to verify the new one"""
     data = []
 
     # Remove the NNTP-double-dot style
@@ -151,7 +151,7 @@ def get_yenc_data(line, splits=None):
 
 
 def yenc_subtract(char, subtract):
-    """ Wrap-around for below 0 """
+    """Wrap-around for below 0"""
     char_diff = char - subtract
     if char_diff < 0:
         return 256 + char_diff

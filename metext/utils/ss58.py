@@ -2,10 +2,10 @@ try:
     from hashlib import blake2b
 except ImportError:
     from pyblake2 import blake2b
+
 from typing import Optional
 
 from base58 import b58decode
-
 
 # Python Substrate Interface Library
 #

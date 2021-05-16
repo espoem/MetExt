@@ -70,23 +70,40 @@ from metext import analyse, print_analysis_output
 if __name__ == "__main__":
     # file-like object
     with open("filepath", "rb") as fp:
-        result = analyse(fp, "raw") # without decoding, find all supported patterns
+        result = analyse(fp, "raw")  # without decoding, find all supported patterns
         print(result)
-        print_analysis_output(result) # by default prints to STDOUT in JSON format
-        print_analysis_output(result, "output_filepath", "csv") # prints to "output_filepath" in CSV format
-
+        print_analysis_output(result)  # by default prints to STDOUT in JSON format
+        print_analysis_output(
+            result, "output_filepath", "csv"
+        )  # prints to "output_filepath" in CSV format
 
     # input is list of filepaths
     # consider either no, or base64 encoding
     # extract ipv4 patterns
     result = analyse(["filepath"], ["raw", "base64"], "ipv4")
 
-
     # input is string
     # limit decoding to provided decoders with custom kwargs
     # limit patterns to extractors with custom kwargs
     input_data = "some string"
-    result = analyse(input_data, [("base64", {"charset":"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/"})], [("base64", {})])
+    result = analyse(
+        input_data,
+        [
+            (
+                "base64",
+                {
+                    "charset": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/"
+                },
+            )
+        ],
+        [("base64", {})],
+    )
+
+    # input is bytes
+    # decode data in best effort
+    # extract all patterns
+    input_data = "some byte string"
+    result = analyse(input_data)
 ```
 
 ## Modules

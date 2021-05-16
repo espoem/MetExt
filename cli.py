@@ -9,6 +9,7 @@ from metext import (
     list_printers_names,
     print_analysis_output,
 )
+from metext.__version__ import __version__
 from metext.utils.fileinput import FileInputExtended
 
 decoders = list_decoders_names(active_only=True)
@@ -77,6 +78,9 @@ def build_parser():
         help="Select output format of found patterns.",
         choices=printers,
         default=["json"],
+    )
+    main_parser.add_argument(
+        "--version", action="version", version="%(prog)s v" + __version__
     )
     return main_parser
 

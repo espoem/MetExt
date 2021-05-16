@@ -98,21 +98,22 @@ def read_filepaths(file, recursive=False):
         yield from unglob_filepaths(fp.readlines(), recursive=recursive)
 
 
-if __name__ == "__main__":
+def main():
     parser = build_parser()
     args = parser.parse_args()
-
     input_files = list(
         set(unglob_filepaths(args.input, args.recursive)).union(
             set(read_filepaths(args.file, args.recursive))
         )
     )
-
     if not input_files and (args.input or args.file):
-        sys.exit("No input files were found")
-
+        sys.exit("No input files found")
     with FileInputExtended(input_files or ["-"], mode="rb") as f:
         res = analyse(
             f, [(dec, {}) for dec in args.decode], [(ex, {}) for ex in args.extract]
         )
     print_analysis_output(res, filename=args.output[0], printer=args.out_format[0])
+
+
+if __name__ == "__main__":
+    main()

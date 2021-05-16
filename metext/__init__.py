@@ -176,8 +176,8 @@ def extract_patterns(data: str, extractor: str, **kwargs) -> List[Any]:
 
 def analyse(
     _input: Union[FileInputExtended, BytesIO, StringIO, str, bytes],
-    decoders: List[Tuple[str, dict]] = None,
-    extractors: List[Tuple[str, dict]] = None,
+    decoders: Union[List[Tuple[str, dict]], List[str], str] = None,
+    extractors: Union[List[Tuple[str, dict]], List[str], str] = None,
     **kwargs
 ) -> List[dict]:
     """Common function to apply multiple decoders and multiple extractors on the input.
@@ -209,13 +209,20 @@ def analyse(
         for k, v in _patterns.items():
             item_formats[_format].setdefault("patterns", {}).setdefault(k, []).extend(v)
 
-    exclusive_decoders_dict = __create_decoders_exclusivity()
-    out = {}
-
     if not decoders or decoders in ["auto", "all"]:
         decoders = [(dec_name, {}) for dec_name in list_decoders().keys()]
+    if isinstance(decoders, str):
+        decoders = [(decoders, {})]
+    decoders = [d if isinstance(d, tuple) else (d, {}) for d in decoders]
+
     if not extractors or extractors in ["auto", "all"]:
         extractors = [(ex_name, {}) for ex_name in list_extractors().keys()]
+    if isinstance(extractors, str):
+        extractors = [(extractors, {})]
+    extractors = [e if isinstance(e, tuple) else (e, {}) for e in extractors]
+
+    exclusive_decoders_dict = __create_decoders_exclusivity()
+    out = {}
 
     max_workers = kwargs.get("max_workers", None)
     if max_workers is None:

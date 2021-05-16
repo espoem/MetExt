@@ -1,3 +1,7 @@
+[![](https://img.shields.io/pypi/v/metext)](https://pypi.org/project/metext/)
+[![](https://img.shields.io/pypi/l/metext)](https://github.com/espoem/MetExt/blob/master/LICENSE.txt)
+[![](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 # MetExt : Metadata Extractor
 
 MetExt (Metadata Extractor) is a Python library and CLI utility that allows to process data in different formats and extract data patterns of interest.

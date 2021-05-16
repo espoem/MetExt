@@ -194,6 +194,8 @@ def analyse(
             _value = StringIO(_value)
         elif isinstance(_value, (bytes, bytearray)):
             _value = BytesIO(_value)
+        if isinstance(_value, list):
+            _value = FileInputExtended(_value, mode="rb")
         if isinstance(_value, FileInputExtended):
             return _value.read()
         return (_value.read(),)

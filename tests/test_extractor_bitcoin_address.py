@@ -8,10 +8,6 @@ from metext.plugins.extractors.crypto import BitcoinAddress
     [
         "",
         "1AGNa15ZQXAZUgFiqJ3i7Z2DPU2J6hW62i",
-        [
-            "1AGNa15ZQXAZUgFiqJ3i7Z2DPU2J6hW62i",
-            "1AGNa15ZQXAZUgFiqJ3i7Z2DPU2J6hW62i",
-        ],
         "1AGNa15ZQXAZUgFiqJ3i7Z2DPU2J6hW62i\n1AGNa15ZQXAZUgFiqJ3i7Z2DPU2J6hW62i",
         "17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j",
         "tb1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3q0sl5k7",
@@ -35,14 +31,10 @@ def test_extract_from_returns_empty_collection(input_data):
             "-17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j-17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j-",
             [
                 "17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j",
-                "17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j",
             ],
         ),
         (
-            [
-                "-17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j-",
-                "\n3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy\nabctest",
-            ],
+            "-17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j-\n3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy\nabctest",
             [
                 "17NdbrSGoUotzeGCcMMCqnFkEvLymoou9j",
                 "3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy",
@@ -66,6 +58,6 @@ def test_extract_from_returns_empty_collection(input_data):
     ],
 )
 def test_extract_from(input_data, expected):
-    extracted = list(BitcoinAddress.run(input_data))
+    extracted = [e["value"] for e in BitcoinAddress.run(input_data)]
     assert len(extracted) == len(expected)
     assert not set(extracted).isdisjoint(expected)
